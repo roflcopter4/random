@@ -1,0 +1,7 @@
+.zshrc
+.vimrc
+.zshrc.pre
+.zshrc.local
+.spacemacs
+.keephack
+.aliases

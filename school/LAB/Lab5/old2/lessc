@@ -1,0 +1,6 @@
+#!/bin/sh
+
+#cat | highlight --out-format=truecolor -s molokai -S c > /tmp/asdf.c
+tmpfile="$(mktemp -d)"
+cat > "${tmpfile}.c"
+exec less "${tmpfile}.c:."

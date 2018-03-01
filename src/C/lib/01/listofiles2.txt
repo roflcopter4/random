@@ -1,0 +1,17 @@
+.ginit.vim
+.config/nvim/ginit.vim
+
+.vimrc
+.config/nvim/init.vim
+
+/Scripts/homebin/mktar.sh
+.local/bin/mktar
+
+/Scripts/homebin/xtar.sh
+.local/bin/xtar
+
+/Scripts/homebin/prettifydu.sh
+.local/bin/prettifydu
+
+/Scripts/localbin/make.sh
+../../usr/local/bin/make
