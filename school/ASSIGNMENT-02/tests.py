@@ -25,7 +25,7 @@ def testCollapseRow():
     INIT = 1
     SOL = 2
     for test in tests:
-        ret = grid.collapseRow(test[INIT].copy())
+        ret = grid.collapseRow(deepcopy(test[INIT]))
         if ret == test[SOL]:
             print("Test (%s) passed." % test[ID])
         else:

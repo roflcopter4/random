@@ -7,9 +7,6 @@ import random as rnd
 from operator import concat
 
 
-msg = ''
-
-
 ###############################################################################
 # NOTE: I take ZERO credit for this function. I copied it verbatim from a post
 #       online. I figured that since it isn't even relevant to the real
@@ -69,7 +66,6 @@ class Grid():
         self.__hbar = '\t|%s\n' % (col*'-----|')
 
         self.length = row * col  # Avoid having to constantly calculate this.
-        self.Range = list(range(self.length))  # Ditto
         self.emptiesSet = list(range(self.length))  # list of empty cells
         self.new_cell = None  # The cell randomly filled in this turn.
 
@@ -85,8 +81,8 @@ class Grid():
         """Returns the index of the cell referred to by a number corresponding
         to the index that cell would have if the grid were a flat list.
         """
-        a = cell // self.row % self.row  # Next value is every self.row * N
-        b = cell % self.col  # Values are consequtive
+        a = cell // self.row % self.row
+        b = cell % self.col
         return [a, b]
 
     def set_cell(self, cell, val):
@@ -98,9 +94,6 @@ class Grid():
         """Returns the value in cell number 'cell' of the flattened grid."""
         a, b = self.__ret_cell(cell)
         return self._grid[a][b]
-
-    def get_cell_from_index(self, rInd, cInd):
-        return ((rInd * self.row) + cInd)
 
     #
     def assign_rand_cell(self, init=False):
@@ -126,16 +119,18 @@ class Grid():
     #
     def draw_grid(self):
         """This function draws the grid representing the state of the game."""
+        # I understand forcing the use of public methods to access private
+        # attributes, but why can't the methods themselves directly access
+        # them? It's more efficient to dereference the grid directly here.
         buf = self.__hbar
         for rInd in range(self.row):
             line = '\t|'
             for cInd in range(self.col):
-                # cell = self._grid[rInd][cInd]
-                this = ((rInd * self.row) + cInd)
-                cell = self.get_cell(this)
+                cell = self._grid[rInd][cInd]
                 if not cell:
                     line += '%s|' % ' '.center(5)
                 else:
+                    this = ((rInd * self.row) + cInd)
                     if this == self.new_cell:
                         tmp = green(str(cell).center(5))
                     else:
@@ -151,44 +146,18 @@ class Grid():
             if self.get_cell(i) == 0:
                 self.emptiesSet.append(i)
 
-    # def collapsible(self):
-    #     """Returns whether the board is collapsible in any direction. """
-    #     row = self.row
-    #     col = self.col
-    #     for rInd in range(self.row):
-    #         for cInd in range(self.col):
-    #             cell = self._grid[rInd][cInd]
-    #             if (cell == 0) or \
-    #                ((rInd+1 < row) and (cell == self._grid[rInd+1][cInd])) or \
-    #                ((cInd+1 < col) and (cell == self._grid[rInd][cInd+1])):
-    #                 return True
-    #     return False
-
+    #
     def collapsible(self):
-        """Good lord it's become lisp."""
-        row = self.row
+        """Returns whether the board is collapsible in any direction. """
+        row = self.row  # The laziest and dumbest way to stay under 79 chars
         col = self.col
-        for i in self.Range:
-            cell = self.get_cell(i)
-            # I refuse to comment this properly. It does the same as the above
-            # but much, much less clearly and efficiently.
-            # if (cell == 0) \
-            #    or (((i % row) < (row - 1)) and
-            #        (cell == self.get_cell(i + 1))) \
-            #    or (((i % col * col) < (self.length - col)) and
-            #        (cell == self.get_cell(i + col))):
-
-            global msg
-            if (cell == 0):
-                return True
-            elif (((i % row) < (row - 1)) and
-                  (cell == self.get_cell(i + 1))):
-                msg = "True row! i -> %d" % (i)
-                return True
-            elif ((((i % col) * col) < (self.length - col)) and
-                  (cell == self.get_cell(i + col))):
-                msg = "True col! i -> %d\ncalcval1 - > %d" % (i, ((i % col) * col))
-                return True
+        for rInd in range(self.row):
+            for cInd in range(self.col):
+                cell = self._grid[rInd][cInd]
+                if (cell == 0) or \
+                   ((rInd+1 < row) and (cell == self._grid[rInd+1][cInd])) or \
+                   ((cInd+1 < col) and (cell == self._grid[rInd][cInd+1])):
+                    return True
         return False
 
     #
@@ -229,12 +198,8 @@ class Grid():
     def collapseLeft(self):
         """Wrapper around 'collapseRow'. Returns True if any rows collapsed."""
         ret = False
-        for rStartInd in [i * self.row for i in range(self.row)]:
-            cSlice = self.Range[rStartInd: rStartInd + self.row]
-            row = [self.get_cell(i) for i in cSlice]
+        for row in self._grid:
             row, tmp = self.collapseRow(row)
-            for i in range(self.row):
-                self.set_cell(cSlice[i], row[i])
             ret = ret or tmp
         return ret
 
@@ -243,32 +208,24 @@ class Grid():
         it again. Returns True if any rows collapsed to the right.
         """
         ret = False
-        for rStartInd in [i * self.row for i in range(self.row)]:
-            cSlice = self.Range[rStartInd: rStartInd + self.row]
-            row = [self.get_cell(i) for i in cSlice]
+        for row in self._grid:
             row.reverse()
             row, tmp = self.collapseRow(row)
             row.reverse()
-            for i in range(self.row):
-                self.set_cell(cSlice[i], row[i])
             ret = ret or tmp
         return ret
 
-    #
     def collapseUp(self):
         """Gets a list for each column in the grid and runs it through
         collapseRow. The changed values in the list are then used to set the
         values in the main grid. Returns True if any columns collapsed upwards.
         """
         ret = False
-        for cStartInd in range(self.col):
-            col = [self.get_cell(i) for i in range(cStartInd, self.length, self.col)]
-            col, tmp = self.collapseRow(col)
-            x = 0
-            for i in range(cStartInd, self.length, self.col):
-                self.set_cell(i, col[x])
-                x += 1
+        for cInd in range(self.col):
+            lst = self.get_columns(cInd)
+            lst, tmp = self.collapseRow(lst)
             ret = ret or tmp
+            self.set_columns(lst, cInd)
         return ret
 
     def collapseDown(self):
@@ -277,35 +234,41 @@ class Grid():
         those in the main grid. Returns True if any columns collapsed downards.
         """
         ret = False
-        for cStartInd in range(self.col):
-            col = [self.get_cell(i) for i in range(cStartInd, self.length, self.col)]
-            col.reverse()
-            col, tmp = self.collapseRow(col)
-            col.reverse()
-            x = 0
-            for i in range(cStartInd, self.length, self.col):
-                self.set_cell(i, col[x])
-                x += 1
+        for cInd in range(self.col):
+            lst = self.get_columns(cInd)
+            lst.reverse()
+            lst, tmp = self.collapseRow(lst)
+            lst.reverse()
             ret = ret or tmp
+            self.set_columns(lst, cInd)
         return ret
 
-    # #
-    # # These two were separated as methods for additional clarity - they could
-    # # well have been left 'inline'.
-    # def get_columns(self, cInd):
-    #     """Returns the value at index cInd for each row (ie sublist) in the
-    #     grid, thus yielding a list of all values in a column.
-    #     """
-    #     return [self._grid[rInd][cInd] for rInd in range(self.row)]
     #
-    # def set_columns(self, lst, cInd):
-    #     """Sets each value in the column indicated by cInd in the grid to the
-    #     corresponding value in lst.
-    #     """
-    #     x = 0
-    #     for rInd in range(self.row):
-    #         self._grid[rInd][cInd] = lst[x]
-    #         x += 1
+    # These two were separated as methods for additional clarity - they could
+    # well have been left 'inline'.
+    def get_columns(self, cInd):
+        """Returns the value at index cInd for each row (ie sublist) in the
+        grid, thus yielding a list of all values in a column.
+        """
+        return [self._grid[rInd][cInd] for rInd in range(self.row)]
+
+    def set_columns(self, lst, cInd):
+        """Sets each value in the column indicated by cInd in the grid to the
+        corresponding value in lst.
+        """
+        x = 0
+        for rInd in range(self.row):
+            self._grid[rInd][cInd] = lst[x]
+            x += 1
+
+    #
+    def print_grid(self, tile=None):
+        """Prints the value of the grid or a square in it for debugging."""
+        if tile is None:
+            print(self._grid)
+        else:
+            tile = list(tile)
+            print(self._grid[tile[0]][tile[1]])
 
 
 # ----------------------------------------------------------------------------
@@ -334,17 +297,14 @@ class Game():
     def play(self):
         stop = False
         collapsible = True
-        global msg
 
         while not stop and collapsible:
             self.print_prompt()
-            print(msg)
             # key = input('\nEnter a move: ')
             key = getch()
 
             while key not in concat(list(self.moves.keys()), self.quit):
                 self.print_prompt()
-                print(msg)
                 # key = input('\nEnter a move: ')
                 key = getch()
 
@@ -447,11 +407,11 @@ def check_opts():
 def ShowUsage():
     print("""\
 Usage: %s -[%s]
--h      Show this help and exit
--t[N]   Run debug test number N (1-3 avail - all of dubious value)
--s[N]   Run the game with an NxN square grid
--r[N]   Run the game with N rows
--c[N]   Run the game with N columns
+-h	Show this help and exit
+-t[N]	Run debug test number N (1-3 avail - all of dubious value)
+-s[N]	Run the game with an NxN square grid
+-r[N]	Run the game with N rows
+-c[N]	Run the game with N columns
 
 Unless otherwise specified the game is run on a 4x4 grid."""
           % (sys.argv[0], OPTSTRING))
@@ -460,3 +420,6 @@ Unless otherwise specified the game is run on a 4x4 grid."""
 
 if __name__ == "__main__":
     main(**check_opts())
+
+
+# vim: ts=8
