@@ -66,6 +66,7 @@ class Grid():
         self.__hbar = '\t|%s\n' % (col*'-----|')
 
         self.length = row * col  # Avoid having to constantly calculate this.
+        self.Range = range(self.length)  # Ditto
         self.emptiesSet = list(range(self.length))  # list of empty cells
         self.new_cell = None  # The cell randomly filled in this turn.
 
@@ -90,10 +91,19 @@ class Grid():
         a, b = self.__ret_cell(cell)
         self._grid[a][b] = val
 
-    def get_cell(self, cell):
+    # def get_cell(self, cell):
+    #     """Returns the value in cell number 'cell' of the flattened grid."""
+    #     a, b = self.__ret_cell(cell)
+    #     return self._grid[a][b]
+
+    def get_cell(self, cell, dbg=False):
         """Returns the value in cell number 'cell' of the flattened grid."""
+        a = b = 0
         a, b = self.__ret_cell(cell)
-        return self._grid[a][b]
+        if dbg:
+            return self._grid[a][b], a, b
+        else:
+            return self._grid[a][b]
 
     #
     def assign_rand_cell(self, init=False):
@@ -341,7 +351,11 @@ def main(testnum=None, rows=None, columns=None):
         if columns is not None:
             kwargs['col'] = columns
         game = Game(**kwargs)
-        game.play()
+        print(game.grid._grid)
+        for i in game.grid.Range:
+            c, a, b = game.grid.get_cell(i, True)
+            print("%d -> %d  -- a: %d, b: %d" % (i, c, a, b))
+        # game.play()
 
 
 def clear_term():

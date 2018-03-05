@@ -107,6 +107,16 @@ def testCollapseDown():
     else:
         print("Test case failed.")
 
+    # grid._grid = [[2, 4, 8, 4],
+    #               [4, 32, 128, 8],
+    #               [2, 8, 32, 4],
+    #               [2, 2, 16, 2]]
+
+    # sol = [[2, 0, 2, 4],
+    #        [8, 8, 8, 2],
+    #        [2, 8, 2, 4],
+    #        [4, 2, 4, 2]]
+
 
 def testCollapsible():
     print("Running test for collapsible()")
@@ -118,7 +128,10 @@ def testCollapsible():
                   [2, 0, 2, 16],
                   [2, 4, 4, 2]]
 
-    if grid.collapsible():
+    # ret, msg = grid.collapsible()
+    # print(msg)
+    ret = grid.collapsible()
+    if ret:
         print('Test (a) passed.')
     else:
         print('Test (a) failed.')
@@ -129,7 +142,10 @@ def testCollapsible():
                   [2, 8, 2, 4],
                   [4, 2, 4, 2]]
 
-    if grid.collapsible():
+    # ret, msg = grid.collapsible()
+    # print(msg)
+    ret = grid.collapsible()
+    if ret:
         print('Test (b) passed.')
     else:
         print('Test (b) failed.')
@@ -140,7 +156,10 @@ def testCollapsible():
                   [2, 4, 2, 4],
                   [4, 2, 4, 2]]
 
-    if grid.collapsible():
+    # ret, msg = grid.collapsible()
+    # print(msg)
+    ret = grid.collapsible()
+    if ret:
         print('Test (c) passed.')
     else:
         print('Test (c) failed.')
@@ -151,10 +170,39 @@ def testCollapsible():
                   [2, 4, 2, 4],
                   [4, 2, 4, 2]]
 
-    if not grid.collapsible():
+    # ret, msg = grid.collapsible()
+    # print(msg)
+    ret = grid.collapsible()
+    if not ret:
         print('Test (d) passed.')
     else:
         print('Test (d) failed.')
+
+    grid.emptiesSet = []
+    grid._grid = [[4, 16, 8, 16],
+                  [128, 4, 128, 8],
+                  [4, 64, 2, 4],
+                  [2, 32, 16, 4]]
+    # ret, msg = grid.collapsible()
+    # print(msg)
+    ret = grid.collapsible()
+    if ret:
+        print('Test (e) passed.')
+    else:
+        print('Test (e) failed.')
+
+    grid.emptiesSet = []
+    grid._grid = [[2, 16, 8, 4],
+                  [128, 32, 128, 8],
+                  [16, 8, 32, 4],
+                  [2, 32, 16, 2]]
+    # ret, msg = grid.collapsible()
+    # print(msg)
+    ret = grid.collapsible()
+    if not ret:
+        print('Test (e) passed.')
+    else:
+        print('Test (e) failed.')
 
 
 def testEmpties():
