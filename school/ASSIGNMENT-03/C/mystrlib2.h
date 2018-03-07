@@ -10,24 +10,28 @@
 
 /* The new method I'd like to try - define everything with structs. */
 
+/* String object - contains a c ctring and its length. */
 typedef struct {
         char *str;
         size_t len;
 } String;
 
+/* String array - contains an array of String objects and the number of them. */
 typedef struct {
         String *arr;
         int num;
 } StringArray;
 
 
-void my_string_cpy(String *strTo, char *strFrom);
-void my_string_cat(String *strto, char *str1, char *str2);
-void my_string_app(String *str_orig, char *str_to_append);
+/* Copy, concatenate, append a string to a String object. */
+void my_strcpy(String *strTo, char *strFrom);
+void my_strcat(String *strto, char *str1, char *str2);
+void my_strapp(String *str_orig, char *str_to_append);
 
-void my_StringObj_cpy(String *strTo, String *strFrom);
-void my_StringObj_cat(String *strto, String *str1, String *str2);
-void my_StringObj_app(String *str_orig, String *str_to_append);
+/* Copy, concatenate, append two String objects. */
+void my_strtcpy(String *strTo, String *strFrom);
+void my_strtcat(String *strto, String *str1, String *str2);
+void my_strtapp(String *str_orig, String *str_to_append);
 
 int get_all_lines(StringArray *str_array, char *filename);
 void get_stdin(StringArray *str_array);
@@ -36,11 +40,6 @@ void SA_free(StringArray *str_array);
 
 StringArray SA_append(StringArray *str_array, char *str);
 StringArray SA_append_string(StringArray *str_array, String str);
-
-#define STRINGARRAY(id)  \
-        StringArray(id); \
-        (id).arr = NULL; \
-        (id).num = 0
 
 
 /* ========================================================================== */
@@ -62,19 +61,19 @@ int my_fgetline(char **line, FILE *f);
 void noMem();
 
 /* Simple little utility macros. */
-#define saferFree(x)                                  \
+#define my_free(x)                                    \
         do {                                          \
                 if ((x) != NULL) {                    \
                         free(x);                      \
                         (x) = NULL;                   \
                 }                                     \
         } while (0)
-#define saferMalloc(x, p)                             \
+#define my_xmalloc(x, p)                              \
         do {                                          \
                 if (((x) = malloc((p))) == NULL)      \
                         noMem();                      \
         } while (0)
-#define saferCalloc(x, p, s)                          \
+#define my_xcalloc(x, p, s)                           \
         do {                                          \
                 if (((x) = calloc((p), (s))) == NULL) \
                         noMem();                      \

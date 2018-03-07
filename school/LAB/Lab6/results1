@@ -1,0 +1,11 @@
+PYTHON3
+Testing time for a non-circular queue to dequeue 1000000 items, for 1 runs.
+Result was:  148.40434637199996 sec.
+Testing time for a circular queue to dequeue 1000000 items, for 1 runs.
+Result was:  0.5689278959998774 sec.
+
+PYPY3
+Testing time for a non-circular queue to dequeue 1000000 items, for 1 runs.
+Result was:  183.80796119099978 sec.
+Testing time for a circular queue to dequeue 1000000 items, for 1 runs.
+Result was:  0.04766190399823245 sec.
