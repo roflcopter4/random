@@ -94,6 +94,7 @@ class Deck:
         return cardval
 
     def compare_cards(card1, card2):
+        """Rather reminicient of Fortran's arithmetic if."""
         val1 = Deck.get_int_val(card1)
         val2 = Deck.get_int_val(card2)
         if val1 > val2:
@@ -251,7 +252,7 @@ class OnTable:
 # ----------------------------------------------------------------------------
 
 
-class OutOfCards(BaseException):
+class OutOfCards(Exception):
     """Player has run out of cards."""
 
 
@@ -309,7 +310,7 @@ def play(hands, table):
             hands[1].add_cards(table.clear())
 
         elif comp == -1:
-            hands[1].add_cards(table.clear())
+            hands[2].add_cards(table.clear())
             print("Player 2 wins this round.")
 
         else:
@@ -317,7 +318,7 @@ def play(hands, table):
             for player in (1, 2):
                 for card in hands[player].get_war_cards():
                     table.place(player, card, False)
-            print("WARTIME TABLE UPDATE\n%s" % table.__str__())
+            print("WARTIME TABLE UPDATE\n%s" % table)
 
         input("\nPress enter to continue...")
         call(CLEAR)
@@ -331,7 +332,7 @@ def print_update(hands, table, faceup):
     print("\nPlayer 1 just placed: %s" % faceup[1])
     print("Player 2 just placed: %s" % faceup[2])
     print("\nALL CARDS ON TABLE (including above two)")
-    print(table.__str__() + '\n')
+    print(str(table) + '\n')
 
 
 # ----------------------------------------------------------------------------
@@ -344,7 +345,7 @@ def process_file(infile=None):
     failure, the user is prompted again for either another filename, or given
     the option to terminate the program.
     """
-    if infile == '-' or (not sys.stdin.isatty()):
+    if (infile == '-') or (not sys.stdin.isatty()):
         from os.path import exists
         if exists("/dev/tty"):
             return get_stdin()
@@ -387,7 +388,7 @@ def get_stdin():
 
 # Getopt handling always looks so messy.
 def get_options():
-    """Process a few commandline options because I'm far, far too lazy to
+    """Process a few commandline options because I'm far too lazy to
     interactively type a filename and the number of cards for every test run.
     """
     kwargs = {}
