@@ -112,6 +112,7 @@ separation.\n""")
     vips.enqueue('a')
     vips.enqueue('b')
     vips.enqueue('c')
+    plebs.enqueue('d')
     while store_open:
         action = get_action()
         print()
@@ -151,12 +152,13 @@ def do_action(action, vips, plebs):
         return True
 
     elif action == "serve":
-        if vips.get_size():
+        print(vips.get_size())
+        if vips.get_size() > 0:
             print("%s customer '%s' has been served." %
                   (vips.name, vips.dequeue()))
-        elif plebs.get_size():
+        elif plebs.get_size() > 0:
             print("%s customer '%s' has been served." %
-                  (vips.name, vips.dequeue()))
+                  (plebs.name, plebs.dequeue()))
         else:
             print("Error: both queues are currently empty.")
 

@@ -131,7 +131,7 @@ class LousyQueue:
 # Functions
 
 
-def main(type=None, Qlen=500, numtests=10000):
+def main(ttype=None, Qlen=500, numtests=10000):
     lst = [LousyQueue(Qlen), CircularQueue(Qlen)]
     d = ["non-circular", "circular"]
 
@@ -149,21 +149,29 @@ def main(type=None, Qlen=500, numtests=10000):
     # print("Result was: ", result)
     #       result = timeit("for i in range(Qlen-1): this.dequeue()", setup="from copy import deepcopy; this=deepcopy(queue)", globals=locals(), number=numtests)
 
-    for i in range(2):
-        from copy import deepcopy
-        import gc
-        queue = lst[i]
-        print("Testing time for a %s queue to dequeue %d items, for %d runs."
-              % (d[i], Qlen, numtests))
+    # print(ttype)
+    # for i in range(2):
+        # if ttype is not None:
+            # if ttype == 'non-circular' and i == 0:
+                # continue
+            # elif ttype == 'circular' and i == 1:
+                # print('yes')
+                # continue
+    i = 1
+    from copy import deepcopy
+    import gc
+    queue = lst[i]
+    print("Testing time for a %s queue to dequeue %d items, for %d runs."
+            % (d[i], Qlen, numtests))
 
-        result = 0
-        result = repeat("for i in range(Qlen-1): this.dequeue()",
-                        # setup="gc.enable(); this=deepcopy(queue)",
-                        setup="this=deepcopy(queue)",
-                        globals=locals(), number=1, repeat=numtests)
+    result = 0
+    result = repeat("for i in range(Qlen-1): this.dequeue()",
+                    # setup="gc.enable(); this=deepcopy(queue)",
+                    setup="this=deepcopy(queue)",
+                    globals=locals(), number=1, repeat=numtests)
 
-        total = sum(result)
-        print("Result was: ", total, "sec.")
+    total = sum(result)
+    print("Result was: ", total, "sec.")
 
 
 def get_items(Qlen):
@@ -189,7 +197,7 @@ def get_options():
     valid_types = ["non-circular", "circular"]
     try:
         opts, args = getopt.getopt(sys.argv[1:], *options)
-    except getopt.GetoptError as e:
+    except getopt.GetoptEttrror as e:
         print(e)
         print()
         ShowUsage(options)
@@ -199,19 +207,21 @@ def get_options():
             if opt in ('h', "help"):
                 ShowUsage(options)
             elif opt in ('t', "type"):
+                # print('found')
                 if optarg in valid_types:
-                    kwargs["type"] = optarg
+                    kwargs["ttype"] = optarg
                 else:
                     print("Value for option %s must be one of %s." %
                           (opt, str(valid_types)), file=sys.stderr)
                     sys.exit(1)
             elif opt.isdigit() and int(opt) < len(valid_types):
-                kwargs["type"] = valid_types[int(opt)]
+                kwargs["ttype"] = valid_types[int(opt)]
             elif opt in ('l', "len"):
                 kwargs["Qlen"] = optarg_to_int_or_die(opt, optarg)
             elif opt in ('n', "num"):
                 kwargs["numtests"] = optarg_to_int_or_die(opt, optarg)
 
+        print(kwargs)
         return kwargs
 
 

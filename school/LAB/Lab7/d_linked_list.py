@@ -241,7 +241,7 @@ def test():
     dieifnot(int_list.get_item(0), 1)
     int_list.append(None)
     dieifnot(int_list.pop(), None, 1)
-    int_list.pop(5000)
+    # int_list.pop(5000)
 
 
 ###############################################################################
