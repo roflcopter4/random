@@ -43,7 +43,7 @@ class d_linked_list:
     def insert(self, pos, item):
         if pos == 0:
             self.add(item)
-        elif pos == (self.__size - 1):
+        elif pos == (self.__size):
             self.append(item)
         else:
             node = self.__getnode_at_index(pos)
