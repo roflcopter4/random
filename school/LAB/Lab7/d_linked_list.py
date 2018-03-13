@@ -43,7 +43,7 @@ class d_linked_list:
     def insert(self, pos, item):
         if pos == 0:
             self.add(item)
-        elif pos == (self.__size - 1):
+        elif pos == (self.__size):
             self.append(item)
         else:
             node = self.__getnode_at_index(pos)
@@ -241,7 +241,7 @@ def test():
     dieifnot(int_list.get_item(0), 1)
     int_list.append(None)
     dieifnot(int_list.pop(), None, 1)
-    int_list.pop(5000)
+    # int_list.pop(5000)
 
 
 ###############################################################################
