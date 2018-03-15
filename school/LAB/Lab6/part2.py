@@ -149,20 +149,15 @@ def do_action(action, vips, plebs):
         except AssertionError as e:
             print("Error: %s queue is full." % e.args[0][0].name)
 
-        return True
-
     elif action == "serve":
         print(vips.get_size())
-        if vips.get_size() > 0:
-            print("%s customer '%s' has been served." %
-                  (vips.name, vips.dequeue()))
-        elif plebs.get_size() > 0:
-            print("%s customer '%s' has been served." %
-                  (plebs.name, plebs.dequeue()))
+        fmt = "%s customer '%s' has been served."
+        if vips.get_size():
+            print(fmt % (vips.name, vips.dequeue()))
+        elif plebs.get_size():
+            print(fmt % (plebs.name, plebs.dequeue()))
         else:
             print("Error: both queues are currently empty.")
-
-        return True
 
     else:
         murder = False
@@ -180,6 +175,8 @@ def do_action(action, vips, plebs):
             print("Nothing to report. Exiting.")
 
         return False
+
+    return True
 
 
 def get_customer():

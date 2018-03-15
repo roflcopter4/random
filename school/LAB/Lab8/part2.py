@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
-import random
+# import random
 
-RANDRANGE = (0, 100)
-GUESSMAX = 6
+RANDRANGE = (0, 101)
+GUESSMAX = 7
 
 ###############################################################################
 # Classes
@@ -13,19 +13,20 @@ class Guesser:
 
     def __init__(self, a, b):
         self.guess_list = []
-        self.window = [a, b]
+        self.low = a
+        self.high = b
         self.last_guess = None
 
     def update(self, status):
         if status == '-':
             print(status)
-            self.window[0] = self.last_guess + 1
+            self.low = self.last_guess
         elif status == '+':
             print(status)
-            self.window[1] = self.last_guess - 1
+            self.high = self.last_guess
 
     def guess(self):
-        self.last_guess = random.randint(*self.window)
+        self.last_guess = (self.high + self.low) // 2
         return self.last_guess
 
 
@@ -36,7 +37,7 @@ class Guesser:
 def main():
     numguesses = 0
     # num = random.randint(*RANDRANGE)
-    num = input("Enter number to guess:  ")
+    num = int(input("Enter number to guess:  "))
     guesser = Guesser(*RANDRANGE)
 
     # print(num)
