@@ -52,14 +52,24 @@ sub filter_data($grade_list) {
 
 sub print_data($average, $min, $max, $list) {
     print "Average: $average\nMax: $max\nMin: $min\n";
-    print map( { "[@{$_}]\n" } @{$list} );
+    #print map({ "[@{$_}]\n" } @{$list});
+    #print Dumper($list)
+    #print map({ "[@{$_}]\n" } @{$list});
+    my $str = Dumper($list);
+    $str =~ s/(?!\]),\n\s* /, /g;
+    $str =~ s/.*(\[|\]).*\n//gm;
+    $str =~ s/\s*(.+$)/[$1]\n/gm;
+    if ( $str =~ /(a|b)|(c|d)/m ) {
+        say "hi";
+    }
+    print $str;
 }
 
 ###############################################################################
 # HTML generation functions
 
 sub add_content($content) {
-    my @stuff = split( /\n/, $content );
+    my @stuff = split(/\n/, $content);
     foreach (@stuff) {
         chomp;
         $output .= $TAB x $level . "$_\n";
@@ -104,7 +114,7 @@ sub css($sec, $format) {
 }
 
 sub end($max = 1) {
-    foreach ( 0 .. --$max ) {
+    for ( 0 .. --$max ) {
         my $content = pop @stack;
         my $section = pop @stack;
 
@@ -169,17 +179,15 @@ add 'body';
         add 'tr';
             my $i = 13;
             foreach my $section (@sectioned_data) {
-                my $len = scalar(@{$section}) * 20;
+                my $len = scalar(@{$section}) * 35;
                 css 'td', 'valign="bottom"';
                     lit <<~ "EOF";
-                        <div style="width:62px;height: ${len}px ;background:blue; border:1px solid red; writing-mode:tb-rl">
-                        </div>
+                        <div style="width:62px;height: ${len}px ;background:blue; border:1px solid red; writing-mode:tb-rl"></div>
                         EOF
                 end;
                 css 'td', 'valign="bottom"';
                     lit <<~ "EOF";
-                        <div style="width:${i}px;height: ${len}px ;background:white;">
-                        </div>
+                        <div style="width:${i}px;height: ${len}px ;background:white;"></div>
                         EOF
                 end;
                 ++$i;

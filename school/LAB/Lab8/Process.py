@@ -14,9 +14,9 @@ class Data:
         self.mini = min(self.grades)
         self.mean = sum(self.grades) / len(self.grades)
 
-        self.sections = self.make_sections()
+        self.sections = self.__make_sections()
 
-    def make_sections(self):
+    def __make_sections(self):
         array = [[]]
         secmax = 9
         ind = 0
@@ -35,9 +35,6 @@ class Data:
         for sec in self.sections:
             buf += str(sec) + "\n"
         return buf[:-1]
-
-
-##############################################################################
 
 
 class HTML:
@@ -148,12 +145,13 @@ for sect in DATA.sections:
     length = len(sect) * 20
     H.css('td', 'valign="bottom"')
     H.lit("""\
-<div style="width:62px;height: %dpx ;background:blue; border:1px solid red; writing-mode:tb-rl">
-</div>""" % length)
+<div style="width:62px;height: %dpx ;background:blue; border:1px solid red; \
+writing-mode:tb-rl">\n</div>""" % length)
     H.end()
 
     H.css('td', 'valign="bottom"')
-    H.lit("""<div style="width:%dpx;height: %dpx ;background:white;">\n</div>""" % (width, length))
+    H.lit('<div style="width:%dpx;height: %dpx ;background:white;">'
+          % (width, length) + "\n</div>")
     H.end()
     width += 1
 
