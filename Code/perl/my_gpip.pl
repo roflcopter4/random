@@ -11,15 +11,15 @@ use File::Which;
 
 sub get_cmd($program) {
     defined($program) or croak 'No program identified in commandline!';
-    my $cmd = which $program or croak "Command '$program' not found.";
+    my $cmd = which($program) or croak "Command '$program' not found.";
     return $cmd;
 }
 
 sub get_tmp($type) {
     if ( defined($type) ) {
-        return tempfile( SUFFIX => ".$type", TMPDIR => 1, CLEANUP => 1 );
+        return tempfile SUFFIX => ".$type", TMPDIR => 1, CLEANUP => 1 ;
     } else {
-        return tempfile( TMPDIR => 1, CLEANUP => 1 );
+        return tempfile TMPDIR => 1, CLEANUP => 1;
     }
 }
 

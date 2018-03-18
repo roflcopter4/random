@@ -1,4 +1,5 @@
 core
 *.o
 *.so
-*.ps
+*.pdf
+*.zip

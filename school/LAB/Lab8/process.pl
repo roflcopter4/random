@@ -22,10 +22,10 @@ our $level  = 0;
 
 sub process_file($filename) {
     my @grade_list;
+    open('fh', '<', $filename) or croak $!;
 
-    open('fh', '<', $filename) or carp $!;
     while (<fh>) {
-        next if m/^$/;
+        next if /^$/;
         chomp;
         my ( $student, $grd ) = split;
         push @grade_list, int($grd);
@@ -52,17 +52,9 @@ sub filter_data($grade_list) {
 
 sub print_data($average, $min, $max, $list) {
     print "Average: $average\nMax: $max\nMin: $min\n";
-    #print map({ "[@{$_}]\n" } @{$list});
-    #print Dumper($list)
-    #print map({ "[@{$_}]\n" } @{$list});
-    my $str = Dumper($list);
-    $str =~ s/(?!\]),\n\s* /, /g;
-    $str =~ s/.*(\[|\]).*\n//gm;
-    $str =~ s/\s*(.+$)/[$1]\n/gm;
-    if ( $str =~ /(a|b)|(c|d)/m ) {
-        say "hi";
-    }
-    print $str;
+    $_ = join('', map({"[@{$_}]\n"} @{$list}));
+    s/(\d+)(?![\]\d])/$1,/gm;
+    print;
 }
 
 ###############################################################################
@@ -153,8 +145,8 @@ my @sectioned_data = filter_data(\@grade_list);
 # Perl lacks a way to generate a range with a step, so we do this the hard way.
 my @ranges;
 for ( my $I = 0; $I <= 90; $I += 10 ) {
-    my $J = ($I == 90) ? 100 : $I+9;
-    push @ranges, sprintf( '[%2d-%-3d]', $I, $J );
+    my $J = ($I == 90) ? (100) : ($I+9);
+    push @ranges, sprintf('[%2d-%-3d]', $I, $J);
 }
 my $buf = join ' ', @ranges;
 
@@ -165,7 +157,7 @@ my $buf = join ' ', @ranges;
 html 'init';
 add 'body';
     add 'h1';
-        lit 'This took so ridiculously long it\'s seriously embarrassing.' ;
+        lit "This took so ridiculously long it's seriously embarrassing.";
     end;
 end;
 

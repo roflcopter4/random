@@ -2,7 +2,7 @@
 
 import sys
 import getopt
-from subprocess import call
+from subprocess import call as syscall
 from random import shuffle
 
 if sys.platform == "win32":
@@ -14,6 +14,10 @@ else:
 # Classes
 
 
+class OutOfCards(Exception):
+    """Player has run out of cards."""
+
+
 class Deck:
     """This mini-class exists mostly to varify the validity of a given deck and
     distribute the cards therein between players.
@@ -21,7 +25,8 @@ class Deck:
     # Evil literals indicating legal card values.
     Field1 = ['A', 'K', 'Q', 'J', '0', '2', '3', '4', '5', '6', '7', '8', '9']
     Field2 = ['C', 'D', 'H', 'S']
-    # Evil literal dict to convert Ace, King, Queen, Jack, and 10 to integers.
+
+    # Hash to convert Ace, King, Queen, Jack, and '0' (10) to integers.
     CardVals = {
         'A': 14,
         'K': 13,
@@ -33,7 +38,7 @@ class Deck:
     def __init__(self, deck):
         self.deck = deck
         try:  # Initial sanity check
-            self.analyze_deck()
+            self.__analyze_deck()
         except AssertionError as e:
             self.__handle_deck_error(e)
 
@@ -43,13 +48,9 @@ class Deck:
         print("Reason: ", e, file=sys.stderr)
         sys.exit(1)
 
-    #
-    def analyze_deck(self):
-        """Checks a given 'deck' list for validity. If this is an instance of
-        the Deck class this method can analyze its 'deck' attribute, or it can
-        take one as a paramater. If the deck is not valid an angry warning will
-        be displayed and the program euthenized. Specifically the deck list is
-        required to contain:
+    def __analyze_deck(self):
+        """Checks a given 'deck' list for validity. If invalid the program
+        dies. Specifically the deck list is required to contain:
             1) exactly 52 members (cards), all of which must be unique,
             2) only valid, correctly formatted playing cards (ie strings
                exactly of exactly 2 chars), and
@@ -63,12 +64,10 @@ class Deck:
 
         # So there are 52 unique strings of size 2. Because they're unique the
         # only way they'll all match is if we have every required card.
-        # A regex like /([AKQJ02-9][CDHS]){52}/ could do away with the loop...
         for card in self.deck:
             assert (card[0] in self.Field1) and (card[1] in self.Field2), \
                 "Invalid card: '%s'." % card
 
-    #
     def distribute(self, numplayers):
         hands = [[] for _ in range(numplayers)]
 
@@ -81,30 +80,8 @@ class Deck:
 
         return hands
 
-    def get_int_val(card):
-        """Utility method for converting a card string to an integer that
-        represents its value. Assumes correct input and returns an int between
-        2 and 14. Card values are given as in the game of War.
-        Does not take 'self' as a paramater.
-        """
-        if card[0] in Deck.CardVals.keys():
-            cardval = Deck.CardVals[card[0]]
-        else:
-            cardval = int(card[0])
-        return cardval
 
-    def compare_cards(card1, card2):
-        """Rather reminicient of Fortran's arithmetic if."""
-        val1 = Deck.get_int_val(card1)
-        val2 = Deck.get_int_val(card2)
-        if val1 > val2:
-            return 1
-        elif val1 == val2:
-            return 0
-        else:
-            return -1
-
-# ----------------------------------------------------------------------------
+# ============================================================================
 
 
 class Queue:
@@ -144,15 +121,19 @@ class Queue:
             return None
 
     def get_size(self):
+        """Returns current size of the queue."""
         return self.__count
 
     def is_full(self):
+        """Returns whether the queue is full."""
         return self.__count == (self.__capacity - 1)
 
     def is_empty(self):
+        """Returns whether the queue is empty."""
         return self.__count == 0
 
     def clear(self):
+        """Empties the queue and resets everything."""
         self.__items = [None for _ in range(self.__capacity)]
         self.__count = self.__head = self.__tail = 0
 
@@ -166,7 +147,7 @@ class Queue:
               (str(s.__items), s.__head, s.__tail, s.__count, s.__capacity))
 
 
-# ----------------------------------------------------------------------------
+# ============================================================================
 
 
 class Hand(Queue):
@@ -184,7 +165,7 @@ class Hand(Queue):
 
     def get_card(self):
         if self.get_size() <= 0:
-            raise OutOfCards(self.__player_number)
+            return None
         return self.dequeue()
 
     def get_war_cards(self):
@@ -195,7 +176,7 @@ class Hand(Queue):
             self.enqueue(card)
 
 
-# ----------------------------------------------------------------------------
+# ============================================================================
 
 
 class OnTable:
@@ -206,26 +187,25 @@ class OnTable:
         self.__cards = [None]*52
         self.__faceUp = [None]*52
 
+    def __get_index(self, player):
+        """Returns the index next free index in the two lists. Player 1 uses a
+        positive index and player 2 a negative one.
+        """
+        if player == 1:
+            return self.__count[player-1]
+        elif player == 2:
+            # We have to subtract 1 when counting backwards.
+            return -(self.__count[player-1]) - 1
+        else:
+            # Pylint whines about inconsistent return statements without this.
+            raise Exception
+
     def place(self, player, card, isHidden):
         index = self.__get_index(player)
 
         self.__cards[index] = card
         self.__faceUp[index] = isHidden
         self.__count[player-1] += 1
-
-    #
-    #  I originally implemented this in one line with a few hacky tricks but
-    #  decided that the fact that this method needed a 7 line comment to
-    #  explain what it did probably meant that it was a poor solution.
-    def __get_index(self, player):
-        """Returns the index next free index in the two lists. Player 1 uses a
-        positive index and player 2 a negative one.
-        """
-        if player == 1:
-            return self.__count[player-1] - 0
-        elif player == 2:
-            # We have to subtract 1 when counting backwards.
-            return (self.__count[player-1] * -1) - 1
 
     def clear(self):
         lst = []
@@ -243,17 +223,10 @@ class OnTable:
         for i in range(52):
             card = self.__cards[i]
             if card is not None:
-                buf += card if self.__faceUp[i] else "XX"
+                buf += (card) if (self.__faceUp[i]) else ("XX")
                 buf += ", "
 
         return buf[:-2] + ']'
-
-
-# ----------------------------------------------------------------------------
-
-
-class OutOfCards(Exception):
-    """Player has run out of cards."""
 
 
 ###############################################################################
@@ -278,64 +251,103 @@ def main(infile=None, numcards=None):
         for player in (1, 2):
             hands[player] = Hand(hands[player], player, war_type)
         table = OnTable()
-        call(CLEAR)
+        syscall(CLEAR)
 
-        try:
-            play(hands, table)
-        except OutOfCards as e:
-            winner = (int(e.args[0]) + 1) % 2
-            print("\nGAME OVER!\nPlayer %s wins!" % winner)
-        except (EOFError, KeyboardInterrupt) as e:
-            print("\n\nGoodbye.")
-            sys.exit(2)
+        play(hands, table)
 
         if input("\nPlay again? y/n  ") not in ('y', 'Y', 'yes'):
             again = False
 
 
 def play(hands, table):
-    gameover = False
     faceup = [None]*3
 
-    while not gameover:
-        for player in (1, 2):
-            faceup[player] = hands[player].get_card()
-            table.place(player, faceup[player], True)
-
-        print_update(hands, table, faceup)
-        comp = Deck.compare_cards(*faceup[1:])
-
-        if comp == 1:
-            print("Player 1 wins this round.")
-            hands[1].add_cards(table.clear())
-
-        elif comp == -1:
-            hands[2].add_cards(table.clear())
-            print("Player 2 wins this round.")
-
-        else:
-            print("Cards are equal - it's war!")
+    # The easiest way to break out of multiple levels of loops in python is
+    # through exceptions. I hope this is not too far from the required algorithm.
+    try:
+        while True:
             for player in (1, 2):
-                for card in hands[player].get_war_cards():
-                    table.place(player, card, False)
-            print("WARTIME TABLE UPDATE\n%s" % table)
+                faceup[player] = hands[player].get_card()
+                table.place(player, faceup[player], True)
 
-        input("\nPress enter to continue...")
-        call(CLEAR)
+            syscall(CLEAR)
+            print_update(hands, table, faceup)
+            comp = compare_cards(*faceup[1:])
+
+            if comp == 0:
+                print("Cards are equal - it's war!")
+                for player in (1, 2):
+                    cardlst = hands[player].get_war_cards()
+
+                    # Because the player might be placing multiple cards down,
+                    # it is possible to lose here, unlike earlier.
+                    if None in cardlst:
+                        raise OutOfCards(player)
+                    for card in cardlst:
+                        table.place(player, card, False)
+
+                print("WARTIME TABLE UPDATE\n%s" % table)
+
+            else:
+                if comp == 1:
+                    round_winner = 1
+                elif comp == -1:
+                    round_winner = 2
+                hands[round_winner].add_cards(table.clear())
+                print("Player %d wins this round." % round_winner)
+
+                # Have to do this check after the fact because a win could save
+                # a player who had 0 cards after placing one down.
+                for player in (1, 2):
+                    if hands[player].is_empty():
+                        raise OutOfCards(player)
+
+            input("\nPress enter to continue...")
+
+    except OutOfCards as e:
+        loser = int(e.args[0])
+        winner = (loser + 1) % 2
+        print("\nGAME OVER!\nPlayer %d is out of cards.\nPlayer %d wins!"
+              % (loser, winner))
 
 
 def print_update(hands, table, faceup):
-    for player in (1, 2):
-        print("Player %d cards remaining:  %d " %
-              (player, (hands[player].get_size()+1)))
-
-    print("\nPlayer 1 just placed: %s" % faceup[1])
+    print("Player 1 just placed: %s" % faceup[1])
     print("Player 2 just placed: %s" % faceup[2])
-    print("\nALL CARDS ON TABLE (including above two)")
-    print(str(table) + '\n')
+    for player in (1, 2):
+        print("Player %d cards remaining: %2d" %
+              (player, hands[player].get_size()))
+    print("\nALL CARDS ON TABLE (including above two)\n", str(table) + '\n')
 
 
-# ----------------------------------------------------------------------------
+# ============================================================================
+
+
+def get_int_val(card):
+    """Converts a string representing a card into an integer. Assumes correct
+    input and returns an value between 2 and 14. Card values are given as in
+    the game of War.
+    """
+    if card[0] in Deck.CardVals.keys():
+        cardval = Deck.CardVals[card[0]]
+    else:
+        cardval = int(card[0])
+    return cardval
+
+
+def compare_cards(card1, card2):
+    """Rather reminicient of Fortran's arithmetic if."""
+    val1 = get_int_val(card1)
+    val2 = get_int_val(card2)
+    if val1 > val2:
+        return 1
+    elif val1 == val2:
+        return 0
+    else:
+        return -1
+
+
+# ============================================================================
 
 
 def process_file(infile=None):
@@ -392,20 +404,19 @@ def get_options():
     interactively type a filename and the number of cards for every test run.
     """
     kwargs = {}
-    options = ["hn:123", ["help", "num="]]
+    options = ["hn:123", ["help", "numcards="]]
     valid_numcards = (1, 2, 3)
     try:
         opts, args = getopt.getopt(sys.argv[1:], *options)
     except getopt.GetoptError as e:
-        print(e)
-        print()
-        ShowUsage(options)
+        print(e, '\n')
+        show_usage(options)  # Exits
     else:
         for opt, optarg in opts:
             opt = opt.lstrip('-')
             if opt in ('h', "help"):
-                ShowUsage(options)
-            elif opt in ('n', "num"):
+                show_usage(options)  # Exits
+            elif opt in ('n', "numcards"):
                 if optarg.isnumeric() and int(optarg) in valid_numcards:
                     kwargs["numcards"] = int(optarg)
                 else:
@@ -414,14 +425,14 @@ def get_options():
                     sys.exit(1)
             elif opt.isdigit() and int(opt) in valid_numcards:
                 kwargs["numcards"] = int(opt)
-        if len(args):
+        if args:
             kwargs["infile"] = args[0]
 
         return kwargs
 
 
-def ShowUsage(options):
-    """Obligatory service."""
+def show_usage(options):
+    """Obligatory service. I miss heredocs."""
     print("""\
 Usage: %s -[%s] --[%s]  <FILE>\n
 File should be a valid filename containing formatted deck information.
@@ -437,5 +448,5 @@ if __name__ == "__main__":
     try:
         main(**get_options())
     except (EOFError, KeyboardInterrupt) as e:
-        print("")
+        print("\n\nGoodbye.")
         sys.exit(3)

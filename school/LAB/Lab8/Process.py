@@ -123,7 +123,7 @@ def get_data():
 # Main
 
 DATA = Data(get_data())
-# print(str(DATA))
+print(str(DATA))
 
 RANGES = ["[%2d-%-3d]" % (i, i+9) for i in range(0, 81, 10)]
 RANGES.append("[90-100]")
@@ -161,4 +161,4 @@ H.lit(" ".join(RANGES))
 H.end(2)
 
 H.finish()
-print(H.output, end="")
+# print(H.output, end="")

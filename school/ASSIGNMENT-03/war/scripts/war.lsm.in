@@ -1,0 +1,21 @@
+Begin3
+Title:		war
+Version:	@VERSION@
+Entered-date:	@ISODATE@
+Description:	Fight wars
+		@configure_input@
+		Please edit war.lsm.in to fix the Keywords and
+		Primary-site entries, add several more lines of
+		description here if appropriate, and to delete these
+		instructions.
+Keywords:	[substitute your keywords here]
+Author: 	leason@ualberta.ca (Brendan)
+Maintained-by:	leason@ualberta.ca (Brendan)
+Primary-site:	metlab.unc.edu pub/Linux/apps/some/directory
+		31k war-@VERSION@.tar.gz
+		500  war.lsm
+Alternate-site: 
+Original-site:  
+Platforms:      
+Copying-policy:	GNU copyleft
+End
