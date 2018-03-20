@@ -61,11 +61,13 @@ main(int argc, char **argv)
                         break;
                 }
 
-                if (verbose)
+                if (verbose) {
                         print_intlist(list_copy, numitems);
+                        puts("");
+                }
 
                 gettimeofday(&tv2, NULL);
-                printf ("\nTotal time = %f seconds\n\n",
+                printf ("Total time = %f seconds\n\n",
                         (double) (tv2.tv_usec - tv1.tv_usec) / 1000000 +
                         (double) (tv2.tv_sec  - tv1.tv_sec));
 

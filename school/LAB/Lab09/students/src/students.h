@@ -12,6 +12,7 @@
 #  define _GNU_SOURCE
 #endif
 /*===========================================================================*/
+#include <sodium.h>
 #include <stdbool.h>
 #include <stdio.h>
 
@@ -20,6 +21,20 @@ struct s_array {
         char **arr;
         int *len;
         int num;
+};
+
+
+struct student_t {
+        char *name;
+        int ID;
+        int grade;
+};
+
+
+enum sort_type {
+        sID,
+        sname,
+        sgrade
 };
 
 
@@ -37,14 +52,18 @@ struct s_array {
 #define modulo(A, B)   (((A) % (B) + (B)) % (B))
 
 
+#define FILENAME "/home/bml/random/school/LAB/Lab09/info"
+
 /* utility.c */
+struct s_array parsefile (int argc, char **argv, int optind);
 char * shitty_fgetline(FILE *f);
 int    countlines     (char *filename);
-void   print_array    (char **array, int len);
+void   print_array    (char **array, int len, char nl);
 void   free_s_array   (struct s_array *str_array);
 void * die_malloc     (size_t size);
 void * die_realloc    (void *ptr, size_t size);
 void   shuffle        (char **array, size_t n);
+int    xatoi          (char *str);
 
 
 /* options.c */
@@ -53,6 +72,16 @@ int decode_switches(int argc, char **argv);
 
 /* students.c */
 char *program_name;
+int maxlen;
+
+
+/* sortstudents.c */
+void sort_students(struct student_t *data, int size, enum sort_type type);
+
+/* methods.c */
+/*void bubble_sort   (uint32_t *data, int size);*/
+/*void selection_sort(uint32_t *data, int size);*/
+/*void recursive_ss  (uint32_t *data, int size);*/
 
 
 #endif /* students.h */

@@ -21,19 +21,6 @@ static struct option const long_options[] = {
 };
 
 
-static int
-xatio(char *str)
-{
-        char *endptr;
-        int num = strtol(str, &endptr, 10);
-
-        if (endptr == str) {
-                eprintf("Invalid integer '%s'.\n", str);
-                exit(2);
-        }
-
-        return num;
-}
 
 
 int
@@ -52,10 +39,9 @@ decode_switches(int argc, char **argv)
                 case 'V':
                         printf("students %s\n", VERSION);
                         exit(0);
-
                 case 'h':
                         usage(0);
-
+                        break;
                 default:
                         usage(EXIT_FAILURE);
                 }

@@ -1,4 +1,5 @@
 #include "students.h"
+#include <bsd/bsd.h>
 #include <ctype.h>
 #include <errno.h>
 #include <stdarg.h>
@@ -67,6 +68,32 @@ countlines(char *filename)
 }
 
 
+struct s_array
+parsefile(int argc, char **argv, int optind)
+{
+        char filename[BUFSIZ];
+        if (argc > optind)
+                strlcpy(filename, argv[optind], BUFSIZ);
+        else
+                strlcpy(filename, FILENAME, BUFSIZ);
+
+        int numlines     = countlines(filename);
+        int *numarr      = die_malloc(numlines * sizeof(int));
+        char **str_array = die_malloc(numlines * sizeof(char *));
+
+        /* We already opened this once, so this SHOULD work... */
+        FILE *fp = fopen(filename, "r");
+        for (int i = 0; i < numlines; ++i) {
+                str_array[i] = shitty_fgetline(fp);
+                numarr[i]    = strlen(str_array[i]);
+        }
+        fclose(fp);
+
+        struct s_array data = {str_array, numarr, numlines};
+        return data;
+}
+
+
 /* I have no idea how this works. */
 void
 shuffle(char **array, size_t n)
@@ -126,12 +153,31 @@ die_realloc(void *ptr, size_t size)
 
 
 void
-print_array(char **array, int len)
+print_array(char **array, int len, char nl)
 {
         for (int i = 0; i < len; ++i) {
-                if (i < (len - 1))
-                        printf("%s, ", array[i]);
-                else
+                if (nl == 'y') {
                         printf("%s\n", array[i]);
+                } else {
+                        if (i < (len - 1))
+                                printf("%s, ", array[i]);
+                        else
+                                printf("%s\n", array[i]);
+                }
         }
+}
+
+
+int
+xatoi(char *str)
+{
+        char *endptr;
+        int num = strtol(str, &endptr, 10);
+
+        if (endptr == str) {
+                eprintf("Invalid integer '%s'.\n", str);
+                exit(2);
+        }
+
+        return num;
 }
