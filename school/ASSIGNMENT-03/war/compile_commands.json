@@ -1,0 +1,102 @@
+[
+    {
+        "arguments": [
+            "cc",
+            "-c",
+            "-DHAVE_CONFIG_H",
+            "-I.",
+            "-I..",
+            "-march=native",
+            "-ftree-vectorize",
+            "-fdiagnostics-color=always",
+            "-pipe",
+            "-g",
+            "-O0",
+            "-o",
+            "utility.o",
+            "utility.c"
+        ],
+        "directory": "/home/bml/random/school/ASSIGNMENT-03/war/src",
+        "file": "utility.c"
+    },
+    {
+        "arguments": [
+            "cc",
+            "-c",
+            "-DHAVE_CONFIG_H",
+            "-I.",
+            "-I..",
+            "-march=native",
+            "-ftree-vectorize",
+            "-fdiagnostics-color=always",
+            "-pipe",
+            "-g",
+            "-O0",
+            "-o",
+            "war.o",
+            "war.c"
+        ],
+        "directory": "/home/bml/random/school/ASSIGNMENT-03/war/src",
+        "file": "war.c"
+    },
+    {
+        "arguments": [
+            "cc",
+            "-c",
+            "-DHAVE_CONFIG_H",
+            "-I.",
+            "-I..",
+            "-march=native",
+            "-ftree-vectorize",
+            "-fdiagnostics-color=always",
+            "-pipe",
+            "-g",
+            "-O0",
+            "-o",
+            "mystrlib2.o",
+            "mystrlib2.c"
+        ],
+        "directory": "/home/bml/random/school/ASSIGNMENT-03/war/src",
+        "file": "mystrlib2.c"
+    },
+    {
+        "arguments": [
+            "cc",
+            "-c",
+            "-DHAVE_CONFIG_H",
+            "-I.",
+            "-I..",
+            "-march=native",
+            "-ftree-vectorize",
+            "-fdiagnostics-color=always",
+            "-pipe",
+            "-g",
+            "-O0",
+            "-o",
+            "validate.o",
+            "validate.c"
+        ],
+        "directory": "/home/bml/random/school/ASSIGNMENT-03/war/src",
+        "file": "validate.c"
+    },
+    {
+        "arguments": [
+            "cc",
+            "-c",
+            "-DHAVE_CONFIG_H",
+            "-I.",
+            "-I..",
+            "-march=native",
+            "-ftree-vectorize",
+            "-fdiagnostics-color=always",
+            "-pipe",
+            "-g",
+            "-O0",
+            "-o",
+            "options.o",
+            "options.c"
+        ],
+        "directory": "/home/bml/random/school/ASSIGNMENT-03/war/src",
+        "file": "options.c"
+    }
+]

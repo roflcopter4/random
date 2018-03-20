@@ -8,7 +8,7 @@ AC_PREREQ([2.69])
 AC_INIT([war],[0.1.0],[nop@nop.com])
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADERS([config.h])
-AM_INIT_AUTOMAKE
+AM_INIT_AUTOMAKE([foreign])
 
 # dnl create a config.h file (Automake will add -DHAVE_CONFIG_H)
 # AM_CONFIG_HEADER(config.h)
@@ -29,8 +29,10 @@ dnl Checks for libraries.
 
 dnl Checks for header files.
 AC_HEADER_STDC
-AC_CHECK_HEADERS(unistd.h sys/param.h sys/time.h time.h sys/mkdev.h sys/sysmacros.h string.h memory.h fcntl.h dirent.h sys/ndir.h ndir.h alloca.h locale.h )
+AC_CHECK_HEADERS( unistd.h sys/param.h sys/time.h time.h sys/mkdev.h sys/sysmacros.h string.h memory.h fcntl.h dirent.h sys/ndir.h ndir.h alloca.h locale.h )
+AC_CHECK_HEADERS( [bsd/bsd.h], [], [echo; echo 'Header file "bsd/bsd.h" not found. Aborting.'; exit 1])
 
+PKG_CHECK_MODULES([WAR], [libbsd])
 
 jm_CHECK_TYPE_STRUCT_UTIMBUF
 AC_HEADER_MAJOR
@@ -45,4 +47,5 @@ dnl Checks for typedefs, structures, and compiler characteristics.
 
 dnl Checks for library functions.
 
-AC_OUTPUT(Makefile src/Makefile src/third_party/Makefile scripts/war.lsm scripts/war.spec)
+#AC_OUTPUT(Makefile src/Makefile src/third_party/Makefile scripts/war.lsm scripts/war.spec)
+AC_OUTPUT(Makefile src/Makefile)

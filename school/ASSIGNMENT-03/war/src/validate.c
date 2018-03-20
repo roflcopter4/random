@@ -1,58 +1,62 @@
-#include <assert.h>
+#ifndef _GNU_SOURCE
+#  define _GNU_SOURCE
+#endif
+#include <stdarg.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "war.h"
-
-#define prarray2(X)                           \
-do {                                             \
-        for (int i = 0; i < 52; ++i)       \
-                printf("%s\n", (X)[i]);          \
-} while (0)
+int compare(const void *a, const void *b);
 
 
-int compare(const void* a, const void* b);
+#define VALUES "AKQJ023456789"
+#define SUITS "CDHS"
 
 void
-validate_data(struct StringArray *data)
+validate_data(struct s_array *data)
 {
-        assert(data->num == 52);
-
-        /*print_array(data);*/
-        char *str_array[52];
-        /*char **str_array;*/
-        /*str_array = calloc(52, sizeof(char *));*/
-        /*size_t siz = 0;*/
-        for (int i = 0; i < 52; ++i) {
-                str_array[i] = malloc(data->arr[i].len);
-                memcpy(str_array[i], data->arr[i].str, data->arr[i].len);
-                /*puts(str_array[i]);*/
-                /*printf("%lu", strlen(data->arr[i].str));*/
-                /*str_array[i] = data->arr[i].str;*/
-                /*siz = (siz < data->arr[i].len) ? data->arr[i].len : siz;*/
-                /*printf("%lu\n", data->arr[i].len);*/
+        /* The deck must have exactly (D_SIZE) cards. */
+        if (data->num != D_SIZE) {
+                eprintf("ERROR: Deck is the wrong size.\n");
+                exit(1);
         }
-        /*printf("%lu\n", siz*sizeof(char));*/
 
-        /*prarray2(data, str_array);*/
-        qsort(str_array, 52, 3, compare);
-        /*qsort(data->arr, 52, 4, compare);*/
-        /*puts(data->arr[3].str);*/
+        /* Every card must be exactly (C_SIZE) characters */
+        for (int i = 0; i < D_SIZE; ++i)
+                if (data->len[i] != (C_SIZE)) {
+                        eprintf("ERROR: Card '%s' is the wrong size.\nAll cards"
+                                " must be exactly %d characters long.\n",
+                                data->arr[i], C_SIZE);
+                        exit(2);
+                }
 
-        /*for (int i = 0; i < 52; ++i)*/
-                /*free(str_array[i]);*/
-        /*puts(str_array[1]);*/
-        /*prarray2(data, str_array);*/
-        /*print_array(data);*/
-        prarray2(str_array);
-}
+        /* The deck must not contain duplicate cards. The easiest way to check
+         * that is to sort the deck and check each card with its neighbour. */
+        qsort(data->arr, D_SIZE, sizeof(char *), compare);
+        for (int i = 0; i < (D_SIZE - 1); ++i)
+                if (streq(data->arr[i], data->arr[i+1])) {
+                        eprintf("ERROR: Deck contains duplicate cards.\n");
+                        exit(3);
+                }
 
+        /* Now check that we have every card. I'm sure the O complexity of this
+         * implementation is just fantastic. 3 stacked for loops. Classy. */
+        char card_vals[2][32] = {VALUES, SUITS};
+        int len[2]            = {strlen(VALUES), strlen(SUITS)};
 
-void
-print_array(struct StringArray *data)
-{
-        for (int i = 0; i < data->num; ++i) {
-                printf("%s\n", data->arr[i].str);
+        for (int i = 0; i < (D_SIZE - 1); ++i) {
+                int found = 0;
+                for (int pos = 0; pos < 2; ++pos)
+                        for (int ch = 0; ch < len[pos]; ++ch)
+                                if (data->arr[i][pos] == card_vals[pos][ch]) {
+                                        ++found;
+                                        break;
+                                }
+                if (found != 2) {
+                        eprintf("ERROR: Card '%s' is invalid.\n", data->arr[i]);
+                        exit(4);
+                }
         }
 }
 
@@ -60,7 +64,6 @@ print_array(struct StringArray *data)
 int
 compare(const void *a, const void *b)
 {
-        const char *pa = (const char**)a;
-        const char *pb = (const char**)b;
-        return strcmp(pa,pb);
+        return strcmp(*(const char **)a,
+                      *(const char **)b);
 }

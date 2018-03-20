@@ -1,4 +1,5 @@
 #include <getopt.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 #include "war.h"
@@ -21,7 +22,7 @@ int
 decode_switches(int argc, char **argv, int *numcards)
 {
         int c;
-        while ((c = getopt_long(argc, argv, "hVn:123",\
+        while ((c = getopt_long(argc, argv, "hVn:123",
                                 long_options, NULL)) != EOF)
         { switch (c) {
         case 'V':
@@ -29,10 +30,11 @@ decode_switches(int argc, char **argv, int *numcards)
                 exit(EXIT_SUCCESS);
         case 'h':
                 usage(EXIT_SUCCESS);
+                break;
         case 'n':
                 if ((*numcards = atoi(optarg)) < 1 || *numcards > 3) {
-                        fprintf(stderr, "Argument to numcards must be an "
-                                "integer between 1 and 3 (inclusive).\n");
+                        eprintf("Argument to numcards must be an integer"
+                                " between 1 and 3 (inclusive).\n");
                         exit(EXIT_FAILURE);
                 }
                 break;

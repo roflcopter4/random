@@ -91,8 +91,7 @@ host_triplet = @host@
 bin_PROGRAMS = war$(EXEEXT)
 subdir = src
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
-	$(top_srcdir)/configure.ac
+am__aclocal_m4_deps = $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 DIST_COMMON = $(srcdir)/Makefile.am $(am__DIST_COMMON)
@@ -103,9 +102,9 @@ CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
 am_war_OBJECTS = war.$(OBJEXT) options.$(OBJEXT) validate.$(OBJEXT) \
-	mystrlib2.$(OBJEXT)
+	utility.$(OBJEXT) queue.$(OBJEXT)
 war_OBJECTS = $(am_war_OBJECTS)
-war_LDADD = $(LDADD)
+war_DEPENDENCIES =
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -121,8 +120,9 @@ am__v_at_1 =
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
-am__depfiles_remade = ./$(DEPDIR)/mystrlib2.Po ./$(DEPDIR)/options.Po \
-	./$(DEPDIR)/validate.Po ./$(DEPDIR)/war.Po
+am__depfiles_remade = ./$(DEPDIR)/options.Po ./$(DEPDIR)/queue.Po \
+	./$(DEPDIR)/utility.Po ./$(DEPDIR)/validate.Po \
+	./$(DEPDIR)/war.Po
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -207,11 +207,16 @@ PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_URL = @PACKAGE_URL@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
+PKG_CONFIG = @PKG_CONFIG@
+PKG_CONFIG_LIBDIR = @PKG_CONFIG_LIBDIR@
+PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
 RANLIB = @RANLIB@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
 VERSION = @VERSION@
+WAR_CFLAGS = @WAR_CFLAGS@
+WAR_LIBS = @WAR_LIBS@
 abs_builddir = @abs_builddir@
 abs_srcdir = @abs_srcdir@
 abs_top_builddir = @abs_top_builddir@
@@ -262,13 +267,11 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-# war_SOURCES=war.c third_party/xmalloc.c third_party/getopt.c third_party/getopt1.c third_party/include/system.h third_party/include/getopt.h third_party/include/xmalloc.h war.1 aclocal.m4
-# broken # war_SOURCES=war.c third_party/libtp.a third_party/include/system.h third_party/include/getopt.h third_party/include/xmalloc.h fag.1 aclocal.m4
-war_SOURCES = war.c options.c validate.c\
-		war.h \
-		mystrlib2.c mystrlib2.h \
+war_SOURCES = war.c options.c validate.c utility.c queue.c \
+		war.h queue.h\
 		third_party/include/system.h war.1 aclocal.m4
 
+war_LDADD = -lbsd
 all: all-am
 
 .SUFFIXES:
@@ -282,9 +285,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu src/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign src/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu src/Makefile
+	  $(AUTOMAKE) --foreign src/Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
 	  *config.status*) \
@@ -355,8 +358,9 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mystrlib2.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/options.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/queue.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/utility.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/validate.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/war.Po@am__quote@ # am--include-marker
 
@@ -507,8 +511,9 @@ clean: clean-am
 clean-am: clean-binPROGRAMS clean-generic mostlyclean-am
 
 distclean: distclean-am
-		-rm -f ./$(DEPDIR)/mystrlib2.Po
-	-rm -f ./$(DEPDIR)/options.Po
+		-rm -f ./$(DEPDIR)/options.Po
+	-rm -f ./$(DEPDIR)/queue.Po
+	-rm -f ./$(DEPDIR)/utility.Po
 	-rm -f ./$(DEPDIR)/validate.Po
 	-rm -f ./$(DEPDIR)/war.Po
 	-rm -f Makefile
@@ -556,8 +561,9 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-		-rm -f ./$(DEPDIR)/mystrlib2.Po
-	-rm -f ./$(DEPDIR)/options.Po
+		-rm -f ./$(DEPDIR)/options.Po
+	-rm -f ./$(DEPDIR)/queue.Po
+	-rm -f ./$(DEPDIR)/utility.Po
 	-rm -f ./$(DEPDIR)/validate.Po
 	-rm -f ./$(DEPDIR)/war.Po
 	-rm -f Makefile
@@ -595,9 +601,6 @@ uninstall-am: uninstall-binPROGRAMS
 
 .PRECIOUS: Makefile
 
-
-#  uncomment the following if war requires the math library
-#war_LDADD=-lm
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
