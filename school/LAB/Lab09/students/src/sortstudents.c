@@ -1,21 +1,17 @@
 #include "students.h"
 #include <bsd/bsd.h>
-#include <stdio.h>
 #include <stdlib.h>
 
 
-static int get_id(struct student_t *student);
-/*static int compare_name(struct student_t *student);*/
-static int get_grade(struct student_t *student);
-
-static void selection_sort(struct student_t *data, int size, int (*compare)(struct student_t *));
-static void selection_sort_str(struct student_t *data, int size);
-
-static void ss2(struct student_t *data, int size, int (*compare)(struct student_t *));
+static inline int get_id(struct student *myStudent);
+static inline int get_grade(struct student *myStudent);
+static void selection_sort(struct student *data, int size,
+                           int (*compare)(struct student *));
+static void selection_sort_str(struct student *data, int size);
 
 
 void
-sort_students(struct student_t *data, int size, enum sort_type type)
+sort_students(struct student *data, int size, enum sort_type type)
 {
         switch (type) {
         case sID:
@@ -27,39 +23,38 @@ sort_students(struct student_t *data, int size, enum sort_type type)
         case sgrade:
                 selection_sort(data, size, &get_grade);
                 break;
+        default:
+                eprintf("Invalid usage of sort_students.\n");
+                exit(1);
         }
 }
 
 
-static int
-get_id(struct student_t *student)
+static inline int
+get_id(struct student *myStudent)
 {
-        return student->ID;
+        return myStudent->ID;
 }
 
-static int
-get_grade(struct student_t *student)
+static inline int
+get_grade(struct student *myStudent)
 {
-        return student->grade;
+        return myStudent->grade;
 }
 
 
 static void
-selection_sort(struct student_t *data, int size,
-               int (*compare)(struct student_t *))
+selection_sort(struct student *data, int size,
+               int (*compare)(struct student *))
 {
         int smallest = 0;
-        for (int i = 0; i < size; ++i) {
-                if (compare(&data[i]) < compare(&data[smallest]))
+        for (int i = 0; i < size; ++i)
+                if (compare(&data[i]) > compare(&data[smallest]))
                         smallest = i;
-                /*int a = compare(&data[i]);*/
-                /*int b = compare(&data[smallest]);*/
-                /*printf("%d - %d\n", a, b);*/
-        }
 
-        struct student_t tmp = data[0];
-        data[0]               = data[smallest];
-        data[smallest]        = tmp;
+        struct student tmp = data[0];
+        data[0] = data[smallest];
+        data[smallest] = tmp;
 
         if (size > 2)
                 selection_sort(&data[1], size - 1, compare);
@@ -67,38 +62,17 @@ selection_sort(struct student_t *data, int size,
 
 
 static void
-selection_sort_str(struct student_t *data, int size)
+selection_sort_str(struct student *data, int size)
 {
         int smallest = 0;
         for (int i = 0; i < size; ++i)
                 if (strcmp(data[i].name, data[smallest].name) < 0)
                         smallest = i;
 
-        struct student_t tmp = data[0];
-        data[0]               = data[smallest];
-        data[smallest]        = tmp;
+        struct student tmp = data[0];
+        data[0] = data[smallest];
+        data[smallest] = tmp;
 
         if (size > 2)
                 selection_sort_str(&data[1], size - 1);
-}
-
-
-static void
-ss2(struct student_t *data, int size,
-               int (*compare)(struct student_t *))
-{
-        for (int index = 0; index < size; ++index) {
-                int smallest = index;
-                for (int i = index; i < size; ++i) {
-                        int a = compare(&data[i]);
-                        int b = compare(&data[smallest]);
-                        printf("%d - %d\n", a, b);
-                        if (compare(&data[i]) < compare(&data[smallest]))
-                                smallest = i;
-                }
-
-                struct student_t tmp   = data[index];
-                data[index]    = data[smallest];
-                data[smallest] = tmp;
-        }
 }
