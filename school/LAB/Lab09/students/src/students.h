@@ -24,7 +24,7 @@ struct s_array {
 };
 
 
-struct student {
+struct student_t {
         char *name;
         int ID;
         int grade;
@@ -76,7 +76,12 @@ int maxlen;
 
 
 /* sortstudents.c */
-void sort_students(struct student *data, int size, enum sort_type type);
+void sort_students(struct student_t *data, int size, enum sort_type type);
+
+/* methods.c */
+/*void bubble_sort   (uint32_t *data, int size);*/
+/*void selection_sort(uint32_t *data, int size);*/
+/*void recursive_ss  (uint32_t *data, int size);*/
 
 
 #endif /* students.h */

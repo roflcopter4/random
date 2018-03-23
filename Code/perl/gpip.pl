@@ -1,50 +1,33 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -w
 # Copyright 2002 Ed Avis.  See the file COPYING.
 use strict; use warnings;
-use Carp;
+use Carp qw( carp croak );
 use File::Temp qw( tempfile tempdir );
 use Getopt::Long qw(:config gnu_getopt no_ignore_case);
 use IO::Handle;
 
 my $VERSION = '1.2';
-
 # Whether to remove the temporary directory after running.  Normally
 # on, but turning it off may be useful for debugging.
 my $CLEANUP = 1;
 
 ###############################################################################
 
-sub show_usage {
-    my $status = shift or confess("Error in call to show_usage()\n");
-    print STDERR << "END";
-usage: $0 [-I] [-O] [-i|-o|-b]... PROG ARGS...
-where some ARGS are - or -.foo, if lowercase switches have been used.
--i replaces the placeholder with a file containing standard input,
--o replaces it with a file whose contents are output after running,
--b does both.
-Use the placeholder -.foo to make a temporary file ending '.foo'.
+sub show_usage() {
+    print STDERR <<~"END";
+        usage: $0 [-I] [-O] [-i|-o|-b]... PROG ARGS...
+        where some ARGS are - or -.foo, if lowercase switches have been used.
+        -i replaces the placeholder with a file containing standard input,
+        -o replaces it with a file whose contents are output after running,
+        -b does both.
+        Use the placeholder -.foo to make a temporary file ending '.foo'.
 
--I means buffer standard input to make it seekable, but does not change
-the arguments passed to PROG.  -O does the same for standard output.
+        -I means buffer standard input to make it seekable, but does not change
+        the arguments passed to PROG.  -O does the same for standard output.
 
-Report bugs to <ed\@membled.com>.
-END
-    exit $status;
+        Report bugs to <ed\@membled.com>.
+        END
 }
-
-sub version {
-    print STDERR << "EOF";
-gpip $VERSION
-Written by Ed Avis.
-
-Copyright (C) 2002 Ed Avis.
-This is free software; see the source for copying conditions.  There is NO
-warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-EOF
-    exit 0;
-}
-
-###############################################################################
 
 sub find_placeholder( $ ) {
     use vars '@l';
@@ -57,6 +40,8 @@ sub find_placeholder( $ ) {
     return undef;
 }
 
+# tmpnam()
+#
 # Return a name for a temporary file.  I believe this is secure
 # because it creates a 'private' directory and then uses that.  Cannot
 # use POSIX's tmpnam() because I want to ensure 8.3 filenames (and
@@ -65,17 +50,17 @@ sub tmpnam() {
     my $tempdir;
     my $num;
     croak 'usage: tmpnam()' if @_;
-
     for ($tempdir) {
         if ( not defined ) {
             $_ = tempdir( 'XXXXXXXX', CLEANUP => $CLEANUP, TMPDIR => 1 );
-            if ( not defined ) { die 'cannot make temporary directory'; }
-            if ( not -d )      { die "failed to make directory $_"; }
+            croak 'cannot make temporary directory' if not defined;
+            croak "failed to make directory $_" if not -d;
         }
     }
 
     # Pick an unused filename in this directory.  Since we created the
     # dir ourselves we don't need to look at what it contains.
+    #
     $num = 0 if not defined $num;
     return "$tempdir/" . $num++;
 }
@@ -94,11 +79,25 @@ my @rest  = ();
 
 # Get the flags into a big lump.
 while ( my $arg = shift @ARGV ) {
-    if    ( index( '--help',    $arg ) == 0 ) { show_usage(0); }
-    elsif ( index( '--version', $arg ) == 0 ) { version; }
+    if ( index( '--help', $arg ) == 0 ) {
+        show_usage();
+        exit(0);
+    }
+    elsif ( index( '--version', $arg ) == 0 ) {
+        print STDERR <<~"END";
+            gpip $VERSION
+            Written by Ed Avis.
+
+            Copyright (C) 2002 Ed Avis.
+            This is free software; see the source for copying conditions.  There is NO
+            warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+            END
+        exit(0);
+    }
     elsif ( $arg =~ /^--/ ) {
         print STDERR "unknown option $arg\n";
-        show_usage(1);
+        show_usage();
+        exit(1);
     }
     elsif ( $arg =~ /^-(.*)/ ) {
         local $_ = $1;
@@ -121,9 +120,9 @@ while ( my $arg = shift @ARGV ) {
 }
 
 @rest = @ARGV;
-if ( @rest == 0 ) {
-    die "no program specified, usage: $0 [-i|-o]... PROG ARGS...";
-}
+croak "no program specified, usage: $0 [-i|-o]... PROG ARGS..."
+    if @rest == 0;
+
 
 ###############################################################################
 
@@ -169,7 +168,7 @@ foreach $flag ( split( //, $flags ) ) {
         }
     }
     else {
-        confess;  # shouldn't happen, we filtered earlier
+        croak;    # shouldn't happen, we filtered earlier
     }
 }
 
@@ -181,7 +180,7 @@ if (@infiles) {
     my @handles = ();
     foreach (@infiles) {
         my $fh = new IO::Handle;
-        open( $fh, '+<', $_ ) or croak "can't write to $_: $!";
+        open( $fh, ">$_" ) or croak "can't write to $_: $!";
         push @handles, $fh;
     }
 
@@ -200,6 +199,7 @@ if (@infiles) {
 # Run the program, with stdin and stdout redirected if appropriate.
 local *OLDOUT;
 if ( defined $stdin_file ) {
+
     # Won't need to restore stdin afterwards.
     open( STDIN, $stdin_file ) or croak "cannot reopen $stdin_file: $!";
 }
@@ -208,16 +208,13 @@ if ( defined $stdout_file ) {
     open( STDOUT, ">$stdout_file" )
         or croak "cannot reopen $stdout_file for writing: $!";
 }
-
 system( $prog, @args );
-
 if ( defined $stdout_file ) {
     open( STDOUT, '>&OLDOUT' )
         or croak "cannot dup stdout back again: $!";
 }
 
 if ($CLEANUP) {
-
     # Remove input files.
     foreach (@infiles) {
         next if $is_outfile{$_};
@@ -227,9 +224,8 @@ if ($CLEANUP) {
 
 # Print output if necessary, and remove files.
 my $outfile;
-my $FH;
 foreach $outfile (@outfiles) {
-    unless ( open( $FH, '>', $outfile ) ) {
+    unless ( open( OUTFILE, $outfile ) ) {
         if (    $! =~ /^No such file or directory/
             and $outfile !~ m!\.[^/]*$! )
         {
@@ -242,25 +238,27 @@ foreach $outfile (@outfiles) {
             }
             my @poss = <$outfile.*>;
             if ( @poss == 0 ) {
+
                 # Nope, nothing.
                 croak "$prog didn't create $outfile or any $outfile.*\n";
             }
             elsif ( @poss == 1 ) {
+
                 # It looks like the program has indeed created an
                 # output file with a silly name.
                 #
                 my $o = $poss[0];
                 $o =~ /^$outfile(\..*)$/ or croak;
                 my $ext = $1;
-                warn << "END";
-$prog has created the file '$o' instead of '$outfile'. Perhaps you should have
-given the output placeholder as '-$1' instead of '-'?
-END
-                open( $FH, '>', $o ) or croak "cannot open $o: $!";
+                warn <<~"END";
+                    $prog has created the file '$o' instead of '$outfile'.  Perhaps you
+                    should have given the output placeholder as '-$1' instead of '-'?
+                    END
+                open( OUTFILE, $o ) or croak "cannot open $o: $!";
                 $outfile = $o;
             }
             else {
-                my $s = join( ', ', @poss );
+                my $s = join( ', ', @poss ) ;
                 croak <<~"EOF";
                     '$prog' did not create '$outfile', but it did create: '$s'.
                     I can't handle this sort of thing, giving up.
@@ -272,11 +270,12 @@ END
         }
     }
 
-    while ( <$FH> ) {
+    while (<OUTFILE>) {
         print;
     }
-    close $FH;
+    close OUTFILE;
     if ($CLEANUP) {
         unlink $outfile or croak "cannot unlink $outfile: $!";
     }
 }
+
