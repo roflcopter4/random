@@ -1,0 +1,93 @@
+Lab 10 Exercise
+
+Write a Python program that contains a function called count_inversions
+that will count the number of inversions in a list of values. An
+inversion is a pair of items in a list that are reversed from their
+natural ordering. For example, in the list [1, 3, 2], the pair of items
+[3, 2] is an inversion, because 2 should come before 3 in a sorted list.
+The pair [1, 3] is not an inversion as 1 comes before 3.
+
+Note that a list of length 1 has no inversions.
+
+Problem Task
+
+The count_inversions function will have a single parameter, which is the
+list to count inversions in. The function should sort the list in
+ascending order using merge sort, and return the number of inversions in
+the original list as well as the sorted list. You may use merge sort
+code from the lecture or the textbook as the basis for your function.
+You can copy the lecture or textbook code directly, and make
+modifications required to count the inversions. However, you should not
+make changes to the underlying merge sort algorithm. You may assume the
+list contains only integers.
+
+Your lab exercise is to create a Python program called INVERSION.PY that
+contains a function called count_inversions that will count the number
+of inversions in a list of values. An inversion is a pair of items in a
+list that are reversed from their natural ordering. For example, in the
+list [1, 3, 2], the pair of items [3, 2] is an inversion, because 2
+should come before 3 in a sorted list. The pair [1, 3] is not an
+inversion as 1 comes before 3.
+
+Counting inversions can be done using a modification of the merge sort
+algorithm, specifically at the merging step. Suppose that you are
+merging two lists, and you know how many inversions were in each half.
+The total number of inversions in the merged list will be the number of
+inversions in the left half, plus the number of inversions in the right
+half, plus the number of inversions between the two lists. The number of
+inversions between the two lists can be found by keeping track of the
+number of items remaining in the left half of the list when you choose
+an item from the right half as the next item to merge.
+
+For example, if the initial list is [5, 1, 2, 4], the left half ([5, 1])
+contains 1 inversion and is sorted as [1, 5]. The right half ([2, 4])
+contains 0 inversions and is sorted as [2, 4]. When we merge the left
+and right halves, we first choose 1 from the left half, then 2 from the
+right half. When we choose 2, there is one item remaining in the left
+half, so we add one inversion to the count. Next, we choose 4 from the
+right half, and again we have one item remaining in the left half, so we
+add one more inversion to the count. Finally, we choose 5 from the left
+half. The total number of inversions is (the number of inversions in the
+left half) + (the number of inversions in the right half) + (the number
+of inversions counted in the merge step), which is 1 + 0 + 2 = 3 in this
+example.
+
+Note that a list of length 1 has no inversions. 
+
+_YOU MUST USE A MODIFICATION OF THE MERGESORT ALGORITHM TO SOLVE THIS PROBLEM. SOLUTIONS NOT BASED ON MERGESORT WILL BE PENALIZED 50% OF THE TOTAL MARKS FOR THIS EXERCISE._
+
+Sample Run 1
+
+my_list = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
+inversions = count_inversions(my_list)
+print(my_list)
+print(inversions)
+
+Sample Output 1
+
+[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+45
+
+Sample Run 2
+
+my_list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+inversions = count_inversions(my_list)
+print(my_list)
+print(inversions)
+
+Sample Output 2
+
+[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+0
+
+Sample Run 3
+
+my_list = [1, 2, 10, 4, 5, 8, 7]
+inversions = count_inversions(my_list)
+print(my_list)
+print(inversions)
+
+Sample Output 3
+
+[1, 2, 4, 5, 7, 8, 10]
+5

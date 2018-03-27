@@ -1,0 +1,13 @@
+Trying mergesort.
+Total time = 0.134201 seconds
+
+Running C's 'qsort'.
+Total time = 0.099876 seconds
+
+Running recursive selection sort.
+Total time = 251.110358 seconds
+
+Running braindead bubblesort.
+Total time = 1142.445836 seconds
+
+Sorting 1 million integers between 0 and 100,000,000.
