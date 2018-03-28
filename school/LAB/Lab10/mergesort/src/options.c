@@ -29,6 +29,9 @@ decode_switches(int argc, char **argv)
         maxsize  = MAXSIZE;
         numitems = NUM;
 
+        if (argc == 1)
+                usage(1);
+
         while ((ch = getopt_long(argc, argv, "hVvLQmbsN:M:",
                                  long_options, (int *)0)) != EOF) {
         switch (ch) {
@@ -57,7 +60,7 @@ decode_switches(int argc, char **argv)
                 optflags[opt_flag_ind++] = (char)ch;
                 break;
         default:
-                usage(1);
+                usage(2);
         } }
 }
 

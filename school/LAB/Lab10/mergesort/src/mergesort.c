@@ -4,9 +4,11 @@
 #include <string.h>
 #include <sys/time.h>
 
-static void timesort(uint32_t *data);
+/*#define INTLIST {10, 9, 8, 7, 6, 5, 4, 3, 2, 1}*/
 
-#define INTLIST {10, 9, 8, 7, 6, 5, 4, 3, 2, 1}
+#ifndef INTLIST
+static void timesort(uint32_t *data);
+#endif
 
 #define my_mergesort(LST,LEN)                            \
         do {                                             \
@@ -30,27 +32,29 @@ main(int argc, char **argv)
         program_name = argv[0];
         decode_switches(argc, argv);
 
+
 #ifdef INTLIST
         uint32_t tmp[] = INTLIST;
         numitems = sizeof(tmp) / sizeof(uint32_t);
         uint32_t *data = xmalloc(sizeof(tmp));
         memcpy(data, tmp, sizeof(tmp));
+
+        __my_mergesort(data, numitems);
+        lazy_printlist(data);
 #else
         if (sodium_init() != 0)
                 exit(255);
         uint32_t *data = getlist();
+        timesort(data);
 #endif
 
-        /*timesort(data);*/
-
-        __my_mergesort(data, numitems);
-        lazy_printlist(data);
 
         free(data);
         return 0;
 }
 
 
+#ifndef INTLIST
 static void
 timesort(uint32_t *data)
 {
@@ -99,3 +103,4 @@ timesort(uint32_t *data)
                 free(data_copy);
         }
 }
+#endif

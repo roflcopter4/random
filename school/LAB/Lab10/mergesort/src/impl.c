@@ -6,15 +6,14 @@ static uint32_t *
 do_merge_sort(uint32_t *data, int size, struct ms_ptr_list *ptrlist);
 
 static uint32_t *
-merge(const uint32_t *left, const uint32_t *right, int left_len, int right_len,
-      struct ms_ptr_list *ptrlist);
+merge(const uint32_t *left, const uint32_t *right, int left_len, int right_len, struct ms_ptr_list *ptrlist);
 
 
 uint32_t *
 merge_sort(uint32_t *data, int size)
 {
         struct ms_ptr_list ptrlist;
-        ptrlist.max       = size * log(size);
+        ptrlist.max       = size * log(size);  /* Seems a reasonable guess */
         ptrlist.increment = ptrlist.max / 2;
         ptrlist.list      = xmalloc(ptrlist.max * sizeof(uint32_t *));
         ptrlist.counter   = 0;

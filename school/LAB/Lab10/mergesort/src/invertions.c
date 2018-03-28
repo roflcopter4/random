@@ -21,6 +21,7 @@ __merge_sort(uint32_t *data, int size)
         ptrlist.increment = ptrlist.max / 2;
         ptrlist.list      = xmalloc(ptrlist.max * sizeof(uint32_t *));
         ptrlist.counter   = 0;
+        /*ptrlist.back_counter = -2;*/
 
         uint32_t *ret = do_merge_sort(data, size, &ptrlist);
 

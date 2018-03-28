@@ -34,6 +34,7 @@ struct ms_ptr_list {
         int increment;
         int max;
         int counter;
+        /*int back_counter;*/
 };
 
 
@@ -57,8 +58,10 @@ struct ms_ptr_list {
 /*===========================================================================*/
 
 
-#define MAXSIZE 10000
+/*#define MAXSIZE 10000*/
+#define MAXSIZE 4294967295
 #define NUM     100
+/*#define SPACE_INTS*/
 
 /* mergesort.c */
 char *program_name;

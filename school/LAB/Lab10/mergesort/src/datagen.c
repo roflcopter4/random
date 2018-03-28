@@ -14,19 +14,12 @@ print_intlist(uint32_t *intlist, int size)
 {
 #ifdef SPACE_INTS
         int intlen = numdigits(size);
-        for (int i = 0; i < size; ++i) {
-                if (i < (size - 1))
-                        printf("%*u, ", intlen, intlist[i]);
-                else
-                        printf("%*u\n", intlen, intlist[i]);
+        for (int i = 0; i < size; ++i)
+                printf("%*u, ", intlen, intlist[i]);
 #else
-        for (int i = 0; i < size; ++i) {
-                if (i < (size - 1))
-                        printf("%u, ", intlist[i]);
-                else
-                        printf("%u", intlist[i]);
+        for (int i = 0; i < size; ++i)
+                printf("%u, ", intlist[i]);
 #endif
-        }
 
         puts("");
 }
