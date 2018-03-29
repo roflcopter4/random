@@ -104,7 +104,8 @@ PROGRAMS = $(bin_PROGRAMS)
 am_mergesort_OBJECTS = mergesort-mergesort.$(OBJEXT) \
 	mergesort-options.$(OBJEXT) mergesort-utility.$(OBJEXT) \
 	mergesort-datagen.$(OBJEXT) mergesort-oldmethods.$(OBJEXT) \
-	mergesort-impl.$(OBJEXT) mergesort-invertions.$(OBJEXT)
+	mergesort-impl.$(OBJEXT) mergesort-invertions.$(OBJEXT) \
+	mergesort-final.$(OBJEXT)
 mergesort_OBJECTS = $(am_mergesort_OBJECTS)
 mergesort_DEPENDENCIES =
 mergesort_LINK = $(CCLD) $(mergesort_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
@@ -125,7 +126,7 @@ DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/mergesort-datagen.Po \
-	./$(DEPDIR)/mergesort-impl.Po \
+	./$(DEPDIR)/mergesort-final.Po ./$(DEPDIR)/mergesort-impl.Po \
 	./$(DEPDIR)/mergesort-invertions.Po \
 	./$(DEPDIR)/mergesort-mergesort.Po \
 	./$(DEPDIR)/mergesort-oldmethods.Po \
@@ -280,10 +281,10 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 mergesort_SOURCES = mergesort.c options.c utility.c datagen.c oldmethods.c impl.c \
-		  invertions.c \
+		  invertions.c final.c \
 		  mergesort.h
 
-mergesort_LDADD = -lsodium -lm
+mergesort_LDADD = -lsodium -lncurses -ltinfo
 all: all-am
 
 .SUFFIXES:
@@ -371,6 +372,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mergesort-datagen.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mergesort-final.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mergesort-impl.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mergesort-invertions.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mergesort-mergesort.Po@am__quote@ # am--include-marker
@@ -495,6 +497,20 @@ mergesort-invertions.obj: invertions.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='invertions.c' object='mergesort-invertions.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(mergesort_CFLAGS) $(CFLAGS) -c -o mergesort-invertions.obj `if test -f 'invertions.c'; then $(CYGPATH_W) 'invertions.c'; else $(CYGPATH_W) '$(srcdir)/invertions.c'; fi`
+
+mergesort-final.o: final.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(mergesort_CFLAGS) $(CFLAGS) -MT mergesort-final.o -MD -MP -MF $(DEPDIR)/mergesort-final.Tpo -c -o mergesort-final.o `test -f 'final.c' || echo '$(srcdir)/'`final.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/mergesort-final.Tpo $(DEPDIR)/mergesort-final.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='final.c' object='mergesort-final.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(mergesort_CFLAGS) $(CFLAGS) -c -o mergesort-final.o `test -f 'final.c' || echo '$(srcdir)/'`final.c
+
+mergesort-final.obj: final.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(mergesort_CFLAGS) $(CFLAGS) -MT mergesort-final.obj -MD -MP -MF $(DEPDIR)/mergesort-final.Tpo -c -o mergesort-final.obj `if test -f 'final.c'; then $(CYGPATH_W) 'final.c'; else $(CYGPATH_W) '$(srcdir)/final.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/mergesort-final.Tpo $(DEPDIR)/mergesort-final.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='final.c' object='mergesort-final.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(mergesort_CFLAGS) $(CFLAGS) -c -o mergesort-final.obj `if test -f 'final.c'; then $(CYGPATH_W) 'final.c'; else $(CYGPATH_W) '$(srcdir)/final.c'; fi`
 
 ID: $(am__tagged_files)
 	$(am__define_uniq_tagged_files); mkid -fID $$unique
@@ -624,6 +640,7 @@ clean-am: clean-binPROGRAMS clean-generic mostlyclean-am
 
 distclean: distclean-am
 		-rm -f ./$(DEPDIR)/mergesort-datagen.Po
+	-rm -f ./$(DEPDIR)/mergesort-final.Po
 	-rm -f ./$(DEPDIR)/mergesort-impl.Po
 	-rm -f ./$(DEPDIR)/mergesort-invertions.Po
 	-rm -f ./$(DEPDIR)/mergesort-mergesort.Po
@@ -676,6 +693,7 @@ installcheck-am:
 
 maintainer-clean: maintainer-clean-am
 		-rm -f ./$(DEPDIR)/mergesort-datagen.Po
+	-rm -f ./$(DEPDIR)/mergesort-final.Po
 	-rm -f ./$(DEPDIR)/mergesort-impl.Po
 	-rm -f ./$(DEPDIR)/mergesort-invertions.Po
 	-rm -f ./$(DEPDIR)/mergesort-mergesort.Po

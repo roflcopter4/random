@@ -3,3 +3,5 @@ core
 *.so
 *.pdf
 *.zip
+tags
+.tags

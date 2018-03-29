@@ -1,6 +1,6 @@
 bin_PROGRAMS=mergesort
 mergesort_SOURCES=mergesort.c options.c utility.c datagen.c oldmethods.c impl.c \
-		  invertions.c \
+		  invertions.c final.c \
 		  mergesort.h
 
-mergesort_LDADD=-lsodium -lm
+mergesort_LDADD=-lsodium -lncurses -ltinfo

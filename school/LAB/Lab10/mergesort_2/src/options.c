@@ -1,23 +1,29 @@
 #include "mergesort.h"
 #include <getopt.h>
+#include <limits.h>
 #include <stdlib.h>
+
+#define MAXSIZE UINT_MAX
+#define NUM     10000
 
 static void usage(int status);
 
 enum { DUMMY_CODE = 129 };
 
 static struct option const long_options[] = {
-        {"help",      no_argument,       0, 'h'},
-        {"version",   no_argument,       0, 'V'},
-        {"verbose",   no_argument,       0, 'v'},
-        {"loud",      no_argument,       0, 'L'},
-        {"qsort",     no_argument,       0, 'Q'},
-        {"mergesort", no_argument,       0, 'm'},
-        {"bubble",    no_argument,       0, 'b'},
-        {"selection", no_argument,       0, 's'},
-        {"num",       required_argument, 0, 'N'},
-        {"maxsize",   required_argument, 0, 'M'},
-        {NULL, 0, NULL, 0}
+        {"help",       no_argument,       0, 'h'},
+        {"version",    no_argument,       0, 'V'},
+        {"verbose",    no_argument,       0, 'v'},
+        {"loud",       no_argument,       0, 'L'},
+        {"qsort",      no_argument,       0, 'Q'},
+        {"mergesort",  no_argument,       0, 'm'},
+        {"invertions", no_argument,       0, 'I'},
+        {"bubble",     no_argument,       0, 'b'},
+        {"selection",  no_argument,       0, 's'},
+        {"num",        required_argument, 0, 'N'},
+        {"maxsize",    required_argument, 0, 'M'},
+        {"intlist",    required_argument, 0, 'i'},
+        {0, 0, 0, 0}
 };
 
 
@@ -26,14 +32,15 @@ decode_switches(int argc, char **argv)
 {
         int ch;
         opt_flag_ind = 0;
-        maxsize  = MAXSIZE;
-        numitems = NUM;
+        g_maxsize  = MAXSIZE;
+        g_numitems = NUM;
+        verbose = loud = use_intlist = false;
 
         if (argc == 1)
                 usage(1);
 
-        while ((ch = getopt_long(argc, argv, "hVvLQmbsN:M:",
-                                 long_options, (int *)0)) != EOF) {
+        while ((ch = getopt_long(argc, argv, "hVvLQmIbsN:M:i",
+                                 long_options, NULL)) != EOF) {
         switch (ch) {
         case 'V':
                 printf("%s %s\n", NAME, VERSION);
@@ -48,16 +55,20 @@ decode_switches(int argc, char **argv)
                 verbose = loud = true;
                 break;
         case 'N':
-                numitems = xatoi(optarg);
+                g_numitems = xatoi(optarg);
                 break;
         case 'M':
-                maxsize = xatoi(optarg);
+                g_maxsize = xatoi(optarg);
                 break;
         case 'Q':
         case 'm':
         case 'b':
         case 's':
+        case 'I':
                 optflags[opt_flag_ind++] = (char)ch;
+                break;
+        case 'i':
+                use_intlist = true;
                 break;
         default:
                 usage(2);
@@ -81,6 +92,8 @@ Options:\n\
   -m, --mergesort     Sort with my mergesort function\n\
   -b, --bubble        Sort with braindead bubblesort\n\
   -s, --selection     Sort with recursive selection sort\n\
+  -I, --invertions    Sort with modified mergesort and print no of invertions\n\
+  -i, --intlist       Override normal operation and sort a literal list\n\
 ");
         exit(status);
 }

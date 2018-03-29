@@ -5,7 +5,7 @@ dnl Process this file with autoconf to produce a configure script.
 # AM_INIT_AUTOMAKE(mergesort, 0.1.0)
  
 AC_PREREQ([2.69])
-AC_INIT([mergesort],[0.1.0],[nop@nop.com])
+AC_INIT([mergesort],[1.0.0],[leason@ualberta.ca])
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE([foreign])
@@ -32,9 +32,9 @@ dnl Checks for header files.
 AC_HEADER_STDC
 AC_CHECK_HEADERS(unistd.h sys/param.h sys/time.h time.h sys/mkdev.h sys/sysmacros.h string.h memory.h fcntl.h dirent.h alloca.h locale.h )
 
-AC_CHECK_HEADERS( [bsd/bsd.h sodium.h], [], [echo; echo 'Header file "bsd/bsd.h" not found. Aborting.'; exit 1])
+AC_CHECK_HEADERS( [sys/ioctl.h sodium.h], [], [echo; echo "Required header not found. Aborting."; exit 1])
 
-PKG_CHECK_MODULES([mergesort], [libbsd libsodium])
+PKG_CHECK_MODULES([mergesort], [libsodium])
 
 jm_CHECK_TYPE_STRUCT_UTIMBUF
 AC_HEADER_MAJOR

@@ -3,18 +3,18 @@
 
 
 void
-bubble_sort(uint32_t *data, int size)
+bubble_sort(uint32_t *data, uint32_t size)
 {
         uint32_t tmp;
-        /*unsigned int numops = 0;*/
-        int last = size - 1;
+        uint32_t numops = 0;
+        uint32_t last = size - 1;
         bool exchange = true;
 
         while (exchange && last >= 0) {
                 exchange = false;
-                for (int i = 0; i < last; ++i) {
-                        /*++numops;*/
+                for (uint32_t i = 0; i < last; ++i) {
                         if (data[i] > data[i+1]) {
+                                ++numops;
                                 tmp       = data[i];
                                 data[i]   = data[i+1];
                                 data[i+1] = tmp;
@@ -23,15 +23,17 @@ bubble_sort(uint32_t *data, int size)
                 }
                 --last;
         }
+
+        printf("Numops: %u\n", numops);
 }
 
 
 void
-selection_sort(uint32_t *data, int size)
+selection_sort(uint32_t *data, uint32_t size)
 {
-        for (int index = 0; index < size; ++index) {
-                int smallest = index;
-                for (int i = index; i < size; ++i)
+        for (uint32_t index = 0; index < size; ++index) {
+                uint32_t smallest = index;
+                for (uint32_t i = index; i < size; ++i)
                         if (data[i] < data[smallest])
                                 smallest = i;
 
@@ -43,10 +45,10 @@ selection_sort(uint32_t *data, int size)
 
 
 void
-recursive_ss(uint32_t *data, int size)
+recursive_ss(uint32_t *data, uint32_t size)
 {
-        int smallest = 0;
-        for (int i = 0; i < size; ++i)
+        uint32_t smallest = 0;
+        for (uint32_t i = 0; i < size; ++i)
                 if (data[i] < data[smallest])
                         smallest = i;
 
