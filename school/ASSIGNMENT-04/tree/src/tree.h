@@ -26,13 +26,7 @@ typedef unsigned int uint;
 typedef long int int64;
 
 
-/*#define nstate_lists   2048*/
-/*#define state_list_len 2*/
-/*#define max_child      16*/
-/*#define child_inc      8*/
-
 enum node_lim {
-        nstate_lists = 1024,
         max_child = 6,
         child_inc = 3
 };
@@ -43,23 +37,14 @@ struct State {
 };
 
 struct Node {
-        /*int **state;*/
-        /*int nlists;*/
-        /*int *state;*/
-        /*int state_len;*/
-
         struct State state;
-
-        /*char level[level_size];*/
-        uint16_t level;
-
         struct Node *key;
         struct Node *parent;
         struct Node **child;
         int nchild;
         int maxchild;
-
         int depth;
+        uint16_t level;
 };
 
 

@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define NUM_LISTS 1024
 #define LIST_LEN 2
 
 static struct Node *do_solve(struct Node *node);
@@ -14,7 +15,6 @@ solve(struct Node *root)
         printf("Solving for %d tokens.\n", root->state.lst[0]);
 
         do_solve(root);
-        /*display(root);*/
 }
 
 
@@ -52,8 +52,8 @@ do_solve(struct Node *node)
 static struct State *
 split(int pile, int *nlists)
 {
-        int comb[nstate_lists][LIST_LEN];
-        int lengths[nstate_lists];
+        int comb[NUM_LISTS][LIST_LEN];
+        int lengths[NUM_LISTS];
 
         int lst[pile];
         for (int i = 0; i < pile; ++i)

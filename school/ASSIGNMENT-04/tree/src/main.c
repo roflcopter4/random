@@ -9,13 +9,13 @@ main (int argc, char **argv)
 {
         program_name = argv[0];
         decode_switches(argc, argv);
-
         int tokens = get_val(argc, argv);
         struct Node *root = init_tree(tokens);
 
         solve(root);
-
+        display(root);
         destroy_tree(root);
+
         return 0;
 }
 
