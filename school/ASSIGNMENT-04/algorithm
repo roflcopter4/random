@@ -1,0 +1,57 @@
+class Minimax:
+    def __init__(self, nimState, minMaxLevel):
+        self.state = nimState
+        self.level = minMaxLevel
+        self.child = []
+
+for each pile k in node.state do
+    if  k > 2 then
+        list of possibilities = split k
+        for each pair (i,j) in possibilities do
+            newstate=node.state
+            replace pile k in newstate with pile i
+            add pile j in newstate
+            sort newstate
+            node.addChild(newstate)
+         end for
+     end if
+end for 
+
+create root with starting number of tokens
+call root.build()
+
+print_tree(indentation, last)
+   print indentation
+   if last then
+      print '\-'
+      indentation += "  "
+   else
+      print '+ '
+      indentation += "| "
+   end if
+   print node.state
+   if last print node.level
+   for all children of node
+          last = false
+          if last child then last = true
+          child.print_tree(indentation, last)
+   end for
+
+Choose your initial size of the pile. Should be more than 2: abc
+Choose your initial size of the pile. Should be more than 2: 2
+Choose your initial size of the pile. Should be more than 2: 6
+ \-[6] MAX
+    + [1, 5]
+    |  + [1, 1, 4]
+    |  |  \-[1, 1, 1, 3] MIN
+    |  |     \-[1, 1, 1, 1, 2] MAX
+    |  \-[1, 2, 3] MAX
+    |     \-[1, 1, 2, 2] MIN
+    \-[2, 4] MIN
+       \-[1, 2, 3] MAX
+          \-[1, 1, 2, 2] MIN
+
+
+NOTES
+max -> computer
+min -> opponent
