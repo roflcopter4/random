@@ -1,0 +1,71 @@
+[
+    {
+        "arguments": [
+            "cc",
+            "-c",
+            "-DHAVE_CONFIG_H",
+            "-I.",
+            "-I../../src",
+            "-I..",
+            "-march=native",
+            "-fdiagnostics-color=always",
+            "-pipe",
+            "-g",
+            "-O0",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-o",
+            "tree-utility.o",
+            "../../src/utility.c"
+        ],
+        "directory": "/home/bml/documents/school/ASSIGNMENT-04/tree/build/src",
+        "file": "../../src/utility.c"
+    },
+    {
+        "arguments": [
+            "cc",
+            "-c",
+            "-DHAVE_CONFIG_H",
+            "-I.",
+            "-I../../src",
+            "-I..",
+            "-march=native",
+            "-fdiagnostics-color=always",
+            "-pipe",
+            "-g",
+            "-O0",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-o",
+            "tree-options.o",
+            "../../src/options.c"
+        ],
+        "directory": "/home/bml/documents/school/ASSIGNMENT-04/tree/build/src",
+        "file": "../../src/options.c"
+    },
+    {
+        "arguments": [
+            "cc",
+            "-c",
+            "-DHAVE_CONFIG_H",
+            "-I.",
+            "-I../../src",
+            "-I..",
+            "-march=native",
+            "-fdiagnostics-color=always",
+            "-pipe",
+            "-g",
+            "-O0",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-o",
+            "tree-tree.o",
+            "../../src/tree.c"
+        ],
+        "directory": "/home/bml/documents/school/ASSIGNMENT-04/tree/build/src",
+        "file": "../../src/tree.c"
+    }
+]
