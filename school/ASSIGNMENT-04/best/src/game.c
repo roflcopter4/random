@@ -1,5 +1,5 @@
 #include "tree.h"
-/*#include <pthread.h>*/
+#include <pthread.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -8,7 +8,7 @@
 #define MAX_THREADS 12
 
 static void do_solve(struct Node *node);
-static struct State **split(uint8_t pile, int *nlists);
+static struct State *split(uint8_t pile, int *nlists);
 #if 0
 static inline void * wrapper(void *data);
 
@@ -20,7 +20,7 @@ pthread_t tid[MAX_THREADS];
 void
 solve(struct Node *root)
 {
-        printf("Solving for %d tokens.\n", root->state->lst[0]);
+        printf("Solving for %d tokens.\n", root->state.lst[0]);
         /*ROOT = root;*/
         do_solve(root);
 }
@@ -35,30 +35,28 @@ wrapper(void *data)
 }
 #endif
 
-
 static void
 do_solve(struct Node *node)
 {
         int nlists = 0;
 
-        for (int i = 0; i < node->state->len; ++i) {
-                uint8_t pile = node->state->lst[i];
+        for (int i = 0; i < node->state.len; ++i) {
+                uint8_t pile = node->state.lst[i];
 
                 if (pile <= 2)
                         continue;
 
-                struct State **state_list = split(pile, &nlists);
+                struct State *state_list = split(pile, &nlists);
 
                 for (int listc = 0; listc < nlists; ++listc) {
-                        struct State *cur      = state_list[listc];
-                        struct State *newstate = state_cpy(node->state);
-                        newstate->lst[i]       = cur->lst[0];
+                        struct State *cur     = state_list + listc;
+                        struct State newstate = state_cpy(&node->state);
+                        struct Node *child;
 
-                        /*state_append(newstate, &cur->lst[1], cur->len - 1);*/
-                        state_append(newstate, cur, 1);
-                        quick_sort(newstate->lst, newstate->len);
-
-                        struct Node *child = new_node(node, newstate);
+                        newstate.lst[i] = cur->lst[0];
+                        state_append(&newstate, &cur->lst[1], cur->len - 1);
+                        quick_sort(newstate.lst, newstate.len);
+                        child = new_node(node, newstate);
 
 #if 0
                         if (node == ROOT && listc < MAX_THREADS)
@@ -68,8 +66,7 @@ do_solve(struct Node *node)
 #endif
                         do_solve(child);
 
-                        free(cur->lst);
-                        free(cur);
+                        free((state_list + listc)->lst);
                 }
                 free(state_list);
         }
@@ -82,7 +79,7 @@ do_solve(struct Node *node)
 }
 
 
-static struct State **
+static struct State *
 split(uint8_t pile, int *nlists)
 {
         uint8_t combinations[NUM_LISTS][LIST_LEN];
@@ -112,14 +109,13 @@ split(uint8_t pile, int *nlists)
         }
 done:
         *nlists = listc;
-        struct State **state_list = xmalloc(*nlists * sizeof(*state_list));
+        struct State *state_list = xmalloc(*nlists * sizeof(*state_list));
 
         for (i = 0; i < *nlists; ++i) {
-                state_list[i]  = xmalloc(sizeof(**state_list));
-                uint8_t *combo = xmalloc(lengths[i] * sizeof(*combo));
-                memcpy(combo, combinations[i], lengths[i] * sizeof(*combo));
-                state_list[i]->lst = combo;
-                state_list[i]->len = lengths[i];
+                uint8_t *state = xmalloc(lengths[i] * sizeof(*state));
+                memcpy(state, combinations[i], lengths[i] * sizeof(*state));
+                state_list[i].lst = state;
+                state_list[i].len = lengths[i];
         }
 
         return state_list;

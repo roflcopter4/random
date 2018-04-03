@@ -39,11 +39,11 @@ do_display(struct Node *node, char *indent, size_t bufsize, bool last)
         else
                 nputs("+ [");
 
-        for (int i = 0; i < node->state->len; ++i)
-                if (i < (node->state->len - 1))
-                        printf("%d, ", node->state->lst[i]);
+        for (int i = 0; i < node->state.len; ++i)
+                if (i < (node->state.len - 1))
+                        printf("%d, ", node->state.lst[i]);
                 else
-                        printf("%d]", node->state->lst[i]);
+                        printf("%d]", node->state.lst[i]);
 
         if (last) {
                 if (LEAF_ONLY) {

@@ -37,20 +37,13 @@ struct State {
 };
 
 struct Node {
-        struct State *state;
+        struct State state;
         /*struct Node *key;*/
         /*struct Node *parent;*/
         struct Node **child;
         uint8_t nchild;
         uint8_t maxchild;
         uint8_t level;
-};
-
-
-struct StateCache {
-        struct State **arr;
-        uint16_t len;
-        uint16_t max_size;
 };
 
 
@@ -110,15 +103,14 @@ void handle_options(int argc, char **argv);
 
 /* main.c */
 char *program_name;
-struct StateCache cache;
 
 
 /* impl.c */
-struct Node *new_node(struct Node *parent, struct State *state);
+struct Node * new_node(struct Node *parent, struct State state);
 struct Node *init_tree(uint8_t val);
-struct State *state_cpy(struct State *orig);
+struct State state_cpy(struct State *orig);
 void destroy_tree(struct Node *node);
-void state_append(struct State *dest, struct State *src, uint16_t start);
+void state_append(struct State *state, uint8_t *lst, uint16_t lst_len);
 
 
 /* game.c */

@@ -4,7 +4,7 @@
 static inline uint8_t get_val(int argc, char **argv);
 
 int
-main(int argc, char **argv)
+main (int argc, char **argv)
 {
         program_name = argv[0];
         handle_options(argc, argv);
