@@ -1,6 +1,6 @@
 package xtar::File;
 use warnings; use strict; use v5.26;
-use Moose;
+use Mouse;
 use feature 'signatures';
 no warnings 'experimental::signatures';
 
@@ -279,5 +279,5 @@ sub determine_decompressor($self, $type)
 
 ###############################################################################
 
-no Moose;
+no Mouse;
 __PACKAGE__->meta->make_immutable;

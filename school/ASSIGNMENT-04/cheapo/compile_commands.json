@@ -1,0 +1,163 @@
+[
+    {
+        "arguments": [
+            "cc",
+            "-c",
+            "-DHAVE_CONFIG_H",
+            "-I.",
+            "-I../../src",
+            "-I..",
+            "-march=native",
+            "-fdiagnostics-color=always",
+            "-pipe",
+            "-Ofast",
+            "-std=gnu99",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-o",
+            "tree-main.o",
+            "../../src/main.c"
+        ],
+        "directory": "/home/bml/random/school/ASSIGNMENT-04/cheapo/build/src",
+        "file": "../../src/main.c"
+    },
+    {
+        "arguments": [
+            "cc",
+            "-c",
+            "-DHAVE_CONFIG_H",
+            "-I.",
+            "-I../../src",
+            "-I..",
+            "-march=native",
+            "-fdiagnostics-color=always",
+            "-pipe",
+            "-Ofast",
+            "-std=gnu99",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-o",
+            "tree-display.o",
+            "../../src/display.c"
+        ],
+        "directory": "/home/bml/random/school/ASSIGNMENT-04/cheapo/build/src",
+        "file": "../../src/display.c"
+    },
+    {
+        "arguments": [
+            "cc",
+            "-c",
+            "-DHAVE_CONFIG_H",
+            "-I.",
+            "-I../../src",
+            "-I..",
+            "-march=native",
+            "-fdiagnostics-color=always",
+            "-pipe",
+            "-Ofast",
+            "-std=gnu99",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-o",
+            "tree-utility.o",
+            "../../src/utility.c"
+        ],
+        "directory": "/home/bml/random/school/ASSIGNMENT-04/cheapo/build/src",
+        "file": "../../src/utility.c"
+    },
+    {
+        "arguments": [
+            "cc",
+            "-c",
+            "-DHAVE_CONFIG_H",
+            "-I.",
+            "-I../../src",
+            "-I..",
+            "-march=native",
+            "-fdiagnostics-color=always",
+            "-pipe",
+            "-Ofast",
+            "-std=gnu99",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-o",
+            "tree-impl.o",
+            "../../src/impl.c"
+        ],
+        "directory": "/home/bml/random/school/ASSIGNMENT-04/cheapo/build/src",
+        "file": "../../src/impl.c"
+    },
+    {
+        "arguments": [
+            "cc",
+            "-c",
+            "-DHAVE_CONFIG_H",
+            "-I.",
+            "-I../../src",
+            "-I..",
+            "-march=native",
+            "-fdiagnostics-color=always",
+            "-pipe",
+            "-Ofast",
+            "-std=gnu99",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-o",
+            "tree-quicksort.o",
+            "../../src/quicksort.c"
+        ],
+        "directory": "/home/bml/random/school/ASSIGNMENT-04/cheapo/build/src",
+        "file": "../../src/quicksort.c"
+    },
+    {
+        "arguments": [
+            "cc",
+            "-c",
+            "-DHAVE_CONFIG_H",
+            "-I.",
+            "-I../../src",
+            "-I..",
+            "-march=native",
+            "-fdiagnostics-color=always",
+            "-pipe",
+            "-Ofast",
+            "-std=gnu99",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-o",
+            "tree-options.o",
+            "../../src/options.c"
+        ],
+        "directory": "/home/bml/random/school/ASSIGNMENT-04/cheapo/build/src",
+        "file": "../../src/options.c"
+    },
+    {
+        "arguments": [
+            "cc",
+            "-c",
+            "-DHAVE_CONFIG_H",
+            "-I.",
+            "-I../../src",
+            "-I..",
+            "-march=native",
+            "-fdiagnostics-color=always",
+            "-pipe",
+            "-Ofast",
+            "-std=gnu99",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-o",
+            "tree-game.o",
+            "../../src/game.c"
+        ],
+        "directory": "/home/bml/random/school/ASSIGNMENT-04/cheapo/build/src",
+        "file": "../../src/game.c"
+    }
+]

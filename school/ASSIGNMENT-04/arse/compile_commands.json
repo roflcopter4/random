@@ -1,0 +1,163 @@
+[
+    {
+        "arguments": [
+            "c++",
+            "-c",
+            "-DHAVE_CONFIG_H",
+            "-I.",
+            "-I..",
+            "-march=native",
+            "-fdiagnostics-color=always",
+            "-pipe",
+            "-O0",
+            "-g",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-std=gnu++17",
+            "-o",
+            "src/main.o",
+            "../src/main.cpp"
+        ],
+        "directory": "/home/bml/random/school/ASSIGNMENT-04/arse/build",
+        "file": "../src/main.cpp"
+    },
+    {
+        "arguments": [
+            "c++",
+            "-c",
+            "-DHAVE_CONFIG_H",
+            "-I.",
+            "-I..",
+            "-march=native",
+            "-fdiagnostics-color=always",
+            "-pipe",
+            "-O0",
+            "-g",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-std=gnu++17",
+            "-o",
+            "src/quicksort.o",
+            "../src/quicksort.cpp"
+        ],
+        "directory": "/home/bml/random/school/ASSIGNMENT-04/arse/build",
+        "file": "../src/quicksort.cpp"
+    },
+    {
+        "arguments": [
+            "cc",
+            "-c",
+            "-DHAVE_CONFIG_H",
+            "-I.",
+            "-I..",
+            "-march=native",
+            "-fdiagnostics-color=always",
+            "-pipe",
+            "-O0",
+            "-g",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-std=gnu11",
+            "-o",
+            "src/utility.o",
+            "../src/utility.c"
+        ],
+        "directory": "/home/bml/random/school/ASSIGNMENT-04/arse/build",
+        "file": "../src/utility.c"
+    },
+    {
+        "arguments": [
+            "c++",
+            "-c",
+            "-DHAVE_CONFIG_H",
+            "-I.",
+            "-I..",
+            "-march=native",
+            "-fdiagnostics-color=always",
+            "-pipe",
+            "-O0",
+            "-g",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-std=gnu++17",
+            "-o",
+            "src/impl.o",
+            "../src/impl.cpp"
+        ],
+        "directory": "/home/bml/random/school/ASSIGNMENT-04/arse/build",
+        "file": "../src/impl.cpp"
+    },
+    {
+        "arguments": [
+            "c++",
+            "-c",
+            "-DHAVE_CONFIG_H",
+            "-I.",
+            "-I..",
+            "-march=native",
+            "-fdiagnostics-color=always",
+            "-pipe",
+            "-O0",
+            "-g",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-std=gnu++17",
+            "-o",
+            "src/game.o",
+            "../src/game.cpp"
+        ],
+        "directory": "/home/bml/random/school/ASSIGNMENT-04/arse/build",
+        "file": "../src/game.cpp"
+    },
+    {
+        "arguments": [
+            "c++",
+            "-c",
+            "-DHAVE_CONFIG_H",
+            "-I.",
+            "-I..",
+            "-march=native",
+            "-fdiagnostics-color=always",
+            "-pipe",
+            "-O0",
+            "-g",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-std=gnu++17",
+            "-o",
+            "src/options.o",
+            "../src/options.cpp"
+        ],
+        "directory": "/home/bml/random/school/ASSIGNMENT-04/arse/build",
+        "file": "../src/options.cpp"
+    },
+    {
+        "arguments": [
+            "c++",
+            "-c",
+            "-DHAVE_CONFIG_H",
+            "-I.",
+            "-I..",
+            "-march=native",
+            "-fdiagnostics-color=always",
+            "-pipe",
+            "-O0",
+            "-g",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-std=gnu++17",
+            "-o",
+            "src/display.o",
+            "../src/display.cpp"
+        ],
+        "directory": "/home/bml/random/school/ASSIGNMENT-04/arse/build",
+        "file": "../src/display.cpp"
+    }
+]

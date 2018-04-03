@@ -8,7 +8,7 @@ static struct Node *make_node();
 
 
 struct Node *
-init_tree(int val)
+init_tree(uint16_t val)
 {
         struct Node *root = xmalloc(sizeof(*root));
 
@@ -19,10 +19,9 @@ init_tree(int val)
         root->child    = xmalloc(max_child * sizeof(*root->child));
         root->maxchild = max_child;
         root->level    = 1;
-        root->depth    = 0;
         root->nchild   = 0;
-        root->key      = root;
-        root->parent   = root;
+        /*root->key      = root;*/
+        /*root->parent   = root;*/
 
         return root;
 }
@@ -33,6 +32,7 @@ destroy_tree(struct Node *node)
 {
         for (int i = 0; i < node->nchild; ++i)
                 destroy_tree(node->child[i]);
+
         free(node->child);
         free(node->state.lst);
         free(node);
@@ -44,11 +44,10 @@ new_node(struct Node *parent, struct State state)
 {
         struct Node *node = xmalloc(sizeof(*node));
 
-        node->depth    = parent->depth + 1;
-        node->key      = parent->key;
+        /*node->key      = parent->key;*/
+        /*node->parent   = parent;*/
         node->level    = !parent->level;
         node->nchild   = 0;
-        node->parent   = parent;
         node->state    = state;
         node->maxchild = max_child;
         node->child    = xmalloc(max_child * sizeof(*node->child));
@@ -77,9 +76,9 @@ state_cpy(struct State *orig)
 
 
 void
-state_append(struct State *state, int *lst, int lst_len)
+state_append(struct State *state, uint16_t *lst, uint16_t lst_len)
 {
-        int newlen = state->len + lst_len;
+        uint16_t newlen = state->len + lst_len;
         state->lst = xrealloc(state->lst, newlen * sizeof(*state->lst));
         memcpy(&(state->lst[state->len]), lst, lst_len * sizeof(*state->lst));
         state->len = newlen;

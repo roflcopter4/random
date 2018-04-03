@@ -17,33 +17,30 @@
 
 
 #include <stdbool.h>
+#include <stdint.h>
 #include <stdio.h>
 
 
-typedef short unsigned int uint16_t;
-typedef unsigned int uint32_t;
-typedef unsigned int uint;
-typedef long int int64;
-
+typedef uint32_t uint;
+typedef int64_t  int64;
 
 enum node_lim {
-        max_child = 6,
-        child_inc = 3
+        max_child = 1,
+        child_inc = 1
 };
 
 struct State {
-        int *lst;
-        int len;
+        uint16_t *lst;
+        uint16_t len;
 };
 
 struct Node {
         struct State state;
-        struct Node *key;
-        struct Node *parent;
+        /*struct Node *key;*/
+        /*struct Node *parent;*/
         struct Node **child;
-        int nchild;
-        int maxchild;
-        int depth;
+        uint16_t nchild;
+        uint16_t maxchild;
         uint16_t level;
 };
 
@@ -81,24 +78,27 @@ struct s_array {
 
 /* mergesort.c */
 char *program_name;
-bool verbose;
+bool quiet, LEAF_ONLY;
 
 
 /* utility.c */
-char * shitty_fgetline(FILE *f);
-int    countlines     (char *filename);
-void   print_array    (char **array, int len);
-void   free_s_array   (struct s_array *str_array);
-void * xmalloc        (size_t size);
-void * xcalloc        (int num, size_t size);
-void * xrealloc       (void *ptr, size_t size);
-void   xfree          (void *ptr);
-void   shuffle        (char **array, size_t n);
-int    xatoi          (char *str);
+#define   xatoi(STR)   __xatoi((STR), false)
+#define   s_xatoi(STR) __xatoi((STR), true)
+char    * my_fgetline  (FILE *f);
+int       countlines   (char *filename);
+void      print_array  (char **array, int len);
+void      free_s_array (struct s_array *str_array);
+void    * xmalloc      (size_t size);
+void    * xcalloc      (int num, size_t size);
+void    * xrealloc     (void *ptr, size_t size);
+void      xfree        (void *ptr);
+void      shuffle      (char **array, size_t n);
+int64_t   __xatoi      (char *str, bool strict);
+void      pretty_print (uint *intlist, uint size);
 
 
 /* options.c */
-void decode_switches(int argc, char **argv);
+void handle_options(int argc, char **argv);
 
 
 /* main.c */
@@ -107,10 +107,10 @@ char *program_name;
 
 /* impl.c */
 struct Node * new_node(struct Node *parent, struct State state);
-struct Node *init_tree(int val);
+struct Node *init_tree(uint16_t val);
 struct State state_cpy(struct State *orig);
 void destroy_tree(struct Node *node);
-void state_append(struct State *state, int *lst, int lst_len);
+void state_append(struct State *state, uint16_t *lst, uint16_t lst_len);
 
 
 /* game.c */
@@ -118,7 +118,9 @@ void solve(struct Node *root);
 
 
 /* quicksort.c */
-void quick_sort(int *data, int size);
+#define QSTYPE uint16_t
+#define QS_SIZE_TYPE uint16_t
+void quick_sort(QSTYPE *data, QS_SIZE_TYPE size);
 
 
 /* display.c */

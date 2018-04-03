@@ -5,3 +5,8 @@ core
 *.zip
 tags
 .tags
+
+configure
+aclocal.m4
+Makefile.in
+autom4te.cache
