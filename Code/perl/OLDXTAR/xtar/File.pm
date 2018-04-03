@@ -13,7 +13,6 @@ use Cwd qw( realpath );
 
 ##############################################################################
 
-has 'Options'     => ( is => 'ro', isa => 'HashRef' );
 has 'filename'    => ( is => 'ro', isa => 'Str' );
 has 'fullpath'    => ( is => 'ro', isa => 'Str' );
 has 'basepath'    => ( is => 'ro', isa => 'Str' );
@@ -41,7 +40,7 @@ around BUILDARGS => sub
     my $orig  = shift;
     my $class = shift;
 
-    if ( @_ == 2 && !ref( $_[0] ) ) {
+    if ( @_ == 1 && !ref( $_[0] ) ) {
         my $filename = $_[0];
         confess("File doesn't exist.") unless ( -e $filename );
         croak("Error: File is a directory.") if ( -d $filename );
@@ -49,14 +48,12 @@ around BUILDARGS => sub
         my $fullpath  = realpath($filename);
         my $basepath  = dirname($fullpath);
         my $extention = $filename =~ s/.*\.(.*)/$1/r;
-        my $Options   = $_[1];
 
         return $class->$orig(
             'filename'  => $filename,
             'fullpath'  => $fullpath,
             'basepath'  => $basepath,
             'extention' => $extention,
-            'Options'   => $Options
         );
     }
     else {
@@ -122,7 +119,7 @@ sub mimetype_analysis($self)
     #my $app = $m->[0];
 
     my $filename = $self->fullpath;
-    my $app = `file --mime-type '$filename'` or confess "$! - $?";
+    my $app = `file --mime-type '$filename'` or croak "$! - $?";
     chomp $app;
     $app = lc $app;
 
@@ -204,12 +201,9 @@ sub __normalize_type($extention)
 sub determine_decompressor($self, $type)
 {
     my ( $CMD, $TFlags, $EFlags, $Stdout );
-
-    my $V     = $self->Options->{'verbose'};
-    my $v7z   = ( $V ) ? '' : '-bso0 -bsp0';
-    my $vzpaq = ( $V ) ? '' : ' >/dev/null';
-
+    my $v7z = '-bso0 -bsp0';
     $TFlags = $EFlags = '';
+
     $_ = $type;
 
     if ( /^(z|Z|compress)$/n and which('uncompress') ) {
@@ -254,7 +248,7 @@ sub determine_decompressor($self, $type)
     elsif ( /^(zpaq)$/n and which('zpaq') ) {
         $CMD    = 'zpaq';
         $TFlags = 'NOTAR';
-        $EFlags = "x -- -to tmp" . $vzpaq;
+        $EFlags = 'x -- -to tmp >/dev/null';
     }
     elsif ( /^(zip)$/n and which('unzip') ) {
         $CMD    = 'unzip';

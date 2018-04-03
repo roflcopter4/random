@@ -11,7 +11,6 @@ use File::Basename;
 use Cwd qw( realpath getcwd );
 use File::Temp qw( tempdir cleanup );
 use File::Copy qw( mv );
-use File::Path qw( make_path );
 use File::Which;
 
 use lib "$ENV{HOME}/random/Code/perl/xtar";
@@ -29,7 +28,7 @@ has 'archive'     => ( is => 'rw', isa => 'Object' );
 has 'out'         => ( is => 'rw', isa => 'Object' );
 has 'tmpdir'      => ( is => 'rw', isa => 'Str' );
 
-my $cmd_color = 'Bcyan';
+my $cmd_color = 'Bmagenta';
 
 ###############################################################################
 
@@ -48,7 +47,7 @@ sub init_outpath($self)
 
 sub init_archive( $self, $filename )
 {
-    $self->archive( xtar::File->new( $filename, $self->Options ) );
+    $self->archive( xtar::File->new( $filename ) );
     $self->archive->analysis();
     $self->out->init( $self->archive );
 }
@@ -64,20 +63,19 @@ sub extract($self)
         $lonefile = $self->out->analyze_output( $self->tmpdir );
 
         if ( $lonefile ) {
-            esayC( 'Bred', 'The output contains only a single file.',
+            esayC( 'yellow', 'The output contains only a single file.',
                    "It could be a sub-archive. Attempting to extract.\n" );
             
             $self->init_archive( $lonefile );
         }
     }
 
-    make_path( $self->out->odir );
-    mv( $self->out->bottom, $self->out->odir ) or confess "$!";
+    mv( $self->out->bottom, $self->out->odir ) or croak "$!";
 
     my $CWD    = $self->CWD;
     my $reldir = $self->out->odir =~ s|${CWD}/(.*)|$1|r;
     my $odir   = $self->out->odir;
-    sayC( 'Bgreen', "Extracted to $reldir" );
+    sayC( 'yellow', "Extracted to $reldir" );
 }
 
 
@@ -99,13 +97,11 @@ sub __extract($self)
         chdir $tmpdir;
 
         if ( do_extraction( $self->archive->fullpath, $cmd, $is_tar, $self->Options ) ) {
-            if ( $self->Options->{'verbose'} ) {
-                esayC( 'green', 'Operation appears successful.' );
-            }
+            esayC( 'green', 'Operation appears successful.' );
             $success = true;
             last;
         }
-        else { esayC( 'Bred', "Operation failed.\n" ) }
+        else { esayC( 'red', "Operation failed.\n" ) }
 
         chdir $self->CWD;
     }

@@ -8,7 +8,6 @@ use boolean;
 use Carp;
 #use Data::Dumper;
 use File::Basename;
-use File::Path;
 use Cwd qw( realpath );
 
 ###############################################################################

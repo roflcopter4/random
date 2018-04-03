@@ -118,5 +118,3 @@ EOF
 
     exit $status;
 }
-
-#__PACKAGE__->meta->make_immutable;
