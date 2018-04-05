@@ -8,7 +8,7 @@
 #  define VERSION "0.1.0"
 #endif
 #ifndef NAME
-#  define NAME "mergesort"
+#  define NAME "tree"
 #endif
 #ifndef _GNU_SOURCE
 #  define _GNU_SOURCE
@@ -21,14 +21,12 @@
 #include <stdio.h>
 
 
-typedef uint32_t uint;
-typedef int64_t  int64;
-
 enum node_lim {
         max_child = 0,
         child_inc = 1,
-        cache_size = 128,
-        cache_inc = 16
+        /*cache_size = 128,*/
+        /*cache_size = 1000,*/
+        /*cache_inc = 16*/
 };
 
 struct State {
@@ -37,28 +35,29 @@ struct State {
 };
 
 struct Node {
-        struct State *state;
-        /*struct Node *key;*/
-        /*struct Node *parent;*/
         struct Node **child;
+        struct State *state;
         uint8_t nchild;
         uint8_t maxchild;
-        uint8_t level;
+        bool level;
 };
 
 
 struct StateCache {
-        struct State **arr;
+        /*struct State **arr;*/
+        struct State *arr[500];
         uint16_t len;
         uint16_t max_size;
 };
 
 
+#if 0
 struct s_array {
         char **arr;
         int *len;
         int num;
 };
+#endif
 
 
 /*===========================================================================*/
@@ -91,17 +90,17 @@ bool quiet, LEAF_ONLY;
 /* utility.c */
 #define   xatoi(STR)   __xatoi((STR), false)
 #define   s_xatoi(STR) __xatoi((STR), true)
-char    * my_fgetline  (FILE *f);
-int       countlines   (char *filename);
-void      print_array  (char **array, int len);
-void      free_s_array (struct s_array *str_array);
+/*char    * my_fgetline  (FILE *f);*/
+/*int       countlines   (char *filename);*/
+/*void      print_array  (char **array, int len);*/
+/*void      free_s_array (struct s_array *str_array);*/
 void    * xmalloc      (size_t size);
 void    * xcalloc      (int num, size_t size);
 void    * xrealloc     (void *ptr, size_t size);
 void      xfree        (void *ptr);
-void      shuffle      (char **array, size_t n);
+/*void      shuffle      (char **array, size_t n);*/
 int64_t   __xatoi      (char *str, bool strict);
-void      pretty_print (uint *intlist, uint size);
+/*void      pretty_print (uint32_t *intlist, uint32_t size);*/
 
 
 /* options.c */
@@ -114,11 +113,11 @@ struct StateCache cache;
 
 
 /* impl.c */
-struct Node *new_node(struct Node *parent, struct State *state);
-struct Node *init_tree(uint8_t val);
+struct Node  *new_node(struct Node *parent, struct State *state);
+struct Node  *init_tree(uint8_t val);
 struct State *state_cpy(struct State *orig);
-void destroy_tree(struct Node *node);
-void state_append(struct State *dest, struct State *src, uint16_t start);
+void          destroy_tree(struct Node *node);
+void          state_append(struct State *dest, struct State *src, uint16_t start);
 
 
 /* game.c */

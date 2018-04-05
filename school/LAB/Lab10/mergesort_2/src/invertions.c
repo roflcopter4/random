@@ -11,7 +11,7 @@ static Lint merge2(uint *copy, uint *data, uint left, uint mid, uint right);
 
 
 Lint
-__merge_sort(uint *data, uint size)
+__merge_sort(uint *data, int64 size)
 {
         /*uint *copy = xcalloc(size, sizeof(uint));*/
         uint copy[size];
@@ -70,13 +70,13 @@ merge2(uint *copy, uint *data, uint left, uint mid, uint right)
 
 
 
-static Lint do_merge_sort2(uint *data, uint *copy, uint size, uint index);
+static Lint do_merge_sort2(uint *data, uint *copy, int64 size, uint index);
 static Lint merge2(uint *copy, const uint *left, const uint *right,
                   uint left_len, uint right_len, uint index);
 
 
 Lint
-__merge_sort(uint *data, uint size)
+__merge_sort(uint *data, int64 size)
 {
         /*uint *copy = xcalloc(size, sizeof(uint));*/
         uint *copy = xmalloc(size * sizeof(uint));
@@ -88,7 +88,7 @@ __merge_sort(uint *data, uint size)
 
 
 static Lint
-do_merge_sort2(uint *data, uint *copy, const uint size, const uint index)
+do_merge_sort2(uint *data, uint *copy, const int64 size, const uint index)
 {
         if (size < 2)
                 return 0L;
@@ -150,7 +150,7 @@ static void merge2(uint *copy, uint *data, uint left, uint mid, uint right);
 
 
 Lint
-__merge_sort(uint *data, uint size)
+__merge_sort(uint *data, int64 size)
 {
         uint *copy = xcalloc(size, sizeof(uint));
         do_merge_sort2(data, copy, 0, size-1);

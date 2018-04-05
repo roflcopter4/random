@@ -1,13 +1,13 @@
 #include "mergesort.h"
 #include <stdlib.h>
 
-static void do_merge_sort(uint *data, uint *copy, uint size, uint index);
+static void do_merge_sort(uint *data, uint *copy, int64 size, uint index);
 static void merge(uint *copy, const uint *left, const uint *right,
                   uint left_len, uint right_len, uint index);
 
 
 void
-merge_sort(uint *data, const uint size)
+merge_sort(uint *data, const int64 size)
 {
         uint *copy = xmalloc(size * sizeof(uint));
         do_merge_sort(data, copy, size, 0);
@@ -16,7 +16,7 @@ merge_sort(uint *data, const uint size)
 
 
 static void
-do_merge_sort(uint *data, uint *copy, const uint size, const uint index)
+do_merge_sort(uint *data, uint *copy, const int64 size, const uint index)
 {
         if (size < 2)
                 return;

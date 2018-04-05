@@ -18,6 +18,7 @@ static struct option const long_options[] = {
         {"qsort",      no_argument,       0, 'Q'},
         {"mergesort",  no_argument,       0, 'm'},
         {"invertions", no_argument,       0, 'I'},
+        {"quicksort",  no_argument,       0, 'q'},
         {"bubble",     no_argument,       0, 'b'},
         {"selection",  no_argument,       0, 's'},
         {"num",        required_argument, 0, 'N'},
@@ -39,7 +40,7 @@ decode_switches(int argc, char **argv)
         if (argc == 1)
                 usage(1);
 
-        while ((ch = getopt_long(argc, argv, "hVvLQmIbsN:M:i",
+        while ((ch = getopt_long(argc, argv, "hVvLQmIqbsN:M:i",
                                  long_options, NULL)) != EOF) {
         switch (ch) {
         case 'V':
@@ -65,6 +66,7 @@ decode_switches(int argc, char **argv)
         case 'b':
         case 's':
         case 'I':
+        case 'q':
                 optflags[opt_flag_ind++] = (char)ch;
                 break;
         case 'i':
@@ -93,6 +95,7 @@ Options:\n\
   -b, --bubble        Sort with braindead bubblesort\n\
   -s, --selection     Sort with recursive selection sort\n\
   -I, --invertions    Sort with modified mergesort and print no of invertions\n\
+  -q, --quicksort     Sort with quicksort.\n\
   -i, --intlist       Override normal operation and sort a literal list\n\
 ");
         exit(status);

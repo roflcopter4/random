@@ -3,7 +3,7 @@
 
 
 void
-bubble_sort(uint32_t *data, uint32_t size)
+bubble_sort(uint32_t *data, int64 size)
 {
         uint32_t tmp;
         uint32_t numops = 0;
@@ -29,7 +29,7 @@ bubble_sort(uint32_t *data, uint32_t size)
 
 
 void
-selection_sort(uint32_t *data, uint32_t size)
+selection_sort(uint32_t *data, int64 size)
 {
         for (uint32_t index = 0; index < size; ++index) {
                 uint32_t smallest = index;
@@ -45,7 +45,7 @@ selection_sort(uint32_t *data, uint32_t size)
 
 
 void
-recursive_ss(uint32_t *data, uint32_t size)
+recursive_ss(uint32_t *data, int64 size)
 {
         uint32_t smallest = 0;
         for (uint32_t i = 0; i < size; ++i)

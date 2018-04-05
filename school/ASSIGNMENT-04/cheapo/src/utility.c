@@ -1,12 +1,13 @@
 #include "tree.h"
 #include <errno.h>
-#include <limits.h>
-#include <locale.h>
+/*#include <limits.h>*/
+/*#include <locale.h>*/
 #include <stdlib.h>
 #include <string.h>
-#include <sys/ioctl.h>
-#include <sys/time.h>
+/*#include <sys/ioctl.h>*/
+/*#include <sys/time.h>*/
 
+#if 0
 static int get_twidth();
 static int numdigits(uint32_t number);
 
@@ -92,8 +93,10 @@ shuffle(char **array, size_t n)
                 }
         }
 }
+#endif
 
 
+#if 0
 void
 free_s_array(struct s_array *str_array)
 {
@@ -103,6 +106,7 @@ free_s_array(struct s_array *str_array)
         free(str_array->len);
         free(str_array->arr);
 }
+#endif
 
 
 void *
@@ -177,6 +181,7 @@ __xatoi(char *str, bool strict)
 }
 
 
+#if 0
 void
 print_array(char **array, int len)
 {
@@ -238,3 +243,4 @@ numdigits(uint32_t number)
         return strlen(tmp);
 }
 
+#endif

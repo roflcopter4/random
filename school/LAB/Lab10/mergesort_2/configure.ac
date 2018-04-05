@@ -21,33 +21,32 @@ AC_SUBST(ISODATE)
 
 AC_CANONICAL_HOST
 
-dnl Checks for programs.
-AC_PROG_RANLIB
-AC_PROG_INSTALL
+# Checks for programs.
 AC_PROG_CC
 
-dnl Checks for libraries.
+# Checks for libraries.
+# FIXME: Replace `main' with a function in `-lncurses':
+AC_CHECK_LIB([ncurses], [main])
+# FIXME: Replace `main' with a function in `-lsodium':
+AC_CHECK_LIB([sodium], [main])
+# FIXME: Replace `main' with a function in `-ltinfo':
+AC_CHECK_LIB([tinfo], [main])
 
-dnl Checks for header files.
-AC_HEADER_STDC
-AC_CHECK_HEADERS(unistd.h sys/param.h sys/time.h time.h sys/mkdev.h sys/sysmacros.h string.h memory.h fcntl.h dirent.h alloca.h locale.h )
+# Checks for header files.
+AC_CHECK_HEADERS([limits.h locale.h stdint.h stdlib.h string.h sys/ioctl.h sys/time.h])
 
-AC_CHECK_HEADERS( [sys/ioctl.h sodium.h], [], [echo; echo "Required header not found. Aborting."; exit 1])
+# Checks for typedefs, structures, and compiler characteristics.
+AC_CHECK_HEADER_STDBOOL
+AC_TYPE_INT64_T
+AC_TYPE_SIZE_T
+AC_TYPE_UINT16_T
+AC_TYPE_UINT32_T
 
-PKG_CHECK_MODULES([mergesort], [libsodium])
+# Checks for library functions.
+AC_FUNC_MALLOC
+AC_FUNC_REALLOC
+AC_CHECK_FUNCS([gettimeofday setlocale strtol])
 
-jm_CHECK_TYPE_STRUCT_UTIMBUF
-AC_HEADER_MAJOR
-AC_FUNC_ALLOCA
-AC_STRUCT_TM
-AC_STRUCT_ST_BLOCKS
-AC_FUNC_CLOSEDIR_VOID
-AC_CHECK_FUNCS(mkfifo)
-AC_CHECK_FUNC(mknod)
-
-dnl Checks for typedefs, structures, and compiler characteristics.
-
-dnl Checks for library functions.
-
-#AC_OUTPUT(Makefile src/Makefile src/third_party/Makefile scripts/mergesort.lsm scripts/mergesort.spec)
-AC_OUTPUT(Makefile src/Makefile)
+AC_CONFIG_FILES([Makefile
+                 src/Makefile])
+AC_OUTPUT

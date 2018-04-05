@@ -17,32 +17,27 @@ AC_SUBST(ISODATE)
 
 AC_CANONICAL_HOST
 
-dnl Checks for programs.
-AC_PROG_RANLIB
-AC_PROG_INSTALL
+# Checks for programs.
 AC_PROG_CC
 
-dnl Checks for libraries.
+# Checks for libraries.
+# FIXME: Replace `main' with a function in `-lsodium':
+AC_CHECK_LIB([sodium], [main])
 
-dnl Checks for header files.
-AC_HEADER_STDC
-AC_CHECK_HEADERS(unistd.h sys/param.h sys/time.h time.h sys/mkdev.h sys/sysmacros.h string.h memory.h fcntl.h dirent.h sys/ndir.h ndir.h alloca.h locale.h )
-AC_CHECK_HEADERS( [bsd/bsd.h], [], [echo; echo 'Header file "bsd/bsd.h" not found. Aborting.'; exit 1])
+# Checks for header files.
+AC_CHECK_HEADERS([stdlib.h string.h sys/time.h])
 
-PKG_CHECK_MODULES([sort], [libbsd])
+# Checks for typedefs, structures, and compiler characteristics.
+AC_CHECK_HEADER_STDBOOL
+AC_C_INLINE
+AC_TYPE_SIZE_T
+AC_TYPE_UINT32_T
 
-jm_CHECK_TYPE_STRUCT_UTIMBUF
-AC_HEADER_MAJOR
-AC_FUNC_ALLOCA
-AC_STRUCT_TM
-AC_STRUCT_ST_BLOCKS
-AC_FUNC_CLOSEDIR_VOID
-AC_CHECK_FUNCS(mkfifo)
-AC_CHECK_FUNC(mknod)
+# Checks for library functions.
+AC_FUNC_MALLOC
+AC_FUNC_REALLOC
+AC_CHECK_FUNCS([gettimeofday strtol])
 
-dnl Checks for typedefs, structures, and compiler characteristics.
-
-dnl Checks for library functions.
-
-#AC_OUTPUT(Makefile src/Makefile src/third_party/Makefile scripts/sort.lsm scripts/sort.spec)
-AC_OUTPUT(Makefile src/Makefile)
+AC_CONFIG_FILES([Makefile
+                 src/Makefile])
+AC_OUTPUT

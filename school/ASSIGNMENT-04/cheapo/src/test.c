@@ -36,7 +36,7 @@ main(int argc, char **argv)
                 printf("Memcmp result: %d\n", x);
         }
 
-        /*free(arr1);*/
-        /*free(arr3);*/
+        free(arr1);
+        free(arr3);
         return 0;
 }

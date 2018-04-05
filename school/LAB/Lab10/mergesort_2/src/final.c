@@ -2,13 +2,13 @@
 #include <stdlib.h>
 #include <string.h>
 
-static int64_t do_merge_sort(uint *data, uint *copy, uint size, uint index);
+static int64_t do_merge_sort(uint *data, uint *copy, int64 size, uint index);
 static int64_t merge(uint *copy, const uint *left, const uint *right,
                      uint left_len, uint right_len, uint index);
 
 
 int64_t
-count_invertions(uint *data, uint size)
+count_invertions(uint *data, int64 size)
 {
         uint *copy = xmalloc(size * sizeof(uint));
         int64_t inv_count = do_merge_sort(data, copy, size, 0);
@@ -18,7 +18,7 @@ count_invertions(uint *data, uint size)
 
 
 static int64_t
-do_merge_sort(uint *data, uint *copy, const uint size, const uint index)
+do_merge_sort(uint *data, uint *copy, const int64 size, const uint index)
 {
         if (size < 2)
                 return 0L;

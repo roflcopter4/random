@@ -66,8 +66,8 @@
    */
 #undef HAVE_SYS_DIR_H
 
-/* Define to 1 if you have the <sys/ioct.h> header file. */
-#undef HAVE_SYS_IOCT_H
+/* Define to 1 if you have the <sys/ioctl.h> header file. */
+#undef HAVE_SYS_IOCTL_H
 
 /* Define to 1 if you have the <sys/mkdev.h> header file. */
 #undef HAVE_SYS_MKDEV_H

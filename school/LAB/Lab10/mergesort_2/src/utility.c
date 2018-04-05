@@ -144,11 +144,11 @@ xrealloc(void *ptr, size_t size)
 }
 
 
-int
+int64
 xatoi(char *str)
 {
         char *endptr;
-        int num = strtol(str, &endptr, 10);
+        int64_t num = strtol(str, &endptr, 10);
 
         if (endptr == str)
                 xeprintf(30, "Invalid integer '%s'.\n", str);
@@ -170,7 +170,7 @@ print_array(char **array, int len)
 
 
 void
-pretty_print(uint *intlist, uint size)
+pretty_print(uint *intlist, int64 size)
 {
         int intlen = numdigits(g_maxsize);
         int dig_per_line = get_twidth() / (intlen + 2);
@@ -199,7 +199,7 @@ get_twidth()
 
 
 void
-print_intlist(uint *intlist, uint size)
+print_intlist(uint *intlist, int64 size)
 {
         for (uint i = 0; i < size; ++i)
                 if (i < size - 1)

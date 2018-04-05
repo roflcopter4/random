@@ -1,0 +1,9 @@
+bin_PROGRAMS=tree
+tree_SOURCES=main.c         \
+		options.c   \
+		impl.c      \
+		game.c      \
+		display.c   \
+		quicksort.c \
+		utility.c   \
+		tree.h

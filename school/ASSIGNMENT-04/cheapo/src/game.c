@@ -1,5 +1,6 @@
 #include "tree.h"
-/*#include <pthread.h>*/
+#include <pthread.h>
+/*#include <bsd/bsd.h>*/
 #include <stdlib.h>
 #include <string.h>
 
@@ -9,31 +10,27 @@
 
 static void do_solve(struct Node *node);
 static struct State **split(uint8_t pile, int *nlists);
-#if 0
 static inline void * wrapper(void *data);
 
 struct Node *ROOT;
 pthread_t tid[MAX_THREADS];
-#endif
 
 
 void
 solve(struct Node *root)
 {
         printf("Solving for %d tokens.\n", root->state->lst[0]);
-        /*ROOT = root;*/
+        ROOT = root;
         do_solve(root);
 }
 
 
-#if 0
 static inline void *
 wrapper(void *data)
 {
         do_solve((struct Node *)data);
         pthread_exit(NULL);
 }
-#endif
 
 
 static void
@@ -54,19 +51,16 @@ do_solve(struct Node *node)
                         struct State *newstate = state_cpy(node->state);
                         newstate->lst[i]       = cur->lst[0];
 
-                        /*state_append(newstate, &cur->lst[1], cur->len - 1);*/
                         state_append(newstate, cur, 1);
                         quick_sort(newstate->lst, newstate->len);
 
                         struct Node *child = new_node(node, newstate);
 
-#if 0
                         if (node == ROOT && listc < MAX_THREADS)
                                 pthread_create(tid + listc, 0, wrapper, child);
                         else
                                 do_solve(child);
-#endif
-                        do_solve(child);
+                        /*do_solve(child);*/
 
                         free(cur->lst);
                         free(cur);
@@ -74,11 +68,9 @@ do_solve(struct Node *node)
                 free(state_list);
         }
 
-#if 0
         if (node == ROOT)
                 for (int i = 0; i < nlists && i < MAX_THREADS; ++i)
                         pthread_join(tid[i], NULL);
-#endif
 }
 
 
@@ -112,11 +104,11 @@ split(uint8_t pile, int *nlists)
         }
 done:
         *nlists = listc;
-        struct State **state_list = xmalloc(*nlists * sizeof(*state_list));
+        struct State **state_list = malloc(*nlists * sizeof(*state_list));
 
         for (i = 0; i < *nlists; ++i) {
-                state_list[i]  = xmalloc(sizeof(**state_list));
-                uint8_t *combo = xmalloc(lengths[i] * sizeof(*combo));
+                state_list[i]  = malloc(sizeof(**state_list));
+                uint8_t *combo = malloc(lengths[i] * sizeof(*combo));
                 memcpy(combo, combinations[i], lengths[i] * sizeof(*combo));
                 state_list[i]->lst = combo;
                 state_list[i]->len = lengths[i];

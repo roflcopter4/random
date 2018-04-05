@@ -1,0 +1,72 @@
+# Extremely simple Makefile.
+
+TARGET       = calc
+OBJECTS      = calculator.o stack.o mystrlib2.o
+
+OPTFLAGS     = -march=native -pipe
+DEBUGFLAGS   = -g -O0
+RELEASEFLAGS = -Ofast
+#WFLAGS       = -Wall -Wpedantic -Wextra -fdiagnostics-color=always
+DEFINES      = -D_GNU_SOURCE
+LIBS         =
+
+CC          ?= /usr/bin/gcc
+LDFLAGS     +=
+BACKUP_CC   := /usr/bin/gcc
+
+###############################################################################
+
+COMMONFLAGS  = ${OPTFLAGS} ${WFLAGS} ${DEFINES}
+
+.if "${CC}" == "cc"
+    CC := ${BACKUP_CC}
+.endif
+
+.if "${cfg}" == "release"
+    CFLAGS := ${RELEASEFLAGS} ${COMMONFLAGS}
+.else
+    CFLAGS := ${DEBUGFLAGS} ${COMMONFLAGS}
+.endif
+
+###############################################################################
+
+.if exists("obj") || "${.CURDIR}" != "${.OBJDIR}"
+all: ${TARGET}
+.else
+all: objdir
+.endif
+
+###############################################################################
+
+.ifndef v
+LD_ECHO    = printf ' CCLD\t%s\n' "$@"
+CLEAN_ECHO = printf 'cleaning all in %s\n' "${.OBJDIR}"
+
+.SILENT:
+
+.c.o:
+	printf " CC\t%s\n" $@
+	${CC} ${CFLAGS} -c -o $@ $>
+.endif
+
+${TARGET}: ${OBJECTS}
+	${LD_ECHO}
+	${CC} ${CFLAGS} ${LDFLAGS} -o $@ $> ${LIBS}
+
+###############################################################################
+
+objdir:
+	mkdir -p "${.CURDIR}/obj"
+	${MAKE}
+
+clean:
+	${CLEAN_ECHO}
+	rm -rf *.o ${TARGET}
+
+remake: clean .WAIT all
+
+###############################################################################
+
+.SUFFIXES: .o
+.OBJDIR: obj
+.PHONY: clean objdir remake

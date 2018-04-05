@@ -7,10 +7,10 @@ static int compare(const void *a, const void *b);
 
 
 uint *
-getlist(uint size, uint max)
+getlist(int64 size, int64 max)
 {
         uint *list = xmalloc(size * sizeof(uint));
-        for (uint i = 0; i < size; ++i)
+        for (int64 i = 0; i < size; ++i)
                 list[i] = randombytes_uniform(max);
 
         return list;
@@ -18,7 +18,7 @@ getlist(uint size, uint max)
 
 
 uint *
-cpylist(uint *list, uint size)
+cpylist(uint *list, int64 size)
 {
         uint *list_copy = xmalloc(size * sizeof(uint));
         memcpy(list_copy, list, size * sizeof(uint));
@@ -28,7 +28,7 @@ cpylist(uint *list, uint size)
 
 
 void
-lazysort(uint *list, uint size)
+lazysort(uint *list, int64 size)
 {
         qsort(list, size, sizeof(uint), compare);
 }

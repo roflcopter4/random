@@ -18,7 +18,7 @@
 
 #define _cputs(STR) cputs("0", "33", STR)
 
-static void timesort(uint *data, uint size);
+static void timesort(uint *data, int64 size);
 
 
 int
@@ -57,7 +57,7 @@ main(int argc, char **argv)
 
 
 static void
-timesort(uint *data, uint size)
+timesort(uint *data, int64 size)
 {
         struct timeval tv1, tv2;
         char msg[1024];

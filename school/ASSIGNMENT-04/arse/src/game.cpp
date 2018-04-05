@@ -3,6 +3,11 @@
 #include <cstring>
 #include <pthread.h>
 
+#include <iostream>
+#include <memory>
+#include <string>
+#include <vector>
+
 #define NUM_LISTS 1024
 #define LIST_LEN 2
 #define MAX_THREADS 12
@@ -18,7 +23,7 @@ pthread_t tid[MAX_THREADS];
 void
 solve(struct Node *root)
 {
-        printf("Solving for %d tokens.\n", root->state.lst[0]);
+        std::cout << "Solving for " << root->state.lst[0] << " tokens.\n";
         ROOT = root;
         do_solve(root);
 }
@@ -101,10 +106,14 @@ split(uint8_t pile, int *nlists)
         }
 done:
         *nlists = listc;
+        //auto state_list = std::vector<struct State>;
+        //std::vector<struct State>;
         auto state_list = new struct State [*nlists];
 
         for (i = 0; i < *nlists; ++i) {
-                auto state = new uint8_t [lengths[i]];
+                //auto state = new uint8_t [lengths[i]];
+                //std::unique_ptr<uint8_t *> state { new  }
+                auto state = std::make_unique<uint8_t>(lengths[i]);
                 memcpy(state, combinations[i], lengths[i] * sizeof(*state));
                 state_list[i].lst = state;
                 state_list[i].len = lengths[i];

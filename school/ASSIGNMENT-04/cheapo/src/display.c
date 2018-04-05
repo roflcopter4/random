@@ -27,7 +27,7 @@ display(struct Node *root)
 }
 
 
-/* I'm using strcat & strcpy instead of something safer like strlcat/strlcpy
+/* I'm using strcat & memcpy instead of something safer like strlcat/strlcpy
  * only because I am keeping track of the buffer size, so it should be ok. */
 static void
 do_display(struct Node *node, char *indent, size_t bufsize, bool last)
@@ -65,7 +65,7 @@ do_display(struct Node *node, char *indent, size_t bufsize, bool last)
 
         for(int i = 0; i < node->nchild; ++i) {
                 char new_indent[bufsize];
-                strcpy(new_indent, indent);
+                memcpy(new_indent, indent, bufsize * sizeof(char));
                 last = (node->nchild == i + 1);
                 do_display(node->child[i], new_indent, bufsize, last);
         }

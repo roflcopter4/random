@@ -31,7 +31,8 @@ enum node_lim {
 };
 
 struct State {
-        uint8_t *lst;
+        //uint8_t *lst;
+        std::unique_ptr<uint8_t> lst;
         uint8_t len;
 };
 
@@ -70,16 +71,8 @@ struct Node {
 /*===========================================================================*/
 
 
-/* arse.c */
-
-
 /* options.c */
 void handle_options(int argc, char **argv);
-
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 
 /* utility.c */
@@ -118,11 +111,6 @@ void quick_sort(QSTYPE *data, QS_SIZE_TYPE size);
 
 /* display.c */
 void display(struct Node *root);
-
-
-#ifdef __cplusplus
-}
-#endif
 
 
 #endif /* arse.h */

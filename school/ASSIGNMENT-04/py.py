@@ -7,6 +7,9 @@ import sys
 from copy import copy
 
 LEAF_ONLY = False
+# The only reason this is global is to keep memory usage down. No reason to
+# have it duplicated for every single node.
+COLORS = {"MAX": "\033[32m", "MIN": "\033[31m"}
 
 ###############################################################################
 
@@ -17,7 +20,6 @@ class Done(Exception):
 
 class Minimax:
     """Represents a node in the minimax tree."""
-    colors = {"MAX": "\033[32m", "MIN": "\033[31m"}
 
     def __init__(self, nimState, minMaxLevel):
         self.state = nimState
@@ -30,7 +32,7 @@ class Minimax:
 
     def __color_level(self):
         """Adds some flair to the output."""
-        return "\033[1m%s%s\033[0m" % (self.colors[self.level], self.level)
+        return "\033[1m%s%s\033[0m" % (COLORS[self.level], self.level)
 
     def solve(self):
         """Recursively creates the tree of all possible game states."""
@@ -70,6 +72,11 @@ class Minimax:
         for i in range(nchild):
             last = (nchild == i + 1)
             self.child[i].display(copy(indent), last)
+
+
+class Cache:
+    def __init__(self):
+        pass
 
 
 ###############################################################################
