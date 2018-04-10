@@ -1,5 +1,4 @@
 #include "tree.h"
-#include <pthread.h>
 /*#include <bsd/bsd.h>*/
 #include <stdlib.h>
 #include <string.h>
@@ -10,27 +9,36 @@
 
 static void do_solve(struct Node *node);
 static struct State **split(uint8_t pile, int *nlists);
-static inline void *wrapper(void *data);
 
-struct Node *ROOT;
-pthread_t tid[MAX_THREADS];
+#ifdef USE_THREADS
+#  include <pthread.h>
+
+   static inline void *wrapper(void *data);
+
+   struct Node *ROOT;
+   pthread_t tid[MAX_THREADS];
+#endif
 
 
 void
 solve(struct Node *root)
 {
         printf("Solving for %d tokens.\n", root->state->lst[0]);
+#ifdef USE_THREADS
         ROOT = root;
+#endif
         do_solve(root);
 }
 
 
+#ifdef USE_THREADS
 static inline void *
 wrapper(void *data)
 {
         do_solve((struct Node *)data);
         pthread_exit(NULL);
 }
+#endif
 
 
 static void
@@ -56,11 +64,14 @@ do_solve(struct Node *node)
 
                         struct Node *child = new_node(node, newstate);
 
+#ifdef USE_THREADS
                         if (node == ROOT && listc < MAX_THREADS)
                                 pthread_create(tid + listc, 0, wrapper, child);
                         else
                                 do_solve(child);
-                        /*do_solve(child);*/
+#else
+                        do_solve(child);
+#endif
 
                         free(cur->lst);
                         free(cur);
@@ -68,9 +79,11 @@ do_solve(struct Node *node)
                 free(state_list);
         }
 
+#ifdef USE_THREADS
         if (node == ROOT)
                 for (int i = 0; i < nlists && i < MAX_THREADS; ++i)
                         pthread_join(tid[i], NULL);
+#endif
 }
 
 

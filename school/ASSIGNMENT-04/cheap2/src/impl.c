@@ -10,25 +10,25 @@ static void destroy_nodes(struct Node *node);
 struct Node *
 init_tree(uint8_t val)
 {
-        struct Node *root   = malloc(sizeof *root);
-        struct State *state = malloc(sizeof *state);
+        struct Node *root   = malloc(sizeof(*root));
+        struct State *state = malloc(sizeof(*state));
 
-        state->lst    = malloc(sizeof *state->lst);
+        state->lst    = malloc(sizeof(*state->lst));
         state->lst[0] = val;
         state->len    = 1;
 
-        root->child    = malloc(max_child * sizeof *root->child);
+        root->child    = malloc(MAX_CHILD * sizeof(*root->child));
         root->state    = state;
         root->level    = true;
         root->nchild   = 0;
-        root->maxchild = max_child;
+        root->maxchild = MAX_CHILD;
 
-        /*cache.max_size = val * 25;*/
-        /*printf("Using val %d\n", cache.max_size);*/
-        /*cache.arr      = malloc(cache.max_size * sizeof *cache.arr);*/
+        cache.max_size = CACHE_SIZE;
+#ifndef USE_THREADS
+        cache.arr      = malloc(cache.max_size * sizeof(*cache.arr));
+#endif
         cache.arr[0]   = state;
         cache.len      = 1;
-        /*cache.max_size = cache_size;*/
 
         return root;
 }
@@ -38,12 +38,14 @@ uint32_t node_count;
 void
 destroy_tree(struct Node *root)
 {
-        uint16_t i;
+        uint32_t i;
         for (i = 0; i < cache.len; ++i) {
                 free(cache.arr[i]->lst);
                 free(cache.arr[i]);
         }
-        /*free(cache.arr);*/
+#ifndef USE_THREADS
+        free(cache.arr);
+#endif
         printf("There were %u records in cache.\n", i);
 
         destroy_nodes(root);
@@ -55,7 +57,7 @@ destroy_tree(struct Node *root)
 static void
 destroy_nodes(struct Node *node)
 {
-        for (int i = 0; i < node->nchild; ++i)
+        for (uint32_t i = 0; i < node->nchild; ++i)
                 destroy_nodes(node->child[i]);
 
         free(node->child);
@@ -67,9 +69,9 @@ destroy_nodes(struct Node *node)
 struct Node *
 new_node(struct Node *parent, struct State *state)
 {
-        struct Node *node = malloc(sizeof *node);
-
+        struct Node *node = malloc(sizeof(*node));
         struct State *cached;
+
         if ((cached = check_cache(state)) != NULL) {
                 node->state = cached;
                 free(state->lst);
@@ -78,17 +80,16 @@ new_node(struct Node *parent, struct State *state)
                 node->state = state;
                 add_cache(state);
         }
-        /*node->state = state;*/
 
-        node->child    = malloc(max_child * sizeof *node->child);
+        node->child    = malloc(MAX_CHILD * sizeof(*node->child));
         node->level    = !parent->level;
         node->nchild   = 0;
-        node->maxchild = max_child;
+        node->maxchild = MAX_CHILD;
 
         if (parent->nchild == parent->maxchild) {
-                parent->maxchild += child_inc;
+                parent->maxchild += CHILD_INC;
                 parent->child = realloc(parent->child, parent->maxchild *
-                                                       sizeof *parent->child);
+                                                       sizeof(*parent->child));
         }
         parent->child[parent->nchild++] = node;
 
@@ -99,10 +100,10 @@ new_node(struct Node *parent, struct State *state)
 struct State *
 state_cpy(struct State *orig)
 {
-        struct State *new = malloc(sizeof *new);
+        struct State *new = malloc(sizeof(*new));
         new->len = orig->len;
-        new->lst = malloc(new->len * sizeof *new->lst);
-        memcpy(new->lst, orig->lst, new->len * sizeof *new->lst);
+        new->lst = malloc(new->len * sizeof(*new->lst));
+        memcpy(new->lst, orig->lst, new->len * sizeof(*new->lst));
 
         return new;
 }
@@ -112,10 +113,10 @@ void
 state_append(struct State *dest, struct State *src, uint16_t start)
 {
         uint16_t newlen = dest->len + (src->len - start);
-        dest->lst = realloc(dest->lst, newlen * sizeof *dest->lst);
+        dest->lst = realloc(dest->lst, newlen * sizeof(*dest->lst));
         memcpy(dest->lst + dest->len,
                src->lst + start,
-               (src->len - start) * sizeof *dest->lst);
+               (src->len - start) * sizeof(*dest->lst));
         dest->len = newlen;
 }
 
@@ -124,14 +125,12 @@ static struct State *
 check_cache(struct State *state)
 {
         for (int i = 0; i < cache.len; ++i)
-                if (state->len == cache.arr[i]->len &&
-                    memcmp(state->lst,
-                           cache.arr[i]->lst,
-                           state->len * sizeof *state->lst) == 0)
-                {
+                if (state->len == cache.arr[i]->len
+                    && memcmp(state->lst,
+                              cache.arr[i]->lst,
+                              state->len * sizeof(*state->lst)) == 0
+                    )
                         return cache.arr[i];
-                }
-
         return NULL;
 }
 
@@ -140,11 +139,11 @@ static void
 add_cache(struct State *state)
 {
         if (cache.len == cache.max_size) {
+#ifdef USE_THREADS
                 xeprintf(2, "Fatal error: maximum cache size exceeded.\n");
-#if 0
-                cache.max_size += cache_inc;
-                cache.arr = realloc(cache.arr, cache.max_size *
-                                                sizeof(*cache.arr));
+#else
+                cache.max_size += CACHE_INC;
+                cache.arr = realloc(cache.arr, cache.max_size * sizeof(*cache.arr));
 #endif
         }
         cache.arr[cache.len++] = state;
