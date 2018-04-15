@@ -130,20 +130,21 @@ sub mimetype_analysis($self)
     my $counter = 0;
     my ( $app, $mimekind );
 
-RESTART:
-    ( $app, $mimekind ) = $self->find_mimetype(\$counter);
+  RESTART:
+    ( $app, $mimekind ) = $self->find_mimetype( \$counter );
 
-    while ( looks_like_number($app) and $app == false and $mimekind <= MAXKIND ) {
+    while ( looks_like_number($app) and $app == false and $mimekind <= MAXKIND )
+    {
         esayC( 'b', "Mimetype number $mimekind failed." ) if $xtar::DEBUG;
         push @done, $mimekind;
-        ( $app, $mimekind ) = $self->find_mimetype(\$counter, @done);
+        ( $app, $mimekind ) = $self->find_mimetype( \$counter, @done );
     }
 
     unless ($app) {
-        $self->mime_raw( '' );
-        $self->mime_type( '' );
-        $self->mime_tar( '' );
-        return
+        $self->mime_raw('');
+        $self->mime_type('');
+        $self->mime_tar('');
+        return;
     }
 
     my $orig = $app;
@@ -152,8 +153,8 @@ RESTART:
     if ( $app =~ /\+/ ) {
         my @progs = split /\+/, $app;
         foreach (@progs) {
-            if ( /tar/ ) { $self->mime_tar( true ) }
-            else         { $self->mime_raw( $_ ) }
+            if   (/tar/) { $self->mime_tar(true) }
+            else         { $self->mime_raw($_) }
         }
     }
     elsif ( $orig =~ m/application/ ) {
@@ -162,8 +163,8 @@ RESTART:
         }
         else {
             $app =~ s/.*application.(\S+).*/$1/;
-            $self->mime_raw( $app );
-            $self->mime_tar( false );
+            $self->mime_raw($app);
+            $self->mime_tar(false);
         }
     }
     else {
@@ -174,19 +175,19 @@ RESTART:
         }
 
         unless ($type) { cluck("Failed to identify mime_raw!") }
-        $self->mime_raw( $type );
-        $self->mime_tar( false );
+        $self->mime_raw($type);
+        $self->mime_tar(false);
     }
 
     my $tmp  = lc( $self->mime_raw =~ s/-compressed//ri );
-    my $type = _normalize_type( $tmp );
-    $type    = ( $type ) ? $type : $tmp;
+    my $type = _normalize_type($tmp);
+    $type = ($type) ? $type : $tmp;
 
     if ( not $type and $mimekind < MAXKIND ) {
         goto RESTART;
     }
 
-    $self->mime_type( $type );
+    $self->mime_type($type);
     $self->mime_cmd( $self->determine_decompressor( $self->mime_type ) );
 
     if ( $type eq 'zpaq' and $self->extention ne 'zpaq' ) {
@@ -195,13 +196,13 @@ RESTART:
 }
 
 
-sub find_mimetype( $self, $counter, @skip )
+sub find_mimetype ( $self, $counter, @skip )
 {
     my $filename = $self->fullpath;
     my ( $app, $kind );
     say "Counter is ${$counter}";
 
-    if ( not ( grep( /1/, @skip ) and grep( /2/, @skip ) ) ) {
+    if ( not( grep( /1/, @skip ) and grep( /2/, @skip ) ) ) {
         my $tmp = true;
         say STDERR 'Using File::Unpack' if $xtar::DEBUG;
         ++${$counter};
@@ -213,8 +214,8 @@ sub find_mimetype( $self, $counter, @skip )
 
         if ($tmp) {
             my $unpack = File::Unpack->new();
-            my $m = $unpack->mime(file => $self->fullpath);
-            my $index = ( ${$counter} == 1 ) ? 0 : 2;
+            my $m      = $unpack->mime( file => $self->fullpath );
+            my $index  = ( ${$counter} == 1 ) ? 0 : 2;
             $app = $m->[$index];
         }
         else {
