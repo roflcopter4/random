@@ -13,12 +13,20 @@
 #ifndef _GNU_SOURCE
 #  define _GNU_SOURCE
 #endif
+#ifndef HAVE_STRLCPY
+#  include "bsd_funcs.h"
+#else
+#  ifdef HAVE_BSD_BSD_H
+#    include <bsd/bsd.h>
+#  endif
+#endif
 /*===========================================================================*/
 
 
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <wchar.h>
 
 #define MAX_CHILD 0
 #define CHILD_INC 1
@@ -35,8 +43,10 @@ struct State {
 struct Node {
         struct Node **child;
         struct State *state;
+        uint16_t depth;
         uint8_t nchild;
         uint8_t maxchild;
+        wchar_t *indent;
         bool level;
 };
 
@@ -46,6 +56,8 @@ struct StateCache {
         uint16_t max_size;
 };
 
+wchar_t *orig_indent;
+
 
 /*===========================================================================*/
 
@@ -54,6 +66,7 @@ struct StateCache {
 #define strneq(SA, SB) (strcmp((SA), (SB)) != 0)
 #define modulo(A, B)   (((A) % (B) + (B)) % (B))
 #define eprintf(...)   fprintf(stderr, __VA_ARGS__)
+#define nputs(STR)     fputs((STR), stdout)
 
 #define xeprintf(STATUS, ...)             \
     do {                                  \
@@ -91,7 +104,7 @@ char *program_name;
 struct StateCache cache;
 
 
-/* impl.c */
+/* tree.c */
 struct Node  * new_node     (struct Node *parent, struct State *state);
 struct Node  * init_tree    (uint8_t val);
 struct State * state_cpy    (struct State *orig);
@@ -111,6 +124,7 @@ void quick_sort(QSTYPE *data, QS_SIZE_TYPE size);
 
 /* display.c */
 void display(struct Node *root);
+void print_node(struct Node *node, int nchild);
 
 
 /* iter.c */

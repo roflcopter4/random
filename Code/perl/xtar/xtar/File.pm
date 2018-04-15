@@ -4,20 +4,29 @@ use Mouse;
 use feature 'signatures';
 no warnings 'experimental::signatures';
 
-use boolean;
-use File::Which;
-use File::Basename;
-#use File::Unpack;
+use constant true  => 1;
+use constant false => 0;
+use constant MAXKIND => 4;
 use Carp qw( carp croak cluck confess );
-use Cwd qw( realpath );
+use File::Basename;
+use File::Copy qw( mv );
+use File::Spec::Functions qw( rel2abs );
+use Scalar::Util qw( looks_like_number );
+use File::Which;
+use Try::Tiny;
+
+use lib "$ENV{HOME}/random/Code/perl/xtar";
+use xtar::Colors qw( esayC eprintC );
 
 ##############################################################################
 
 has 'Options'     => ( is => 'ro', isa => 'HashRef' );
-has 'filename'    => ( is => 'ro', isa => 'Str' );
-has 'fullpath'    => ( is => 'ro', isa => 'Str' );
+has 'ID_Failure'  => ( is => 'rw', isa => 'Bool' );
+
 has 'basepath'    => ( is => 'ro', isa => 'Str' );
-has 'bname'       => ( is => 'rw', isa => 'Str' );  # Can't call it basename...
+has 'filename'    => ( is => 'rw', isa => 'Str' );
+has 'fullpath'    => ( is => 'rw', isa => 'Str' );
+has 'bname'       => ( is => 'rw', isa => 'Str' );
 
 has 'extention'   => ( is => 'rw', isa => 'Str' );
 has 'ext_type'    => ( is => 'rw', isa => 'Str' );
@@ -46,7 +55,7 @@ around BUILDARGS => sub
         confess("File doesn't exist.") unless ( -e $filename );
         croak("Error: File is a directory.") if ( -d $filename );
 
-        my $fullpath  = realpath($filename);
+        my $fullpath  = rel2abs($filename);
         my $basepath  = dirname($fullpath);
         my $extention = $filename =~ s/.*\.(.*)/$1/r;
         my $Options   = $_[1];
@@ -86,18 +95,18 @@ sub extention_analysis($self)
         $self->bname( $self->filename =~ s/(.*)\.tar\..*/$1/r );
     }
     else {
-        my ( $ext_tar, $extention ) = __check_short_tar($self->extention);
+        my ( $ext_tar, $extention ) = _check_short_tar($self->extention);
         $self->ext_tar( $ext_tar );
         $self->extention( $extention );
         $self->bname( $self->filename =~ s/(.*)\..*/$1/r );
     }
 
-    $self->ext_type( __normalize_type($self->extention) );
-    $self->ext_cmd( $self->determine_decompressor( $self->ext_type ) );
+    $self->ext_type( _normalize_type($self->extention) );
+    $self->ext_cmd( $self->determine_decompressor($self->ext_type) );
 }
 
 
-sub __check_short_tar($extention)
+sub _check_short_tar($extention)
 {
     my $ret = '';
     for ($extention) {
@@ -117,20 +126,29 @@ sub __check_short_tar($extention)
 
 sub mimetype_analysis($self)
 {
-    #my $unpack = File::Unpack->new();
-    #my $m = $unpack->mime(file => $self->fullpath);
-    #my $app = $m->[0];
+    my @done;
+    my $counter = 0;
+    my ( $app, $mimekind );
 
-    my $filename = $self->fullpath;
-    my $app = `file --mime-type '$filename'` or confess "$! - $?";
-    chomp $app;
-    $app = lc $app;
+RESTART:
+    ( $app, $mimekind ) = $self->find_mimetype(\$counter);
 
-    unless ( $app =~ /application/ ) {
-        carp("Not a recognized mime archive of any kind!")
+    while ( looks_like_number($app) and $app == false and $mimekind <= MAXKIND ) {
+        esayC( 'b', "Mimetype number $mimekind failed." ) if $xtar::DEBUG;
+        push @done, $mimekind;
+        ( $app, $mimekind ) = $self->find_mimetype(\$counter, @done);
     }
 
-    $app =~ s/.*?x-(.*)/$1/;
+    unless ($app) {
+        $self->mime_raw( '' );
+        $self->mime_type( '' );
+        $self->mime_tar( '' );
+        return
+    }
+
+    my $orig = $app;
+    $app =~ s|.*?/x-(.*)|$1|;
+
     if ( $app =~ /\+/ ) {
         my @progs = split /\+/, $app;
         foreach (@progs) {
@@ -138,20 +156,95 @@ sub mimetype_analysis($self)
             else         { $self->mime_raw( $_ ) }
         }
     }
+    elsif ( $orig =~ m/application/ ) {
+        if ( $orig =~ m/octet/ ) {
+            goto RESTART;
+        }
+        else {
+            $app =~ s/.*application.(\S+).*/$1/;
+            $self->mime_raw( $app );
+            $self->mime_tar( false );
+        }
+    }
     else {
         my @args = split / /, $app;
-        my $type = $args[0];
-        unless ( $type ) { carp("Failed to identify mime_raw!") }
+        my $type;
+        foreach (@args) {
+            last if ( $type = _normalize_type($_) );
+        }
+
+        unless ($type) { cluck("Failed to identify mime_raw!") }
         $self->mime_raw( $type );
         $self->mime_tar( false );
     }
 
     my $tmp  = lc( $self->mime_raw =~ s/-compressed//ri );
-    my $type = __normalize_type( $tmp );
+    my $type = _normalize_type( $tmp );
     $type    = ( $type ) ? $type : $tmp;
+
+    if ( not $type and $mimekind < MAXKIND ) {
+        goto RESTART;
+    }
 
     $self->mime_type( $type );
     $self->mime_cmd( $self->determine_decompressor( $self->mime_type ) );
+
+    if ( $type eq 'zpaq' and $self->extention ne 'zpaq' ) {
+        self->move_zpaq();
+    }
+}
+
+
+sub find_mimetype( $self, $counter, @skip )
+{
+    my $filename = $self->fullpath;
+    my ( $app, $kind );
+    say "Counter is ${$counter}";
+
+    if ( not ( grep( /1/, @skip ) and grep( /2/, @skip ) ) ) {
+        my $tmp = true;
+        say STDERR 'Using File::Unpack' if $xtar::DEBUG;
+        ++${$counter};
+
+        $kind = ${$counter};
+
+        try   { require File::Unpack and File::Unpack->import() }
+        catch { $tmp = false };
+
+        if ($tmp) {
+            my $unpack = File::Unpack->new();
+            my $m = $unpack->mime(file => $self->fullpath);
+            my $index = ( ${$counter} == 1 ) ? 0 : 2;
+            $app = $m->[$index];
+        }
+        else {
+            $app = false;
+        }
+    }
+    elsif ( which('file') and not grep( /3/, @skip ) ) {
+        $app = `file --mime-type '$filename'` or confess "$! - $?";
+        $kind = 3;
+        chomp $app;
+    }
+    elsif ( which('file') and not grep( /4/, @skip ) ) {
+        $app = `file '$filename'` or confess "$! - $?";
+        $kind = 4;
+        chomp $app;
+    }
+    else {
+        eprintC( 'bRED', 'Error: ' );
+        print STDERR <<'EOF';
+No mimetype tools found. If using a *nix system, check whether the
+`file(1)' utility is properly installed (it should be). Otherwise, please
+install the package `File::Unpack' from cpan or your local package manager if
+available. Will attempt to extract using only file extention information. This
+will fail if the extention is not accurate or if the file lacks one entirely.
+EOF
+        return ( false, 0 );
+    }
+
+    $app = lc $app;
+    return ( $app, $kind );
 }
 
 
@@ -160,13 +253,23 @@ sub mimetype_analysis($self)
 
 sub finalize_analysis($self)
 {
-    #unless ( $self->ext_type eq $self->mime_type ) {
-    #    carp("Mismatch between extention and mime_raw analysis!")
-    #}
-
     if    ( $self->mime_type ) { $self->likely_type( $self->mime_type ) }
     elsif ( $self->ext_type )  { $self->likely_type( $self->ext_type ) }
-    else                       { confess "No type identified." }
+    else                       {
+        if ( $self->Options->{'force'} ) {
+            esayC( 'RED', 'Warning: No type identified.' );
+            $self->ID_Failure( true );
+            return;
+        }
+        else {
+            esayC( 'bRED', <<'EOF' );
+Error: No type identified at all. If you are sure that this is an archive of
+some kind, re-run this program with the -f/--force flag to attempt to extract
+it with every known program until something works.
+EOF
+            exit 127;
+        }
+    }
 
     $self->likely_tar( $self->ext_tar or $self->mime_tar );
     $self->likely_cmd( $self->determine_decompressor( $self->likely_type ) );
@@ -176,25 +279,34 @@ sub finalize_analysis($self)
 ###############################################################################
 
 
-sub __normalize_type($extention)
+sub _normalize_type($extention)
 {
     my $type = '';
     $_ = $extention;
 
-    if    (/^(z|Z)$/n)          { $type = 'compress' }
-    elsif (/^(gz|bzip)$/n)      { $type = 'gzip' }
-    elsif (/^(bz|bz2|bzip2)$/n) { $type = 'bzip2' }
-    elsif (/^(xz|lzma|lz)$/n)   { $type = 'xz' }
-    elsif (/^(lz4)$/n)          { $type = 'lz4' }
-    elsif (/^(tar|cpio)$/n)     { $type = 'tar' }
-    elsif (/^(7z|7zip|7-zip)/n) { $type = '7zip' }
-    elsif (/^(zpaq)$/n)         { $type = 'zpaq' }
-    elsif (/^(zip)$/n)          { $type = 'zip' }
-    elsif (/^(arc)$/n)          { $type = 'arc' }
-    elsif (/^(ace|winace)$/n)   { $type = 'ace' }
-    elsif (/^(rar)$/n)          { $type = 'rar' }
+    if    (/^(z|Z)$/ni)          { $type = 'compress' }
+    elsif (/^(gz|bzip)$/ni)      { $type = 'gzip' }
+    elsif (/^(bz|bz2|bzip2)$/ni) { $type = 'bzip2' }
+    elsif (/^(xz|lzma|lz)$/ni)   { $type = 'xz' }
+    elsif (/^(lz4)$/ni)          { $type = 'lz4' }
+    elsif (/^(tar|cpio)$/ni)     { $type = 'tar' }
+    elsif (/^(7z|7zip|7-zip)/ni) { $type = '7zip' }
+    elsif (/^(zpaq)$/ni)         { $type = 'zpaq' }
+    elsif (/^(zip)$/ni)          { $type = 'zip' }
+    elsif (/^(arc)$/ni)          { $type = 'arc' }
+    elsif (/^(ace|winace)$/ni)   { $type = 'ace' }
+    elsif (/^(rar)$/ni)          { $type = 'rar' }
 
     return $type;
+}
+
+
+sub move_zqaq($self)
+{
+    mv( $self->fullpath, $self->fullpath . '.zpaq' );
+    $self->fullpath( $self->fullpath . '.zpaq' );
+    $self->filename( basename($self->fullpath) );
+    $self->extention( 'zpaq' );
 }
 
 
@@ -212,64 +324,64 @@ sub determine_decompressor($self, $type)
     $TFlags = $EFlags = '';
     $_ = $type;
 
-    if ( /^(z|Z|compress)$/n and which('uncompress') ) {
+    if ( /^(z|compress)$/ni and which('uncompress') ) {
         $CMD    = 'uncompress';
         $TFlags = $EFlags = '-c';
         $Stdout = true;
     }
-    elsif ( /^(gz|z|Z|gzip|compress)$/n and which('gzip') ) {
+    elsif ( /^(gz|z|gzip|compress)$/ni and which('gzip') ) {
         $CMD    = 'gzip';
         $TFlags = $EFlags = '-dc';
         $Stdout = true;
     }
-    elsif ( /^(bz|bz2|bzip[2]{0,1})$/n and which('bzip2') ) {
+    elsif ( /^(bz|bz2|bzip[2]?)$/ni and which('bzip2') ) {
         $CMD    = 'bzip2';
         $TFlags = $EFlags = '-dc';
         $Stdout = true;
     }
-    elsif ( /^(xz|lzma|lz)$/n and which('xz') ) {
+    elsif ( /^(xz|lzma|lz)$/ni and which('xz') ) {
         $CMD    = 'xz';
         $TFlags = $EFlags = '-dc';
         $Stdout = true;
     }
-    elsif ( /^(lz4)$/n and which('lz4') ) {
+    elsif ( /^(lz4)$/ni and which('lz4') ) {
         $CMD    = 'lz4';
         $TFlags = $EFlags = '-dc';
         $Stdout = true;
     }
-    elsif ( /^(tar|cpio)$/n ) {
+    elsif ( /^(tar|cpio)$/ni ) {
         $CMD    = 'TAR';
         $TFlags = '-xf -- -O';
         $EFlags = '-xf';
     }
-    elsif ( /^(7z|gz|bz|bz2|xz|lzma|lz|lz4|zip|cpio|rar|z|Z|jar|
+    elsif ( /^(7z|gz|bz|bz2|xz|lzma|lz|lz4|zip|cpio|rar|z|jar|
                deb|rpm|a|ar|iso|img|0{1,2}[1-9]|
-               compress|gzip|bzip2|7[-]{0,1}zip)$/nx
+               compress|gzip|bzip2|7[-]?zip)$/nxi
             and which('7z') )
     {
         $CMD    = '7z';
         $TFlags = "$v7z -so x";
         $EFlags = "$v7z x";
     }
-    elsif ( /^(zpaq)$/n and which('zpaq') ) {
+    elsif ( /^(zpaq)$/ni and which('zpaq') ) {
         $CMD    = 'zpaq';
         $TFlags = 'NOTAR';
         $EFlags = "x -- -to tmp" . $vzpaq;
     }
-    elsif ( /^(zip)$/n and which('unzip') ) {
+    elsif ( /^(zip)$/ni and which('unzip') ) {
         $CMD    = 'unzip';
         $TFlags = '-p';
     }
-    elsif ( /^(arc)$/n and which('arc') ) {
+    elsif ( /^(arc)$/ni and which('arc') ) {
         $CMD    = 'arc';
         $TFlags = 'p';
         $EFlags = 'x';
     }
-    elsif ( /^(ace|winace)$/n and which('unace') ) {
+    elsif ( /^(ace|winace)$/ni and which('unace') ) {
         $CMD    = 'unace';
         $TFlags = $EFlags = 'x';
     }
-    elsif ( /^(rar)$/n and which('unrar') ) {
+    elsif ( /^(rar)$/ni and which('unrar') ) {
         $CMD    = 'unrar';
         $TFlags = $EFlags = 'x';
     }

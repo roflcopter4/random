@@ -5,15 +5,14 @@ given a starting pile size.
 
 import sys
 from copy import copy
-from array import array
 
 ###############################################################################
 
 
 class Cache:
     """Stores a list of all unique game states with as small a memory footprint
-    as possible. The 'state' attribute of all nodes is a reference to a
-    bytearray stored in the (essentially) global instance of Cache.
+    as possible. The 'state' attribute of all nodes is a reference to a list
+    stored in the (essentially) global instance of Cache.
     """
 
     def __init__(self):
@@ -22,10 +21,7 @@ class Cache:
     def check_cache(self, state):
         """Compares a given game state to every entry in cache. Returns it if
         not found, otherwise returns a reference to the previously cached data.
-        Also converts the list to a bytearray. Doing this doesn't save much
-        memory, but it does make the comparisons much faster.
         """
-        state = array('B', state)
         for entry in self.__cache:
             if state == entry:
                 return entry
@@ -54,18 +50,13 @@ class Minimax:
 
     def __color_level(self):
         """Adds some flair to the output."""
-        return "\033[1m%s%s\033[0m" % (self.COLORS[self.level], self.level)
-
-    def __get_list(self):
-        """Converts the bytearray state variable to a normal python list."""
-        return self.state.tolist()
+        return "\033[%dm%s%s\033[0m" % \
+            (self.LEAF_ONLY, self.COLORS[self.level], self.level)
 
     def solve(self):
         """Recursively creates the tree of all possible game states."""
         all_splits = self.split(self.state)
-        # for i in range(len(all_splits)):
-        # for i in enumerate(all_splits):
-        #     combinations = all_splits[i]
+
         for i, combinations in enumerate(all_splits):
             if combinations is not None:
                 for combo in combinations:
@@ -86,14 +77,14 @@ class Minimax:
 
         if last:
             if (self.LEAF_ONLY and nchild == 0) or (not self.LEAF_ONLY):
-                line += "\\-%s %s" % (self.__get_list(), self.__color_level())
+                line += "└──%s %s" % (self.state, self.__color_level())
             else:
-                line += "\\-%s" % self.__get_list()
+                line += "└─┬%s" % self.state
             indent += "  "
 
         else:
-            line += "+ %s" % self.__get_list()
-            indent += "| "
+            line += "├─┬%s" % self.state
+            indent += "│ "
 
         print(line)
 
@@ -102,27 +93,45 @@ class Minimax:
             self.child[i].display(copy(indent), last)
 
     #
-    # Pylint says this shouldn't be a method because it doesn't reference self
-    # at all. I think pylint is a little too whiny.
+    # I'm not sure how people feel about goto statements nowadays (because
+    # that's basically what 'raise Done' is), but this just seems like the most
+    # straightforward way to break out of two nested loops.
+    #
+    # Also, I append None to the list if the values are less than or equal to 2
+    # instead of the number or another list because those values can't be split
+    # and will be skipped in solve() one way or another. It seems pointless to
+    # add them to the return list if they won't be used anyway. Adding None
+    # just functions as a placeholder so the iterator in solve() is incremented
+    # but nothing is done. I just thought I'd mention this because it means
+    # that this function does not actually return the same results as mentioned
+    # in the assignment description. I really hope that is an ok sort of change
+    # to make.
+    #
     def split(self, state):
-        """Returns all possible non-equal splits for a given pile. I made this a
-        function because pylint whines about not using 'self' if it is a method.
+        """Returns all possible non-equal splits for each pile in a state list.
+        Piles that are less than or equal to two can't be split and are
+        replaced by None in the return list.
         """
         all_splits = []
 
         for pile in state:
-            # The continue statement just keeps the nesting down a bit.
+
             if pile <= 2:
+                # The continue statement just keeps the nesting down a bit.
                 all_splits.append(None)
                 continue
 
             combinations = []
+            # This is an incredibly stupid way to do this, but it's honestly
+            # all I could think of. At least the goto equivalent let's us break
+            # out halfway through our braindead n^2 double loop.
             try:
                 for val1 in range(1, pile):
                     for val2 in range(1, pile):  # <- break
-                        if val1 + val2 == pile:
-                            if val1 >= val2:
-                                raise Done  # This is basically a goto
+
+                        if (val1 + val2 == pile):
+                            if (val1 >= val2):
+                                raise Done
                             else:
                                 combinations.append([])
                                 combinations[-1].append(val1)
@@ -131,7 +140,7 @@ class Minimax:
                                 break
             except Done:
                 pass
-            all_splits.append([array('B', combo) for combo in combinations])
+            all_splits.append(combinations)
 
         return all_splits
 
@@ -152,10 +161,11 @@ def main(init_tokens=None, quiet=False, leaf_only=False):
     root = Minimax([init_tokens], "MAX")
 
     root.solve()
-    if not quiet:
-        root.display()
 
-    print("There are %d items in cache." % root.cache.get_num_items())
+    if quiet:
+        print("There are %d items in cache." % root.cache.get_num_items())
+    else:
+        root.display()
 
 
 def get_init_tokens(val=None):
@@ -225,9 +235,9 @@ invalid value is provided.
 
 Options
  -h --help       Show this usage information.
- -q --quiet      Do not display tree (useful for benchmarking)
+ -q --quiet      Do not display tree (useful for benchmarking).
  -l --leaf-only  Only print 'min' or 'max' for leaf nodes, rather than do as
-                 specified in the requirements for this assignment""")
+                 specified in the requirements for this assignment.""")
     sys.exit(status)
 
 

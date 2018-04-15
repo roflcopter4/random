@@ -12,9 +12,10 @@ main(int argc, char **argv)
         uint8_t tokens = get_val(argc, argv);
         struct Node *root = init_tree(tokens);
 
-        solve(root);
-        if (!quiet)
-                display(root);
+        /* solve(root); */
+        iter_solve(root);
+        /* if (!quiet)
+                display(root); */
         destroy_tree(root);
         return 0;
 }

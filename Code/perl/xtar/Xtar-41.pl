@@ -2,10 +2,11 @@
 use warnings; use strict; use v5.26;
 use feature 'signatures';
 no warnings 'experimental::signatures';
-use Cwd qw( getcwd realpath );
+use Cwd 'getcwd';
 use Carp;
 use File::Basename;
 use File::Which;
+use File::Spec::Functions 'rel2abs';
 use Getopt::Long qw(:config gnu_getopt no_ignore_case);
 
 use lib "$ENV{HOME}/random/Code/perl/xtar";
@@ -17,7 +18,7 @@ use xtar::Colors qw( sayC fsayC esayC );
 
 my ( %options, $TAR );
 
-my $default_tar = 'bsdtar';
+my $default_tar = 'tar';
 
 GetOptions(
     'h|help'    => \$options{help},
@@ -27,7 +28,9 @@ GetOptions(
     'b|bsdtar'  => \$options{bsdtar},
     'g|gtar'    => \$options{gtar},
     'T|tar=s'   => \$options{tar},
-    'o|out=s'   => \$options{odir}
+    'o|out=s'   => \$options{odir},
+    'f|force'   => \$options{force},
+    'd|debug'   => \$options{Debug}
 ) or show_usage(1);
 
 if ( $options{help} )    { show_usage(0) }
@@ -61,9 +64,11 @@ my $xtar = xtar->new(
         TAR     => $TAR,
         odir    => $options{odir},
         verbose => $options{verbose},
-        combine => $options{combine}
+        combine => $options{combine},
+        force   => $options{force},
+        Debug   => $options{Debug}
     },
-    CWD         => realpath(getcwd()),
+    CWD         => rel2abs(getcwd()),
     NumArchives => scalar(@ARGV)
 );
 undef %options;
@@ -76,7 +81,7 @@ while (@ARGV) {
     my $file = shift;
 
     print "\n\n" if ( $counter++ > 1 );
-    sayC( 'yellow', "----- Processing file '$file' -----" );
+    sayC( 'YELLOW', "----- Processing file '$file' -----" );
 
     $xtar->init_archive($file);
     $xtar->extract();
@@ -112,11 +117,11 @@ OPTIONS
  -T --tar [ARG] Explicity specify the tar binary to use.
  -b --bsdtar    Use bsdtar over 'tar' if it exists, otherwise fall back to tar.
  -g --gtar      Use gtar if it exists, otherwise fall back to tar.
+ -f --force     If completely unable to identify a type, try to extract through
+                trial and error using all commands available (safe but slow).
 EOF
     }
     else { say STDERR "Usage: ${THIS} [options] archive(s)..." }
 
     exit $status;
 }
-
-#__PACKAGE__->meta->make_immutable;

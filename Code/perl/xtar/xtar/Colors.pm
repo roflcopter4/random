@@ -1,58 +1,68 @@
 package xtar::Colors;
-use warnings; use strict; use v5.26;
+use warnings; use strict; use v5.24;
 use Exporter 'import';
 use feature 'signatures';
 no warnings 'experimental::signatures';
 
-our @EXPORT_OK = qw( sayC fsayC esayC );
+use constant true  => 1;
+use constant false => 0;
+
+our @EXPORT = qw( sayC fsayC esayC );
+our @EXPORT_OK = qw( printC fprintC eprintC );
 
 my %color_hash = (
-    red     => 31,
-    green   => 32,
-    yellow  => 33,
-    blue    => 34,
-    magenta => 35,
-    cyan    => 36
+    RED     => 31,
+    GREEN   => 32,
+    YELLOW  => 33,
+    BLUE    => 34,
+    MAGENTA => 35,
+    CYAN    => 36
 );
 
 
-sub sayC( $color, @strings )
-{
-    my $str = get_string( $color, @strings );
-
-    say( $str );
+sub sayC( $color, @strings ) {
+    say _get_string( $color, @strings );
 }
 
-
-sub fsayC( $file, $color, @strings )
-{
-    my $str = get_string( $color, @strings );
-
-    say( $file $str );
+sub fsayC( $FH, $color, @strings ) {
+    say $FH _get_string( $color, @strings );
 }
 
-
-sub esayC ( $color, @strings )
-{
-    fsayC( *STDERR, $color, @strings );
+sub esayC( $color, @strings ) {
+    say STDERR _get_string( $color, @strings );
 }
 
+sub printC( $color, @strings ) {
+    print _get_string( $color, @strings );
+}
 
-sub get_string( $color, @strings )
+sub fprintC( $FH, $color, @strings ) {
+    print $FH _get_string( $color, @strings );
+}
+
+sub eprintC( $color, @strings ) {
+    print STDERR _get_string( $color, @strings );
+}
+
+###############################################################################
+
+
+sub _get_string( $color, @strings )
 {
     my ( $isbold, $esc );
 
-    $color =~ /^(B{0,1})(.*)/;
+    $color =~ /^(b?)(.*)/i;
     $isbold = $1;
-    $color  = $2;
+    $color  = "\U$2";
+    $color  = ($color) ? $color_hash{$color} : 1;
 
-    $esc = get_escape( $color_hash{$color}, $isbold );
+    $esc = _get_escape( $color, $isbold );
 
     return $esc . "@strings" . "\033[0m";
 }
 
 
-sub get_escape( $num, $isbold )
+sub _get_escape( $num, $isbold )
 {
     my $bold = ($isbold) ? 1 : 0;
 

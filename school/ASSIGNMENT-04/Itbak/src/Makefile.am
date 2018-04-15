@@ -1,6 +1,7 @@
 bin_PROGRAMS=tree
 tree_SOURCES=	main.c      \
 		tree.c      \
+		iter.c      \
 		game.c      \
 		display.c   \
 		utility.c   \
@@ -8,4 +9,6 @@ tree_SOURCES=	main.c      \
 		quicksort.c \
 		tree.h
 
-#tree_LDADD=-lpthread
+if NEED_BSD_FUNCS
+tree_SOURCES+=	bsd_funcs.c bsd_funcs.h
+endif

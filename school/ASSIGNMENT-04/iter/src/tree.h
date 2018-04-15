@@ -13,6 +13,13 @@
 #ifndef _GNU_SOURCE
 #  define _GNU_SOURCE
 #endif
+#ifndef HAVE_STRLCPY
+#  include "bsd_funcs.h"
+#else
+#  ifdef HAVE_BSD_BSD_H
+#    include <bsd/bsd.h>
+#  endif
+#endif
 /*===========================================================================*/
 
 
@@ -24,6 +31,7 @@
 #define CHILD_INC 1
 #define CACHE_SIZE 128
 #define CACHE_INC 16
+#define INDENT_SIZE 2
 
 typedef unsigned int uint;
 
@@ -37,6 +45,7 @@ struct Node {
         struct State *state;
         uint8_t nchild;
         uint8_t maxchild;
+        char *indent;
         bool level;
 };
 
@@ -45,6 +54,11 @@ struct StateCache {
         uint16_t len;
         uint16_t max_size;
 };
+
+char *program_name;
+char *orig_indent;
+bool quiet, LEAF_ONLY;
+struct StateCache cache;
 
 
 /*===========================================================================*/
@@ -71,50 +85,27 @@ struct StateCache {
 /*===========================================================================*/
 
 
-/* utility.c */
-#define   xatoi(STR)   __xatoi((STR), false)
-#define   s_xatoi(STR) __xatoi((STR), true)
-int64_t   __xatoi      (char *str, bool strict);
-void    * xmalloc      (size_t size);
-void    * xcalloc      (int num, size_t size);
-void    * xrealloc     (void *ptr, size_t size);
-void      xfree        (void *ptr);
-
-
 /* options.c */
-bool quiet, LEAF_ONLY;
 void handle_options(int argc, char **argv);
 
-
-/* main.c */
-char *program_name;
-struct StateCache cache;
-
-
-/* impl.c */
+/* tree.c */
 struct Node  * new_node     (struct Node *parent, struct State *state);
 struct Node  * init_tree    (uint8_t val);
-struct State * state_cpy    (struct State *orig);
+struct State * state_cpy    (const struct State *orig);
 void           destroy_tree (struct Node *node);
-void           state_append (struct State *dest, struct State *src, uint16_t start);
-
-
-/* game.c */
-void solve(struct Node *root);
-
+void           state_append (struct State *dest, const struct State *src, uint16_t start);
+void           destroy_node (struct Node *node);
 
 /* quicksort.c */
-#define QSTYPE uint8_t
+#define QS_TYPE      uint8_t
 #define QS_SIZE_TYPE uint16_t
-void quick_sort(QSTYPE *data, QS_SIZE_TYPE size);
-
+void quick_sort(QS_TYPE *data, QS_SIZE_TYPE size);
 
 /* display.c */
-void display(struct Node *root);
-
+void print_node(struct Node *node, bool last);
 
 /* iter.c */
-void iter_solve(struct Node *root);
+void solve(struct Node *root);
 
 
 #endif /* tree.h */

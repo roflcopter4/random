@@ -4,15 +4,18 @@ use Mouse;
 use feature 'signatures';
 no warnings 'experimental::signatures';
 
-use boolean;
+use constant true  => 1;
+use constant false => 0;
 use Carp;
-use File::Basename;
-#use Data::Dumper;
-use Cwd qw( realpath getcwd );
-use File::Temp qw( tempdir cleanup );
-use File::Copy qw( mv );
-use File::Path qw( make_path );
 use File::Which;
+use File::Basename;
+use Data::Dumper;
+use Cwd 'getcwd';
+use File::Copy qw( mv cp );
+use File::Path qw( make_path );
+use File::Temp qw( tempdir cleanup );
+use File::Copy::Recursive 'dircopy';
+use File::Spec::Functions 'rel2abs';
 
 use lib "$ENV{HOME}/random/Code/perl/xtar";
 use xtar::File;
@@ -25,11 +28,13 @@ has 'CWD'         => ( is => 'ro', isa => 'Str' );
 has 'Options'     => ( is => 'ro', isa => 'HashRef' );
 has 'NumArchives' => ( is => 'ro', isa => 'Int' );
 has 'counter'     => ( is => 'rw', isa => 'Int' );
-has 'archive'     => ( is => 'rw', isa => 'Object' );
-has 'out'         => ( is => 'rw', isa => 'Object' );
 has 'tmpdir'      => ( is => 'rw', isa => 'Str' );
 
+has 'out'         => ( is => 'rw', isa => 'Object' );
+has 'file'        => ( is => 'rw', isa => 'Object' );
+
 my $cmd_color = 'Bcyan';
+our $DEBUG;
 
 ###############################################################################
 
@@ -43,84 +48,125 @@ sub init_outpath($self)
             NumArchives => $self->NumArchives
         )
     );
+    $DEBUG = $self->Options->{'Debug'};
 }
 
 
 sub init_archive( $self, $filename )
 {
-    $self->archive( xtar::File->new( $filename, $self->Options ) );
-    $self->archive->analysis();
-    $self->out->init( $self->archive );
-}
-
-
-sub extract($self)
-{
-    my $lonefile = true;
-
-    while ( $lonefile ) {
-        unless ( $self->__extract() ) { return false }
-        
-        $lonefile = $self->out->analyze_output( $self->tmpdir );
-
-        if ( $lonefile ) {
-            esayC( 'Bred', 'The output contains only a single file.',
-                   "It could be a sub-archive. Attempting to extract.\n" );
-            
-            $self->init_archive( $lonefile );
-        }
-    }
-
-    make_path( $self->out->odir );
-    mv( $self->out->bottom, $self->out->odir ) or confess "$!";
-
-    my $CWD    = $self->CWD;
-    my $reldir = $self->out->odir =~ s|${CWD}/(.*)|$1|r;
-    my $odir   = $self->out->odir;
-    sayC( 'Bgreen', "Extracted to $reldir" );
+    $self->file( xtar::File->new( $filename, $self->Options ) );
+    $self->file->analysis();
+    $self->out->init( $self->file );
 }
 
 
 ###############################################################################
 
 
-sub __extract($self)
+sub extract($self)
+{
+    my $lonefile = true;
+
+    while ($lonefile) {
+        unless ( $self->try_extractions() ) { return false }
+        
+        $lonefile = $self->out->analyze_output($self->tmpdir);
+
+        if ($lonefile) {
+            esayC( 'bRED', 'The output contains only a single file.',
+                   "It could be a sub-archive. Attempting to extract.\n" );
+            
+            $self->init_archive($lonefile);
+        }
+    }
+
+    # What a mess of a command follows here.
+    safe_make_path( $self->out->top_dir );
+
+    mv( $self->out->bottom, $self->out->odir )
+      or ( $DEBUG && say STDERR "Resorting to dircopy" or true )
+         && dircopy( $self->out->bottom, $self->out->odir )
+      or confess "Dircopy failed. Aborting. - $!";
+
+    my $CWD    = $self->CWD;
+    my $reldir = $self->out->odir =~ s|${CWD}/(.*)|$1|r;
+    my $odir   = $self->out->odir;
+
+    sayC( 'bGREEN', "Extracted to $reldir" );
+}
+
+
+sub _get_tempdir($self)
+{
+    my @odir_info = stat $self->out->top_exist;
+    my $C = 1;
+    my $dir;
+    
+    if ( $odir_info[0] == [stat '/tmp']->[0] ) {
+        $dir = tempdir( CLEANUP => $C );
+    }
+    elsif ( -w $self->out->top_exist ) {
+        $dir = tempdir( CLEANUP => $C, DIR => $self->out->top_exist );
+    }
+    elsif ( $odir_info[0] == [stat $self->CWD]->[0] and -w $self->CWD ) {
+        $dir = tempdir( CLEANUP => $C, DIR => $self->CWD );
+    }
+    elsif ( $odir_info[0] == [$ENV{HOME}]->[0] ) {
+        $dir = tempdir( CLEANUP => $C, DIR => $ENV{HOME} );
+    }
+    else {  # If all else fails...
+        $dir = tempdir( CLEANUP => $C );
+    }
+
+    say STDERR "Tmpdir is " . rel2abs($dir) if $DEBUG;
+    return $dir;
+}
+
+
+###############################################################################
+
+
+sub try_extractions($self)
 {
     my $success = false;
     my $tmpdir;
 
     foreach my $try ( ('likely', 'mime', 'ext') ) {
-        my $cmd    = eval qq( \$self->archive->${try}_cmd );
-        my $is_tar = eval qq( \$self->archive->${try}_tar );
+        my $cmd    = eval qq( \$self->file->${try}_cmd );
+        my $is_tar = eval qq( \$self->file->${try}_tar );
 
         next unless ( $cmd->{CMD} );
 
-        $tmpdir = get_tempdir( $self->CWD, $self->archive->fullpath );
+        $tmpdir = $self->_get_tempdir();
         chdir $tmpdir;
 
-        if ( do_extraction( $self->archive->fullpath, $cmd, $is_tar, $self->Options ) ) {
+        $success = do_extraction( $self->file->fullpath,
+                                  $cmd, $is_tar, $self->Options );
+
+        if ( $success ) {
             if ( $self->Options->{'verbose'} ) {
-                esayC( 'green', 'Operation appears successful.' );
+                esayC( 'GREEN', 'Operation appears successful.' );
             }
-            $success = true;
             last;
         }
-        else { esayC( 'Bred', "Operation failed.\n" ) }
+        else {
+            esayC( 'bRED', "Operation failed.\n" )
+        }
 
         chdir $self->CWD;
     }
 
     unless ( $success ) {
-        esayC( 'Bred', 'All identified programs have failed.' );
+        esayC( 'bRED', 'All identified programs have failed.' );
 
-        $tmpdir = get_tempdir( $self->CWD, $self->archive->fullpath );
+        $tmpdir = $self->_get_tempdir();
         chdir $tmpdir;
 
-        $success = force_extract( $self->archive->fullpath,
+        $success = force_extract( $self->file->fullpath,
                                   $self->Options->{'TAR'} );
     }
 
-    $self->tmpdir( realpath( $tmpdir ) );
+    $self->tmpdir( rel2abs($tmpdir) );
     chdir $self->CWD;
     return $success;
 }
@@ -154,27 +200,23 @@ sub do_extraction( $archive, $cmd, $is_tar, $options )
 sub extract_tar( $CMD, $flags, $file, $options )
 {
     my $ret = true;
-    my $shortname = basename( $file );
+    my $shortname = basename($file);
 
     my $command = substitute_cmd( $CMD, $flags, $file, $options );
     my $short_command = substitute_cmd( $CMD, $flags, $shortname, $options );
 
-    if ( $flags eq 'SPECIAL' ) { croak }
-    else {
-        sayC( $cmd_color, qq($short_command | $options->{TAR} -xf -) );
+    sayC( $cmd_color, qq($short_command | $options->{TAR} -xf -) );
 
-        my ( $CmdPipe, $TarPipe );
-        open $CmdPipe, '-|', qq($command);
-        open $TarPipe, '|-', qq($options->{TAR} -xf -);
+    my ( $CmdPipe, $TarPipe );
+    open $CmdPipe, '-|', qq($command);
+    open $TarPipe, '|-', qq($options->{TAR} -xf -);
 
-        while ( <$CmdPipe> ) {
-            print $TarPipe $_;
-        }
+    # We just act like a filter between the commands.
+    while (<$CmdPipe>) { print $TarPipe $_ }
 
-        # If either command failed we won't be able to close its pipe.
-        close $CmdPipe or $ret = false;
-        close $TarPipe or $ret = false;
-    }
+    # If either command failed we won't be able to close its pipe.
+    close($CmdPipe) or $ret = false;
+    close($TarPipe) or $ret = false;
 
     return $ret;
 }
@@ -182,68 +224,44 @@ sub extract_tar( $CMD, $flags, $file, $options )
 
 sub extract_else( $CMD, $flags, $stdout, $file, $options )
 {
-    my $shortname = basename( $file );
+    my $shortname = basename($file);
     my $CWD = getcwd();
 
     my $command = substitute_cmd( $CMD, $flags, $file, $options );
     my $short_command = substitute_cmd( $CMD, $flags, $shortname, $options );
 
-    if ( $flags eq 'SPECIAL' ) { croak }
+    if ($stdout) {
+        sayC( $cmd_color, qq($short_command > "$CWD/") );
+        system qq($command > "$CWD/$shortname");
+    }
     else {
-        if ($stdout) {
-            sayC( $cmd_color, qq($short_command > "$CWD/") );
-            system qq($command > "$CWD/$shortname");
-        }
-        else {
-            sayC( $cmd_color, qq($short_command) );
-            system qq($command);
-        }
+        sayC( $cmd_color, qq($short_command) );
+        system qq($command);
     }
 
-    return boolean( $? == 0 );
+    return $? == 0;
 }
 
 
 ###############################################################################
 
 
-sub substitute_cmd ( $CMD, $flags, $file, $options )
+sub substitute_cmd( $CMD, $flags, $file, $options )
 {
     my $TAR = $options->{TAR};
     $CMD =~ s/TAR/$TAR/;
 
-    if ( $flags =~ /--/ ) {
-        $flags =~ s/--/'$file'/;
-    }
-    else {
-        $flags .= " '$file'";
-    }
+    if ( $flags =~ /--/ ) { $flags =~ s/--/'$file'/ }
+    else                  { $flags .= " '$file'" }
 
     return "$CMD $flags";
 }
 
 
-sub get_tempdir( $CWD, $archive )
+sub safe_make_path($top_dir)
 {
-    my @archive_info = stat $archive;
-    my @dest_info    = stat '/tmp';
-    my $C = 1;
-
-    if ( $archive_info[0] == $dest_info[0] ) {
-        return tempdir( CLEANUP => $C );
-    }
-
-    @dest_info = stat $CWD;
-    if ( $archive_info[0] == $dest_info[0] and -w $CWD ) {
-        return tempdir( CLEANUP => $C, DIR => $CWD );
-    }
-
-    @dest_info = stat( $ENV{'HOME'} );
-    if ( $archive_info[0] == $dest_info[0] ) {
-        return tempdir( CLEANUP => $C, DIR => $ENV{'HOME'} );
-    }
-
-    return tempdir( CLEANUP => $C );
+    my $dir = dirname($top_dir);
+    make_path($dir) unless ( -e $dir );
 }
 
 
@@ -252,9 +270,9 @@ sub get_tempdir( $CWD, $archive )
 
 sub force_extract( $archive, $TAR )
 {
-    esayC( 'Bred', "Attempting to force extract.\n" );
+    esayC( 'bRED', "Attempting to force extract.\n" );
     my $index = 1;
-    my $color = 'Byellow';
+    my $color = 'bYELLOW';
 
     while (true) {
         if ( $index == 1 ) {
@@ -283,14 +301,14 @@ sub force_extract( $archive, $TAR )
             last if ( $? == 0 );
         }
         elsif ( $index == 6 ) {
-            esayC( 'Bred', "\n\nTotal failure. Giving up" );
+            esayC( 'bRED', "\n\nTotal failure. Giving up" );
             return false;
         }
 
         ++$index;
     }
 
-    esayC( 'Bgreen', 'Success!' );
+    esayC( 'bGREEN', 'Success!' );
     return true;
 }
 

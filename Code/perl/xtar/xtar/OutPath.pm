@@ -4,50 +4,56 @@ use Mouse;
 use feature 'signatures';
 no warnings 'experimental::signatures';
 
-use boolean;
+use constant true  => 1;
+use constant false => 0;
 use Carp;
-#use Data::Dumper;
 use File::Basename;
-use File::Path;
-use Cwd qw( realpath );
+use File::Spec::Functions qw( rel2abs catdir );
 
 ###############################################################################
 
 has 'CWD'         => ( is => 'ro', isa => 'Str' );
 has 'Options'     => ( is => 'ro', isa => 'HashRef' );
 has 'NumArchives' => ( is => 'ro', isa => 'Int' );
+has 'notfirst'    => ( is => 'rw', isa => 'Bool' );
 
 has 'tmpdir'      => ( is => 'rw', isa => 'Str' );
 has 'bottom'      => ( is => 'rw', isa => 'Str' );
 has 'top_dir'     => ( is => 'rw', isa => 'Str' );
 has 'odir'        => ( is => 'rw', isa => 'Str' );
+has 'top_exist'   => ( is => 'rw', isa => 'Str' );
 
-has 'archive'     => ( is => 'rw', isa => 'Object' );
-has 'notfirst'    => ( is => 'rw', isa => 'Bool' );
+has 'file'        => ( is => 'rw', isa => 'Object' );
 
 ###############################################################################
 
 
 sub init( $self, $archive )
 {
-    $self->archive( $archive );
+    $self->file( $archive );
 
     if ( $self->Options->{'odir'}) {
         unless ( $self->notfirst  ) {
-            my $top = realpath( $self->Options->{'odir'} );
+            my $top = rel2abs( $self->Options->{'odir'} );
+
             if ( -e $top ) {
-                $top = handle_conflict( dirname( $top ), basename( $top ) );
+                $top = handle_conflict( dirname($top), basename($top) );
             }
 
             my $tmp = $top;
-            while ( true ) {
-                if    ( not -e $tmp ) { $tmp = dirname( $tmp ) }
+            while (true) {
+                if ( not -e $tmp ) {
+                    $tmp = dirname($tmp);
+                }
                 elsif ( not -w $tmp ) {
                     croak "Given output directory is not writable. Aborting.";
                 }
-                else { last }
+                else {
+                    last;
+                }
             }
 
+            $self->top_exist( $tmp );
             $self->top_dir( $top );
         }
     }
@@ -55,6 +61,7 @@ sub init( $self, $archive )
         unless ( -w $self->CWD ) {
             croak "Current directory is not writable. Aborting.";
         }
+        $self->top_exist( $self->CWD );
         $self->top_dir( $self->CWD );
     }
 
@@ -67,7 +74,7 @@ sub init( $self, $archive )
 
 sub analyze_output( $self, $tmpdir )
 {
-    my ( $bottom, $lonefile ) = descend( $tmpdir );
+    my ( $bottom, $lonefile ) = descend($tmpdir);
     chdir $self->CWD;
     $self->bottom( $bottom );
     $self->tmpdir( $tmpdir );
@@ -94,13 +101,13 @@ sub __get_odir($self)
     my $oname;
 
     if ( $self->tmpdir eq $self->bottom ) {
-        $oname = $self->archive->bname;
+        $oname = $self->file->bname;
     }
     else {
-        $oname = basename( $self->bottom );
+        $oname = basename($self->bottom);
     }
 
-    my $odir = sprintf( "%s/%s", $self->top_dir, $oname );
+    my $odir = catdir( $self->top_dir, $oname );
     if ( -e $odir ) {
         $odir = handle_conflict( $self->top_dir, $oname );
     }
@@ -127,7 +134,7 @@ sub handle_conflict( $path, $name )
 }
 
 
-sub glob_all
+sub glob_all()
 {
     my @files = glob('* .*');
     my @filter;
@@ -150,12 +157,12 @@ sub descend($dir)
 
     if ( @files == 1) {
         if ( -d $files[0] ) {
-            my $lonedir = realpath( $files[0] );
-            ( $bottom, $lonefile ) = descend( $lonedir );
+            my $lonedir = rel2abs($files[0]);
+            ( $bottom, $lonefile ) = descend($lonedir);
         }
         else {
             $bottom   = $dir;
-            $lonefile = realpath( $files[0] );
+            $lonefile = rel2abs($files[0]);
         }
     }
     elsif ( @files == 0 ) {

@@ -1,5 +1,4 @@
 #include "tree.h"
-/*#include <bsd/bsd.h>*/
 #include <stdlib.h>
 #include <string.h>
 
@@ -7,14 +6,35 @@
 #define LIST_LEN 2
 
 static void do_solve(struct Node *node);
-static struct State **split(const uint8_t pile, uint * restrict nlists);
+static struct State **split(uint8_t const pile, uint * const nlists);
 
 
 void
-solve(struct Node *root)
+iter_solve(struct Node *root)
 {
         printf("Solving for %d tokens.\n", root->state->lst[0]);
         do_solve(root);
+#if 0
+        uint nlists = 0;
+        struct State **state_list = split(root->state->lst[0], &nlists);
+
+        for (uint A = 0; A < nlists; ++A) {
+                struct State *newstate = state_cpy(root->state);
+                newstate->lst[0] = state_list[A]->lst[0];
+
+                state_append(newstate, state_list[A], 1);
+                quick_sort(newstate->lst, newstate->len);
+
+                struct Node *child = new_node(root, newstate);
+
+                /* do_solve(child); */
+
+                free(state_list[A]->lst);
+                free(state_list[A]);
+        }
+
+        free(state_list);
+#endif
 }
 
 
@@ -50,7 +70,7 @@ do_solve(struct Node *node)
 
 
 static struct State **
-split(const uint8_t pile, uint * restrict nlists)
+split(uint8_t const pile, uint * const nlists)
 {
         uint8_t combinations[NUM_LISTS][LIST_LEN];
         uint8_t lengths[NUM_LISTS];
