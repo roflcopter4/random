@@ -11,3 +11,13 @@ aclocal.m4
 Makefile.in
 autom4te.cache
 .deps
+
+config.sub
+config.guess
+config.status
+config.log
+
+install-sh
+missing
+depcomp
+compile
