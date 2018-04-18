@@ -253,11 +253,11 @@ class Maze:
 
 class MazeSquare:
     def __init__(self, x, y):
-        self.__moves = []
-        self.__x = x
-        self.__y = y
+        self.moves = []
+        self.x = x
+        self.y = y
         # None is a meaningful value, so these must be initialized
-        self.__walls = {
+        self.walls = {
             "North": None,
             "South": None,
             "East": None,
@@ -265,30 +265,30 @@ class MazeSquare:
         }
 
     def add_move(self, neighbor):
-        self.__moves.append(neighbor)
+        self.moves.append(neighbor)
 
     def get_legal_moves(self):
-        return self.__moves
+        return self.moves
 
     def get_location(self):
-        return (self.__x, self.__y)
+        return (self.x, self.y)
 
     def get_walls(self):
         """Create the messy 'walls' hash."""
-        legal_moves = [i.get_location() for i in self.__moves]
+        legal_moves = [i.get_location() for i in self.moves]
         for move in legal_moves:
-            if self.__y > move[1]:
-                self.__walls['North'] = Y_PAD
-            elif self.__y < move[1]:
-                self.__walls['South'] = Y_PAD
+            if self.y > move[1]:
+                self.walls['North'] = Y_PAD
+            elif self.y < move[1]:
+                self.walls['South'] = Y_PAD
 
-            if self.__x < move[0]:
-                self.__walls['East'] = X_PAD
-            elif self.__x > move[0]:
-                self.__walls['West'] = X_PAD
+            if self.x < move[0]:
+                self.walls['East'] = X_PAD
+            elif self.x > move[0]:
+                self.walls['West'] = X_PAD
 
     def ret_walls(self):
-        return self.__walls
+        return self.walls
 
 
 ###############################################################################

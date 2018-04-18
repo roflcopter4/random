@@ -130,7 +130,7 @@ sub mimetype_analysis($self)
     my $counter = 0;
     my ( $app, $mimekind );
 
-  RESTART:
+RETRY:
     ( $app, $mimekind ) = $self->find_mimetype( \$counter );
 
     while ( looks_like_number($app) and $app == false and $mimekind <= MAXKIND )
@@ -158,8 +158,8 @@ sub mimetype_analysis($self)
         }
     }
     elsif ( $orig =~ m/application/ ) {
-        if ( $orig =~ m/octet/ ) {
-            goto RESTART;
+        if ( $orig =~ m/octet|stream/ ) {
+            goto RETRY;
         }
         else {
             $app =~ s/.*application.(\S+).*/$1/;
@@ -184,7 +184,7 @@ sub mimetype_analysis($self)
     $type = ($type) ? $type : $tmp;
 
     if ( not $type and $mimekind < MAXKIND ) {
-        goto RESTART;
+        goto RETRY;
     }
 
     $self->mime_type($type);
@@ -200,7 +200,6 @@ sub find_mimetype ( $self, $counter, @skip )
 {
     my $filename = $self->fullpath;
     my ( $app, $kind );
-    say "Counter is ${$counter}";
 
     if ( not( grep( /1/, @skip ) and grep( /2/, @skip ) ) ) {
         my $tmp = true;

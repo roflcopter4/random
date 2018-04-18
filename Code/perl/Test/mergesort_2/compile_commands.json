@@ -1,0 +1,146 @@
+[
+    {
+        "arguments": [
+            "cc",
+            "-c",
+            "-DHAVE_CONFIG_H",
+            "-I.",
+            "-I..",
+            "-march=native",
+            "-Ofast",
+            "-o",
+            "colorful.o",
+            "colorful.c"
+        ],
+        "directory": "/home/bml/random/Code/perl/Test/mergesort_2/src",
+        "file": "colorful.c"
+    },
+    {
+        "arguments": [
+            "cc",
+            "-c",
+            "-DHAVE_CONFIG_H",
+            "-I.",
+            "-I..",
+            "-march=native",
+            "-Ofast",
+            "-o",
+            "utility.o",
+            "utility.c"
+        ],
+        "directory": "/home/bml/random/Code/perl/Test/mergesort_2/src",
+        "file": "utility.c"
+    },
+    {
+        "arguments": [
+            "cc",
+            "-c",
+            "-DHAVE_CONFIG_H",
+            "-I.",
+            "-I..",
+            "-march=native",
+            "-Ofast",
+            "-o",
+            "oldmethods.o",
+            "oldmethods.c"
+        ],
+        "directory": "/home/bml/random/Code/perl/Test/mergesort_2/src",
+        "file": "oldmethods.c"
+    },
+    {
+        "arguments": [
+            "cc",
+            "-c",
+            "-DHAVE_CONFIG_H",
+            "-I.",
+            "-I..",
+            "-march=native",
+            "-Ofast",
+            "-o",
+            "datagen.o",
+            "datagen.c"
+        ],
+        "directory": "/home/bml/random/Code/perl/Test/mergesort_2/src",
+        "file": "datagen.c"
+    },
+    {
+        "arguments": [
+            "cc",
+            "-c",
+            "-DHAVE_CONFIG_H",
+            "-I.",
+            "-I..",
+            "-march=native",
+            "-Ofast",
+            "-o",
+            "quicksort.o",
+            "quicksort.c"
+        ],
+        "directory": "/home/bml/random/Code/perl/Test/mergesort_2/src",
+        "file": "quicksort.c"
+    },
+    {
+        "arguments": [
+            "cc",
+            "-c",
+            "-DHAVE_CONFIG_H",
+            "-I.",
+            "-I..",
+            "-march=native",
+            "-Ofast",
+            "-o",
+            "options.o",
+            "options.c"
+        ],
+        "directory": "/home/bml/random/Code/perl/Test/mergesort_2/src",
+        "file": "options.c"
+    },
+    {
+        "arguments": [
+            "cc",
+            "-c",
+            "-DHAVE_CONFIG_H",
+            "-I.",
+            "-I..",
+            "-march=native",
+            "-Ofast",
+            "-o",
+            "impl.o",
+            "impl.c"
+        ],
+        "directory": "/home/bml/random/Code/perl/Test/mergesort_2/src",
+        "file": "impl.c"
+    },
+    {
+        "arguments": [
+            "cc",
+            "-c",
+            "-DHAVE_CONFIG_H",
+            "-I.",
+            "-I..",
+            "-march=native",
+            "-Ofast",
+            "-o",
+            "invertions.o",
+            "invertions.c"
+        ],
+        "directory": "/home/bml/random/Code/perl/Test/mergesort_2/src",
+        "file": "invertions.c"
+    },
+    {
+        "arguments": [
+            "cc",
+            "-c",
+            "-DHAVE_CONFIG_H",
+            "-I.",
+            "-I..",
+            "-march=native",
+            "-Ofast",
+            "-o",
+            "final.o",
+            "final.c"
+        ],
+        "directory": "/home/bml/random/Code/perl/Test/mergesort_2/src",
+        "file": "final.c"
+    }
+]

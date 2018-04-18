@@ -68,7 +68,9 @@ sub extract($self)
     my $lonefile = true;
 
     while ($lonefile) {
-        unless ( $self->try_extractions() ) { return false }
+        unless ( $self->try_extractions() ) {
+            return false;
+        }
         
         $lonefile = $self->out->analyze_output($self->tmpdir);
 
@@ -130,6 +132,7 @@ sub try_extractions($self)
 {
     my $success = false;
     my $tmpdir;
+    goto SKIP if $self->file->ID_Failure;
 
     foreach my $try ( ('likely', 'mime', 'ext') ) {
         my $cmd    = eval qq( \$self->file->${try}_cmd );
@@ -158,7 +161,7 @@ sub try_extractions($self)
 
     unless ( $success ) {
         esayC( 'bRED', 'All identified programs have failed.' );
-
+SKIP:
         $tmpdir = $self->_get_tempdir();
         chdir $tmpdir;
 

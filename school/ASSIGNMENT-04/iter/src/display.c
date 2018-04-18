@@ -40,7 +40,6 @@ print_node(struct Node *node, const bool last)
 
         if (last) {
                 if ((LEAF_ONLY && (node->nchild == 0U)) || (!LEAF_ONLY))
-                        /* pmaxmin(node); */
                         printf(" \033[%dm%s\033[0m\n",
                                LEAF_ONLY, node->level ? MAX_STR : MIN_STR);
                 else

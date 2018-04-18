@@ -134,13 +134,13 @@ static struct State *
 check_cache(const struct State * const state)
 {
         for (int i = 0; i < cache.len; ++i) {
-                if (state->len == cache.arr[i]->len
-                    && memcmp(state->lst,
-                              cache.arr[i]->lst,
-                              state->len * sizeof(*state->lst)
-                              ) == 0) {
+                if (state->len == cache.arr[i]->len &&
+                    memcmp(state->lst,
+                           cache.arr[i]->lst,
+                           state->len * sizeof(*state->lst)
+                          ) == 0
+                    )
                         return cache.arr[i];
-                }
         }
 
         return NULL;
