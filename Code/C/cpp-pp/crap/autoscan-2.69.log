@@ -1,0 +1,4 @@
+autoscan-2.69: warning: missing AC_CHECK_HEADERS([limits.h]) wanted by: 
+	src/bsd_funcs.c:11
+autoscan-2.69: warning: missing AC_PROG_CXX wanted by: 
+	build/src/Makefile:134

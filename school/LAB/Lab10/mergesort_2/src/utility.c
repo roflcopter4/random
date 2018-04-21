@@ -14,7 +14,7 @@ static int numdigits(uint number);
 #define INCSIZE   (16  * sizeof(char))
 
 char *
-shitty_fgetline(FILE *f)
+my_fgetline(FILE *f)
 {
         int ch, it, size;
         char *buf, *temp, *line;
