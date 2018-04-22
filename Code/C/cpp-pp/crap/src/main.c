@@ -42,11 +42,10 @@ main(int argc, char **argv)
 
         char *slurp;
 
-        if (streq(argv[0], "-")) {
+        if (streq(argv[0], "-"))
                 slurp = slurp_stdin();
-        } else {
+        else
                 slurp = slurp_file(argv[0]);
-        }
 
         char *orig  = slurp;
 
@@ -154,7 +153,7 @@ redo:
                 while (isblank(*line))
                         ++line;
         } else if (ALL) {
-                --line; /* oopsie.. */
+                --line;  /* oopsie.. */
                 --tmp;
                 if (loc_lev > 0)
                         for (int i = 0; i < (loc_lev * WIDTH) + 1; ++i)
