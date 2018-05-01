@@ -7,8 +7,10 @@ no warnings 'experimental::signatures';
 use constant true  => 1;
 use constant false => 0;
 use Carp;
-use File::Basename;
 use File::Spec::Functions qw( rel2abs catdir );
+
+use lib "$ENV{HOME}/random/Code/perl/xtar";
+use xtar::Utils;
 
 ###############################################################################
 
@@ -31,26 +33,22 @@ has 'file'        => ( is => 'rw', isa => 'Object' );
 sub init( $self, $archive )
 {
     $self->file( $archive );
+    my $msg = "output directory is not writable. Aborting.";
 
-    if ( $self->Options->{'odir'}) {
+    if ( $self->Options->{odir}) {
         unless ( $self->notfirst  ) {
-            my $top = rel2abs( $self->Options->{'odir'} );
-
-            if ( -e $top ) {
-                $top = handle_conflict( dirname($top), basename($top) );
+            my $top = rel2abs( $self->Options->{odir} );
+            
+            if ( not $self->Options->{clobber} and -e $top ) {
+                $top = handle_conflict( Dirname($top), Basename($top) );
             }
 
             my $tmp = $top;
-            while (true) {
-                if ( not -e $tmp ) {
-                    $tmp = dirname($tmp);
-                }
-                elsif ( not -w $tmp ) {
-                    croak "Given output directory is not writable. Aborting.";
-                }
-                else {
-                    last;
-                }
+
+            while () {
+                if    ( not -e $tmp ) { $tmp = Dirname($tmp) }
+                elsif ( not -w $tmp ) { croak "Given $msg"  }
+                else                  { last }
             }
 
             $self->top_exist( $tmp );
@@ -58,9 +56,7 @@ sub init( $self, $archive )
         }
     }
     else {
-        unless ( -w $self->CWD ) {
-            croak "Current directory is not writable. Aborting.";
-        }
+        unless ( -w $self->CWD ) { croak "Current $msg" }
         $self->top_exist( $self->CWD );
         $self->top_dir( $self->CWD );
     }
@@ -87,7 +83,9 @@ sub analyze_output( $self, $tmpdir )
 
 sub get_odir($self)
 {
-    if ( $self->Options->{'odir'} and $self->NumArchives == 1 ) {
+    if ( $self->Options->{combine}
+         or ( $self->Options->{odir} and $self->NumArchives == 1 ) )
+    {
         $self->odir( $self->top_dir );
     }
     else {
@@ -104,7 +102,7 @@ sub __get_odir($self)
         $oname = $self->file->bname;
     }
     else {
-        $oname = basename($self->bottom);
+        $oname = Basename($self->bottom);
     }
 
     my $odir = catdir( $self->top_dir, $oname );

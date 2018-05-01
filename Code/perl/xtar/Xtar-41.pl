@@ -2,16 +2,19 @@
 use warnings; use strict; use v5.26;
 use feature 'signatures';
 no warnings 'experimental::signatures';
-use Cwd 'getcwd';
+use constant true  => 1;
+use constant false => 0;
+
 use Carp;
-use File::Basename;
+use Cwd 'getcwd';
 use File::Which;
 use File::Spec::Functions 'rel2abs';
 use Getopt::Long qw(:config gnu_getopt no_ignore_case);
 
 use lib "$ENV{HOME}/random/Code/perl/xtar";
 use xtar;
-use xtar::Colors qw( sayC fsayC esayC );
+use xtar::Colors;
+use xtar::Utils;
 
 ###############################################################################
 # Main
@@ -25,12 +28,15 @@ GetOptions(
     'V|version' => \$options{version},
     'v|verbose' => \$options{verbose},
     'c|combine' => \$options{combine},
+    'C|clobber' => \$options{clobber},
     'b|bsdtar'  => \$options{bsdtar},
     'g|gtar'    => \$options{gtar},
     'T|tar=s'   => \$options{tar},
     'o|out=s'   => \$options{odir},
     'f|force'   => \$options{force},
-    'd|debug'   => \$options{Debug}
+    'd|debug'   => \$options{Debug},
+    'q|quiet'   => \$options{quiet},
+    'Q|shutup'  => \$options{shutup}
 ) or show_usage(1);
 
 if ( $options{help} )    { show_usage(0) }
@@ -46,9 +52,13 @@ elsif ( $options{bsdtar} )      { $TAR = find_tar('bsdtar') }
 elsif ( $options{gtar} )        { $TAR = find_tar('gtar') }
 else                            { $TAR = find_tar( $default_tar ) }
 
-if ( $options{combine} ) { die "Combine is not implemented yet." }
-if ( $options{verbose} ) { warn "Verbose doesn't do anything yet." }
+if ( $options{clobber} )    { $options{combine} = true }
 
+if    ( $options{Debug} )   { $options{verbose} = true;  $options{quiet} = false; }
+elsif ( $options{shutup} )  { $options{verbose} = false; $options{quiet} = true; }
+elsif ( $options{verbose} ) { $options{quiet}   = false }
+elsif ( $options{quiet} )   { $options{verbose} = false }
+else                        { $options{verbose} = $options{quiet} = false }
 
 sub find_tar($binary) {
     if   ( which($binary) ) { return $binary }
@@ -65,8 +75,11 @@ my $xtar = xtar->new(
         odir    => $options{odir},
         verbose => $options{verbose},
         combine => $options{combine},
+        clobber => $options{clobber},
         force   => $options{force},
-        Debug   => $options{Debug}
+        Debug   => $options{Debug},
+        quiet   => $options{quiet},
+        shutup  => $options{shutup}
     },
     CWD         => rel2abs(getcwd()),
     NumArchives => scalar(@ARGV)
@@ -76,12 +89,17 @@ undef %options;
 $xtar->init_outpath();
 
 my $counter = 1;
+my $spacing = ($xtar->Options->{verbose}) ? "\n\n" : "\n";
 
 while (@ARGV) {
     my $file = shift;
 
-    print "\n\n" if ( $counter++ > 1 );
-    sayC( 'YELLOW', "----- Processing file '$file' -----" );
+    if    ( $xtar->Options->{shutup} ) {}
+    elsif ( $xtar->Options->{quiet} )  { say "Extracting $file" }
+    else {
+        print $spacing if ( $counter++ > 1 );
+        sayC( 'YELLOW', "----- Processing file '$file' -----" );
+    }
 
     $xtar->init_archive($file);
     $xtar->extract();
@@ -94,9 +112,9 @@ while (@ARGV) {
 
 
 sub show_usage($status) {
-    my $THIS = basename $0;
+    my $THIS = Basename $0;
     if ( $status == 0 ) {
-        print "Usage: ${THIS} [options] archive(s)...\n\n";
+        print "Usage: ${THIS} [options] archive(s)\n\n";
         print << 'EOF';
 Extract an archive safely to a unique directory, ensuring no irritating
 single sub-directories or lots of loose files are created. See the manual for
@@ -106,6 +124,9 @@ OPTIONS
  -h --help      Show this usage information.
  -V --version   Show version.
  -v --verbose   Verbose mode. Display progress information if possible.
+ -d --debug     Enable very verbose output. Implies -v.
+ -q --quiet     Disable most output.
+ -Q --shutup    Really say nothing unless everything breaks.
  -o --out [DIR] Explicitly specify output directory. If it already exists,
                 time_t will be appended to it. When used with multiple
                 archives it will function as a top directory with each archive
@@ -121,7 +142,7 @@ OPTIONS
                 trial and error using all commands available (safe but slow).
 EOF
     }
-    else { say STDERR "Usage: ${THIS} [options] archive(s)..." }
+    else { err "Usage: ${THIS} [options] archive(s)" }
 
     exit $status;
 }

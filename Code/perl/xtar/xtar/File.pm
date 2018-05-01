@@ -11,12 +11,13 @@ use Carp qw( carp croak cluck confess );
 use File::Basename;
 use File::Copy qw( mv );
 use File::Spec::Functions qw( rel2abs );
-use Scalar::Util qw( looks_like_number );
 use File::Which;
+use Scalar::Util qw( looks_like_number );
 use Try::Tiny;
 
 use lib "$ENV{HOME}/random/Code/perl/xtar";
-use xtar::Colors qw( esayC eprintC );
+use xtar::Colors;
+use xtar::Utils;
 
 ##############################################################################
 
@@ -56,12 +57,12 @@ around BUILDARGS => sub
         croak("Error: File is a directory.") if ( -d $filename );
 
         my $fullpath  = rel2abs($filename);
-        my $basepath  = dirname($fullpath);
+        my $basepath  = Dirname($fullpath);
         my $extention = $filename =~ s/.*\.(.*)/$1/r;
         my $Options   = $_[1];
 
         return $class->$orig(
-            'filename'  => $filename,
+            'filename'  => Basename($filename),
             'fullpath'  => $fullpath,
             'basepath'  => $basepath,
             'extention' => $extention,
@@ -133,7 +134,7 @@ sub mimetype_analysis($self)
 RETRY:
     ( $app, $mimekind ) = $self->find_mimetype( \$counter );
 
-    while ( looks_like_number($app) and $app == false and $mimekind <= MAXKIND )
+    while ( looks_like_number($app) and $app == 0 and $mimekind <= MAXKIND )
     {
         esayC( 'b', "Mimetype number $mimekind failed." ) if $xtar::DEBUG;
         push @done, $mimekind;
@@ -174,7 +175,9 @@ RETRY:
             last if ( $type = _normalize_type($_) );
         }
 
-        unless ($type) { cluck("Failed to identify mime_raw!") }
+        if ( not $type and $xtar::DEBUG ) {
+            carp("Failed to identify mime_raw!");
+        }
         $self->mime_raw($type);
         $self->mime_tar(false);
     }
@@ -203,7 +206,7 @@ sub find_mimetype ( $self, $counter, @skip )
 
     if ( not( grep( /1/, @skip ) and grep( /2/, @skip ) ) ) {
         my $tmp = true;
-        say STDERR 'Using File::Unpack' if $xtar::DEBUG;
+        err 'Using File::Unpack' if $xtar::DEBUG;
         ++${$counter};
 
         $kind = ${$counter};
@@ -255,8 +258,8 @@ sub finalize_analysis($self)
 {
     if    ( $self->mime_type ) { $self->likely_type( $self->mime_type ) }
     elsif ( $self->ext_type )  { $self->likely_type( $self->ext_type ) }
-    else                       {
-        if ( $self->Options->{'force'} ) {
+    else {
+        if ( $self->Options->{force} ) {
             esayC( 'RED', 'Warning: No type identified.' );
             $self->ID_Failure( true );
             return;
@@ -305,7 +308,7 @@ sub move_zqaq($self)
 {
     mv( $self->fullpath, $self->fullpath . '.zpaq' );
     $self->fullpath( $self->fullpath . '.zpaq' );
-    $self->filename( basename($self->fullpath) );
+    $self->filename( Basename($self->fullpath) );
     $self->extention( 'zpaq' );
 }
 
@@ -317,7 +320,7 @@ sub determine_decompressor($self, $type)
 {
     my ( $CMD, $TFlags, $EFlags, $Stdout );
 
-    my $V     = $self->Options->{'verbose'};
+    my $V     = $self->Options->{verbose};
     my $v7z   = ( $V ) ? '' : '-bso0 -bsp0';
     my $vzpaq = ( $V ) ? '' : ' >/dev/null';
 

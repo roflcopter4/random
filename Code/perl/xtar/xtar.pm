@@ -7,26 +7,29 @@ no warnings 'experimental::signatures';
 use constant true  => 1;
 use constant false => 0;
 use Carp;
+use Clone qw( clone );
+use Cwd qw( getcwd );
 use File::Which;
-use File::Basename;
 use Data::Dumper;
-use Cwd 'getcwd';
 use File::Copy qw( mv cp );
 use File::Path qw( make_path );
 use File::Temp qw( tempdir cleanup );
 use File::Copy::Recursive 'dircopy';
-use File::Spec::Functions 'rel2abs';
+use File::Spec::Functions qw( rel2abs splitpath catfile );
+use Scalar::Util qw( looks_like_number );
 
 use lib "$ENV{HOME}/random/Code/perl/xtar";
 use xtar::File;
 use xtar::OutPath;
-use xtar::Colors qw( sayC fsayC esayC );
+use xtar::Colors;
+use xtar::Utils;
+
 
 ###############################################################################
 
 has 'CWD'         => ( is => 'ro', isa => 'Str' );
-has 'Options'     => ( is => 'ro', isa => 'HashRef' );
 has 'NumArchives' => ( is => 'ro', isa => 'Int' );
+has 'Options'     => ( is => 'rw', isa => 'HashRef' );
 has 'counter'     => ( is => 'rw', isa => 'Int' );
 has 'tmpdir'      => ( is => 'rw', isa => 'Str' );
 
@@ -45,15 +48,24 @@ sub init_outpath($self)
         xtar::OutPath->new(
             CWD         => $self->CWD,
             Options     => $self->Options,
-            NumArchives => $self->NumArchives
+            NumArchives => $self->NumArchives,
         )
     );
-    $DEBUG = $self->Options->{'Debug'};
+    $DEBUG = $self->Options->{Debug};
 }
 
 
-sub init_archive( $self, $filename )
+sub init_archive( $self, $filename, $second_try=false )
 {
+    if ($second_try) {
+        $self->Options->{force} = false;
+        if ($DEBUG) { esayC( 'RED', 'This is the second go.' ) }
+        else {
+            $self->Options->{verbose} = false;
+            $self->Options->{quiet}   = true;
+        }
+    }
+
     $self->file( xtar::File->new( $filename, $self->Options ) );
     $self->file->analysis();
     $self->out->init( $self->file );
@@ -65,36 +77,45 @@ sub init_archive( $self, $filename )
 
 sub extract($self)
 {
-    my $lonefile = true;
+    my $lonefile;
+    my $orig_options = clone $self->Options;
 
-    while ($lonefile) {
-        unless ( $self->try_extractions() ) {
-            return false;
-        }
-        
-        $lonefile = $self->out->analyze_output($self->tmpdir);
-
-        if ($lonefile) {
-            esayC( 'bRED', 'The output contains only a single file.',
-                   "It could be a sub-archive. Attempting to extract.\n" );
-            
-            $self->init_archive($lonefile);
-        }
+    unless ( $self->try_extractions() ) {
+        $self->Options( $orig_options );
+        err "Extraction failed, returning." if $DEBUG;
+        return false;
     }
+
+    while ( ($lonefile = $self->out->analyze_output($self->tmpdir)) )
+    {
+        if ( Basename($lonefile) eq $self->file->filename ) {
+            my $new = catfile( $self->tmpdir, $self->file->bname );
+            err( "Rename '$lonefile' -> '$new'" ) if $DEBUG;
+            rename $lonefile, $new or croak "$!";
+            last;
+        }
+
+        esayC( 'bRED', 'The output contains only a single file.',
+               "It could be a sub-archive. Attempting to extract.\n" );
+
+        $self->init_archive( $lonefile, true );
+    }
+
+    $self->Options( $orig_options );
 
     # What a mess of a command follows here.
     safe_make_path( $self->out->top_dir );
 
     mv( $self->out->bottom, $self->out->odir )
-      or ( $DEBUG && say STDERR "Resorting to dircopy" or true )
-         && dircopy( $self->out->bottom, $self->out->odir )
-      or confess "Dircopy failed. Aborting. - $!";
+        or ( $DEBUG && err "Resorting to dircopy" or true )
+           && dircopy( $self->out->bottom, $self->out->odir )
+        or confess "Dircopy failed. Aborting. - $!";
 
     my $CWD    = $self->CWD;
     my $reldir = $self->out->odir =~ s|${CWD}/(.*)|$1|r;
     my $odir   = $self->out->odir;
 
-    sayC( 'bGREEN', "Extracted to $reldir" );
+    sayC( 'bGREEN', "Extracted to $reldir" ) unless $self->Options->{quiet};
 }
 
 
@@ -120,7 +141,7 @@ sub _get_tempdir($self)
         $dir = tempdir( CLEANUP => $C );
     }
 
-    say STDERR "Tmpdir is " . rel2abs($dir) if $DEBUG;
+    err "Tmpdir is " . rel2abs($dir) if $DEBUG;
     return $dir;
 }
 
@@ -147,12 +168,12 @@ sub try_extractions($self)
                                   $cmd, $is_tar, $self->Options );
 
         if ( $success ) {
-            if ( $self->Options->{'verbose'} ) {
+            if ( $self->Options->{verbose} ) {
                 esayC( 'GREEN', 'Operation appears successful.' );
             }
             last;
         }
-        else {
+        elsif ( not $self->Options->{quiet} ) {
             esayC( 'bRED', "Operation failed.\n" )
         }
 
@@ -162,11 +183,13 @@ sub try_extractions($self)
     unless ( $success ) {
         esayC( 'bRED', 'All identified programs have failed.' );
 SKIP:
-        $tmpdir = $self->_get_tempdir();
-        chdir $tmpdir;
+        if ( $self->Options->{force} ) {
+            $tmpdir = $self->_get_tempdir();
+            chdir $tmpdir;
 
-        $success = force_extract( $self->file->fullpath,
-                                  $self->Options->{'TAR'} );
+            $success = force_extract( $self->file->fullpath,
+                                      $self->Options->{TAR} );
+        }
     }
 
     $self->tmpdir( rel2abs($tmpdir) );
@@ -202,13 +225,14 @@ sub do_extraction( $archive, $cmd, $is_tar, $options )
 
 sub extract_tar( $CMD, $flags, $file, $options )
 {
+    my $Q = $options->{quiet};
     my $ret = true;
-    my $shortname = basename($file);
+    my $shortname = Basename($file);
 
     my $command = substitute_cmd( $CMD, $flags, $file, $options );
     my $short_command = substitute_cmd( $CMD, $flags, $shortname, $options );
 
-    sayC( $cmd_color, qq($short_command | $options->{TAR} -xf -) );
+    sayC( $cmd_color, qq($short_command | $options->{TAR} -xf -) ) unless $Q;
 
     my ( $CmdPipe, $TarPipe );
     open $CmdPipe, '-|', qq($command);
@@ -218,8 +242,8 @@ sub extract_tar( $CMD, $flags, $file, $options )
     while (<$CmdPipe>) { print $TarPipe $_ }
 
     # If either command failed we won't be able to close its pipe.
-    close($CmdPipe) or $ret = false;
-    close($TarPipe) or $ret = false;
+    close $CmdPipe or $ret = false;
+    close $TarPipe or $ret = false;
 
     return $ret;
 }
@@ -227,18 +251,19 @@ sub extract_tar( $CMD, $flags, $file, $options )
 
 sub extract_else( $CMD, $flags, $stdout, $file, $options )
 {
-    my $shortname = basename($file);
+    my $Q = $options->{quiet};
+    my $shortname = Basename($file);
     my $CWD = getcwd();
 
     my $command = substitute_cmd( $CMD, $flags, $file, $options );
     my $short_command = substitute_cmd( $CMD, $flags, $shortname, $options );
 
     if ($stdout) {
-        sayC( $cmd_color, qq($short_command > "$CWD/") );
+        sayC( $cmd_color, qq($short_command > "$CWD/") ) unless $Q;
         system qq($command > "$CWD/$shortname");
     }
     else {
-        sayC( $cmd_color, qq($short_command) );
+        sayC( $cmd_color, qq($short_command) ) unless $Q;
         system qq($command);
     }
 
@@ -263,7 +288,7 @@ sub substitute_cmd( $CMD, $flags, $file, $options )
 
 sub safe_make_path($top_dir)
 {
-    my $dir = dirname($top_dir);
+    my $dir = Dirname($top_dir);
     make_path($dir) unless ( -e $dir );
 }
 
