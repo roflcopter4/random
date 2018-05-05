@@ -1,0 +1,87 @@
+# Extremely simple Makefile.
+
+OUTPUT  = cunt
+# OBJECTS = test2.o ubsd.o
+OBJECTS = bzip.o
+
+CC  := gcc
+CXX := g++
+GC  ?= gccgo
+
+OPTFLAGS     = -march=native -pipe
+DEBUGFLAGS   = -g -O0
+RELEASEFLAGS = -O3
+WFLAGS       = -Wall -Wpedantic -Wextra -fdiagnostics-color=always
+DEFINES      = -DHAVE_LIBBSD -DHAVE_BSD_BSD_H
+LIBS         = -lbsd -lbz2
+LDFLAGS      = -Wl,-O1
+
+COMP   = ${CC}
+O_STR  = "GC"
+LD_STR = "GCLD"
+
+# FORCE_RELEASE := "YES"
+
+.SUFFIXES: .o .c
+
+###############################################################################
+
+COMMONFLAGS = ${OPTFLAGS} ${WFLAGS} ${DEFINES}
+
+.if "${cfg}" == "release" || defined(FORCE_RELEASE)
+  FLAGS = ${RELEASEFLAGS} ${COMMONFLAGS}
+.else
+  FLAGS = ${DEBUGFLAGS} ${COMMONFLAGS}
+.endif
+
+.if !defined(v)
+  O_ECHO     = printf " %s\t%s\n" ${O_STR} $@
+  LD_ECHO    = printf ' %s\t%s\n' ${LD_STR} "$@"
+  CLEAN_ECHO = printf 'Cleaning all in %s\n' "${.OBJDIR}"
+.SILENT:
+.endif
+
+MAKECMD = ${COMP} ${FLAGS} -c -o ${.TARGET} ${.IMPSRC}
+LDCMD   = ${COMP} ${FLAGS}${LDFLAGS} -o ${.TARGET} ${.ALLSRC} ${LIBS}
+
+###############################################################################
+
+.if exists("obj") || "${.CURDIR}" != "${.OBJDIR}"
+all: ${OUTPUT}
+	@rm -f "../${OUTPUT}"
+	@test -f ${OUTPUT} && ln ${OUTPUT} ..
+.else
+all: objdir
+.endif
+
+###############################################################################
+
+
+${OUTPUT}: ${OBJECTS}
+	${LD_ECHO}
+	${LDCMD}
+
+.c.o:
+	${O_ECHO}
+	${MAKECMD}
+
+
+###############################################################################
+
+objdir:
+	mkdir -p "${.CURDIR}/obj"
+	${MAKE}
+
+clean:
+	${CLEAN_ECHO}
+	rm -f ../*.o *.o ${OUTPUT} ../${OUTPUT}
+
+cleandir: clean
+	rm -rf "${.OBJDIR}"
+
+remake: clean .WAIT all
+
+###############################################################################
+
+.OBJDIR: obj
+.PHONY: clean cleandir objdir remake
