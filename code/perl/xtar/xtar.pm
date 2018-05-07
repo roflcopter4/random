@@ -59,7 +59,9 @@ sub init_archive( $self, $filename, $second_try=false )
 {
     if ($second_try) {
         $self->Options->{force} = false;
-        if ($DEBUG) { esayC( 'RED', 'This is the second go.' ) }
+        if ($DEBUG) {
+            esayC( 'RED', 'This is the second go.' )
+        }
         else {
             $self->Options->{verbose} = false;
             $self->Options->{quiet}   = true;
@@ -88,7 +90,8 @@ sub extract($self)
 
     while ( ($lonefile = $self->out->analyze_output($self->tmpdir)) )
     {
-        if ( Basename($lonefile) eq $self->file->filename ) {
+        if ( Basename($lonefile) eq $self->file->filename )
+        {
             my $new = catfile( $self->tmpdir, $self->file->bname );
             err( "Rename '$lonefile' -> '$new'" ) if $DEBUG;
             rename $lonefile, $new or croak "$!";

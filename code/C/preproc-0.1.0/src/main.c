@@ -18,7 +18,7 @@ main(int argc, char **argv)
 {
         extern int optind;
         program_name = argv[0];
-        bool is_tty = handle_options(argc, argv);
+        bool is_tty  = handle_options(argc, argv);
         argc -= optind;
         argv += optind;
         if (argc == 0 && is_tty)
@@ -114,10 +114,10 @@ slurp_stdin(char **slurp)
 static char *
 parse_line(char * restrict line, char * restrict buf)
 {
-        char *orig = line;
-        char *tmp = buf;
+        char *orig  = line;
+        char *tmp   = buf;
         int loc_lev = LEVEL;
-        bool iscpp = false;
+        bool iscpp  = false;
 
         if (*line == '\0')
                 return line;
@@ -166,8 +166,8 @@ redo:
 
                 if (match == 2 || match == 3) {
                         iscpp = false;
-                        line = orig + 1;
-                        tmp = buf + 1;
+                        line  = orig + 1;
+                        tmp   = buf + 1;
                         goto redo;
                 }
         }

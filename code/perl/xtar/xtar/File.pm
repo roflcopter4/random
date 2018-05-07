@@ -169,7 +169,7 @@ RETRY:
         }
     }
     else {
-        my @args = split / /, $app;
+        my @args = split(/ /, $app);
         my $type;
         foreach (@args) {
             last if ( $type = _normalize_type($_) );
@@ -186,6 +186,8 @@ RETRY:
     my $type = _normalize_type($tmp);
     $type = ($type) ? $type : $tmp;
 
+    # If the analysis fails, redo the analysis with several alternative methods
+    # until either something works or we run out. The goto is very cludgy.
     if ( not $type and $mimekind < MAXKIND ) {
         goto RETRY;
     }
@@ -224,11 +226,13 @@ sub find_mimetype ( $self, $counter, @skip )
             $app = false;
         }
     }
+    # Resort to using the `file` command, with a GNU option.
     elsif ( which('file') and not grep( /3/, @skip ) ) {
         $app = `file --mime-type '$filename'` or confess "$! - $?";
         $kind = 3;
         chomp $app;
     }
+    # Resort to using `file` with no options. Last gasp.
     elsif ( which('file') and not grep( /4/, @skip ) ) {
         $app = `file '$filename'` or confess "$! - $?";
         $kind = 4;
@@ -254,6 +258,9 @@ EOF
 ###############################################################################
 
 
+# If the mimetype analysis produced any results, use them. If it produced
+# nothing then we're forced to go by the file suffix. If that also produced
+# nothing then either die or resort to random guessing.
 sub finalize_analysis($self)
 {
     if    ( $self->mime_type ) { $self->likely_type( $self->mime_type ) }

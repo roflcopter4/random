@@ -56,7 +56,7 @@ do_solve(struct Node *node, bool last)
 
 
 static struct State **
-split(const uint8_t pile, uint16_t *nlists)
+split(const uint8_t pile, uint16_t * const nlists)
 {
         struct State **state_list;
         uint8_t combinations[NUM_LISTS][LIST_LEN];
