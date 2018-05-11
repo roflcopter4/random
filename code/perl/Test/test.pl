@@ -8,7 +8,7 @@ use Inline (
     ccflagsex   => '-Wall -Wextra -Wpedantic -std=gnu99',
     optimize    => '-O3 -march=native',
     build_noisy => 1,
-    force_build => 1
+    # force_build => 1
 );
 
 my $input = eval '`du -d1 '.shell_quote(@ARGV).' | sort -nr`' or die "$!";

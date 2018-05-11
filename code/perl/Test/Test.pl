@@ -10,7 +10,7 @@ use Inline (C => Config =>
     optimize    => '-O3 -march=native',
     ccflagsex   => '-Wall -Wextra -std=gnu11 -D_GNU_SOURCE',
     build_noisy => 1,
-    force_build => 1
+    # force_build => 1
 );
 
 use Inline C => <<~'_END_C_';
