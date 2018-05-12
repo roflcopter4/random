@@ -1,5 +1,5 @@
 package xtar::File;
-use warnings; use strict; use v5.26;
+use warnings; use strict; use v5.24;
 use Mouse;
 use feature 'signatures';
 no warnings 'experimental::signatures';

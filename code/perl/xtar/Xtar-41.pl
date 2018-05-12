@@ -1,5 +1,5 @@
 #!/usr/bin/env perl
-use warnings; use strict; use v5.26;
+use warnings; use strict; use v5.24;
 use feature 'signatures';
 no warnings 'experimental::signatures';
 use constant true  => 1;
