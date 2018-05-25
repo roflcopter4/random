@@ -61,8 +61,9 @@ elsif ( $options{quiet} )   { $options{verbose} = false }
 else                        { $options{verbose} = $options{quiet} = false }
 
 sub find_tar($binary) {
-    if   ( which($binary) ) { return $binary }
-    else                    { return 'tar' }
+    return (which $binary) ? $binary : 'tar';
+    # if   ( which($binary) ) { return $binary }
+    # else                    { return 'tar' }
 }
 
 
