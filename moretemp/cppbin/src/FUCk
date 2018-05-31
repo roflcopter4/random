@@ -1,0 +1,450 @@
+#include "neotags.h"
+#include <clocale>
+#include <cstdbool>
+#include <cstdlib>
+#include <cstring>
+
+#include <iostream>
+#include <string>
+#include <vector>
+#include <sstream>
+
+using namespace std;
+#undef USE_PTHREADS
+
+#ifdef USE_PTHREADS
+#  include <pthread.h>
+   static void *do_search(void *vdata);
+
+   struct pdata {
+           int threadnum;
+           const char *vim_buf;
+           const char *lang;
+           const char *order;
+           const char *const *skip;
+           const char *const *equiv;
+           // struct lldata **lst;
+           vector<struct lldata> *lst;
+           int num;
+   };
+#endif
+
+   static void search(vector <string> *tags, const string *vim_buf,
+                      const string *lang, const string *order,
+                      const vector<string> *skip, const vector<string> *equiv);
+
+   static vector<string> get_colon_data(char *oarg);
+
+   char *program_name;
+   char *backup_pointers[NUM_BACKUPS];
+   int backup_iterator;
+
+#ifdef DOSISH
+#  define __CONST__
+#  define SEPCHAR ';'
+#else
+#  define __CONST__ const
+#  define SEPCHAR ':'
+#endif
+
+#ifdef HAVE_STRDUPA
+#  define STRDUP strdupa
+#else
+#  define STRDUP strdup
+#endif
+
+#define REQUIRED_INPUT 8
+// #define CCC(ARG_) (static_cast<const char *const *>(ARG_))
+
+
+int
+main(int argc, char *argv[])
+{
+        setlocale(LC_NUMERIC, "");
+        int reads    = 0;
+        program_name = handle_progname(*argv++);
+        if (isatty(0))
+                errx(1, "This program can't be run manually.");
+        if (--argc != REQUIRED_INPUT)
+                errx(2, "Error: Wrong number of paramaters (%d, need %d).",
+                     argc, REQUIRED_INPUT);
+
+        auto files   = get_colon_data(*argv++);
+        auto ctlang  = string(*argv++);
+        auto vimlang = string(*argv++);
+        auto order   = string(*argv++);
+        bool strip   = xatoi(*argv++);
+        auto nchars  = xatoi(*argv++);
+        auto skip    = get_colon_data(*argv++);
+        auto equiv   = get_colon_data(*argv++);
+
+        auto vim_buf = string();
+        vim_buf.reserve(nchars + 1);
+
+        // auto *tags = new struct datalist;
+        auto tags = vector<struct lldata>(INIT_TAGS);
+        // tags->num  = 0;
+        // tags->max  = INIT_TAGS;
+
+        // for (char **ptr = files; *ptr != nullptr; ptr += 2)
+        for (uint32_t i = 0; i < files.size(); i += 2)
+                reads += getlines(&tags, files[i].c_str(), files[i + 1].c_str());
+
+        if (reads == 0)
+                errx(1, "Error: no files were successfully read.");
+
+        // fread(vim_buf, 1, nchars, stdin);
+        // cin.read(vim_buf, nchars);
+        // vim_buf[nchars] = '\0';
+        stringstream buffer;
+        buffer << cin.rdbuf();
+        vim_buf = buffer.str();
+
+        if (strip) {
+                cerr << "Stripping comments..." << endl;
+                struct lldata tmp = {vim_buf, '\0',
+                                     static_cast<uint32_t>(nchars) + 1};
+                char *buf = strip_comments(&tmp, vimlang.c_str());
+                if (buf) {
+                        // delete[] vim_buf;
+                        vim_buf = buf;
+                }
+        }
+
+        search(&tags, &vim_buf, &ctlang, &order, &skip, &equiv);
+
+        /* pointlessly free everything */
+        for (int i = 0; i < backup_iterator; ++i)
+                delete[] backup_pointers[i];
+        /* for (int i = 0; i < tags->num; ++i)
+                delete tags->data[i]; */
+
+        // delete[] backup_data;
+        // delete[] equiv;
+        // delete[] files;
+        // delete[] skip;
+        // delete[] vim_buf;
+        delete tags;
+
+        return 0;
+}
+
+
+static vector<string>
+get_colon_data(char *oarg)
+{
+        int num = 0;
+        char *arg = oarg;
+
+        if (*arg != '\0') {
+                do if (*arg == SEPCHAR) {
+                        *arg++ = '\0';
+                        ++num;
+                } while (*arg++);
+        }
+
+        /* The loop above will miss the last element, so we increment num. */
+        arg = oarg;
+        vector<string> data(++num);
+
+        for (int i = 0; i < (num - 1); ++i) {
+                while (*arg++)
+                        ;
+                data[i] = oarg;
+                oarg = arg;
+        }
+
+        return data;
+}
+
+
+/* ========================================================================== */
+
+
+static bool
+in_order(const vector<string> *equiv, const string *order, char *group)
+{
+        /* `group' is actually a pointer to a char, not a C string. */
+        // for (; *equiv != nullptr; ++equiv) {
+        for (unsigned i = 0; i < equiv->size(); ++i) {
+                if (*group == (*equiv)[i][0]) {
+                        *group = (*equiv)[i][1];
+                        break;
+                }
+        }
+
+        // return strchr(order, *group) != nullptr;
+        return order->find_first_of(*group) != (-1lu);
+}
+
+
+static bool
+is_correct_lang(const string *lang, __CONST__ string *match_lang)
+{
+#ifdef DOSISH
+        /* It's a little disgusting to have to strlen every single string in
+         * Windows just to get ride of some '\r's, but it must be done. */
+        size_t size = strlen(match_lang);
+        if (match_lang[size - 1] == '\r')
+                match_lang[size - 1] = '\0';
+#endif
+        if (*match_lang == *lang)
+                return true;
+
+        if ((*lang == "C" || *lang == "C\\+\\+") &&
+            (*match_lang == "C++" || *match_lang == "C"))
+                return true;
+
+        return false;
+}
+
+
+static bool
+skip_tag(const vector<string> *skip, const string *find)
+{
+        for (unsigned i = 0; i < skip->size(); ++i)
+                if ((*skip)[i] == *find)
+                        return true;
+
+        return false;
+}
+
+
+/*============================================================================*/
+#ifdef USE_PTHREADS
+
+/* static void
+search(struct datalist *tags,
+       const char *vim_buf,
+       const char *lang,
+       const char *order,
+       const char *const *skip,
+       const char *const *equiv) */
+
+static void
+search(struct datalist *tags,
+       const string *vim_buf,
+       const string *lang,
+       const string *order,
+       const vector<string> *skip,
+       const vector<string> *equiv)
+{
+        /* Skip past the comments and make sure the file isn't empty. */
+        int ia = 0;
+        while ((ia < tags->num) && (tags->data[ia].s[0] == '!'))
+                tags->data.erase(tags->data.begin() + ia++);
+                // delete tags->data[ia++];
+        // tags->data += ia;
+        tags->num  -= ia;
+
+        if (tags->num == 0) {
+                cerr << "No tags found!" << endl;
+                return;
+        }
+        
+        int num_threads = find_num_cpus();
+        if (num_threads == 0)
+                num_threads = 4;
+        cerr << "Using " << num_threads << " cpus." << endl;
+
+        pthread_t tid[num_threads];
+
+        for (int i = 0; i < num_threads; ++i) {
+                auto *tmp = new struct pdata;
+                int div = (tags->num / num_threads);
+
+                int num = (i == num_threads - 1)
+                              ? (tags->num - ((num_threads - 1) * div))
+                              : div;
+
+                *tmp = (struct pdata){
+                        .threadnum = i,
+                        .vim_buf   = vim_buf,
+                        .lang  = lang,
+                        .order = order,
+                        .skip  = skip,
+                        .equiv = equiv,
+                        .lst   = tags->data + (i * div),
+                        .num   = num
+                };
+
+                errno = 0;
+                int pt = pthread_create(tid + i, 0, do_search, tmp);
+                if (pt != 0 || errno)
+                        err(1, "pthread_create failed");
+        }
+
+        auto **out = new struct datalist *[num_threads];
+
+        for (int th = 0; th < num_threads ; ++th) {
+                void *tmp;
+                pthread_join(tid[th], &tmp);
+                out[th] = static_cast<struct datalist *>(tmp);
+        }
+
+        for (int T = 0; T < num_threads; ++T) {
+                for (int i = 0; i < out[T]->num; ++i) {
+                        printf("%c\n%s\n",
+                               out[T]->data[i].kind,
+                               out[T]->data[i].s.c_str());
+                        // delete out[T]->data[i];
+                }
+
+                // delete[] out[T]->data;
+                delete out[T];
+        }
+
+        delete[] out;
+}
+
+
+#  define cur_str (data->lst[i]->s)
+#  define is_dup(KIND, NAME, PREV) \
+        ((KIND) == (PREV)->kind && streq((NAME), (PREV)->s))
+
+
+static void *
+do_search(void *vdata)
+{
+        auto *data = static_cast<struct pdata *>(vdata);
+        auto *ret  = new struct datalist;
+        *ret = (struct datalist){
+                .data = new struct lldata *[data->num],
+                .num  = 0
+        };
+
+
+        for (int i = 0; i < data->num; ++i) {
+                /* The name is first, followed by two fields we don't need. */
+                char *name = strsep(&cur_str, "\t");
+                cur_str    = strchr(cur_str, '\t');
+                cur_str    = strchr(cur_str, '\t');
+
+                char *tok;
+                char *match_lang = nullptr;
+                char kind = '\0';
+
+                while ((tok = strsep(&cur_str, "\t")) != nullptr) {
+                        /* The 'kind' field is the only one that is 1 character
+                         * long, and the 'language' field is prefaced. */
+                        if (tok[0] != '\0' && tok[1] == '\0')
+                                kind = *tok;
+                        else if (strncmp(tok, "language:", 9) == 0)
+                                 match_lang = tok + 9;
+                }
+                if (!match_lang || !kind)
+                        continue;
+
+                /* Prune tags. Include only those that are:
+                 *    1) of a type in the `order' list,
+                 *    2) of the correct language (applies mainly to C
+                 *       and C++, generally ctags filters languages),
+                 *    3) are not included in the `skip' list, and
+                 *    4) are not duplicates, and
+                 *    5) are present in the current vim buffer
+                 * If invalid, just move on. */
+                if ( in_order(data->equiv, data->order, &kind) &&
+                     is_correct_lang(data->lang, match_lang) &&
+                    !skip_tag(data->skip, name) &&
+                     (ret->num == 0 || !is_dup(kind, name,
+                                               ret->data[ret->num - 1])) &&
+                     strstr(data->vim_buf, name) != nullptr)
+                {
+                        auto *tmp = new struct lldata;
+                        tmp->s    = name;
+                        tmp->kind = kind;
+                        ret->data[ret->num++] = tmp;
+                } else {
+                        delete[] data->lst[i]->s;
+                }
+        }
+
+        delete data;
+        pthread_exit(ret);
+}
+
+
+/*============================================================================*/
+#else /* USE_PTHREADS */
+
+
+static void
+search(vector <struct lldata> *tags,
+       const string *vim_buf,
+       const string *lang,
+       const string *order,
+       const vector<string> *skip,
+       const vector<string> *equiv)
+{
+// #  define cur_str tags->data[]
+        int nfields = 0;
+        char *tok;
+
+        unsigned ia = 0;
+        while ((*tags->s)[0][0] == '!')
+                tags->erase(tags->begin());
+
+        if (tags->size() == 0) {
+                cerr << "No tags found!" << endl;
+                return;
+        }
+
+        /* Verify that the file has the 2 required 'extra' fields. */
+        char *tmp = STRDUP((*tags)[0].c_str());
+        while ((tok = strsep(&tmp, "\t")) != nullptr)
+                if ((tok[0] != '\0' && tok[1] == '\0') ||
+                    strncmp(tok, "language:", 9) == 0)
+                        ++nfields;
+#  ifndef HAVE_STRDUPA
+        free(tmp);
+#  endif
+        if (nfields != 2) {
+                cerr << "Invalid file! nfields is " << nfields << endl;
+                return;
+        }
+
+        // struct lldata prev = { .s = nullptr };
+        string prevs = "0";
+        char prevkind = '\0';
+
+        for (unsigned i = 0; i < tags->size(); ++i) {
+                vector<string> lst;
+                int64_t X, Y;
+
+                for (X = Y = 0; Y >= 0; X = Y + 1)
+                        lst.push_back(cur_str.substr(X, ((Y = cur_str.find('\n', X)) - X)));
+
+                /* name    = strsep(&cur_str, "\t");
+                cur_str = strchr(cur_str, '\t');
+                cur_str = strchr(cur_str, '\t'); */
+
+                string name = lst[0];
+                string match_lang;
+                char kind;
+
+                // while ((tok = strsep(&cur_str, "\t")) != nullptr) {
+                for (unsigned it = 2; it < lst.size(); ++it) {
+                        string tok = lst[it];
+                        if (tok[0] != '\0' && tok[1] == '\0')
+                                kind = tok[0];
+                        else if (strncmp(tok.c_str(), "language:", 9) == 0)
+                                match_lang = tok.substr(0, 9);
+                }
+
+#  define is_dup(KIND, NAME, PREVS, PREVKIND) \
+        ((KIND) == (PREVKIND) && ((NAME) == (PREVS)))
+
+                if ( in_order(equiv, order, &kind) &&
+                     is_correct_lang(lang, &match_lang) &&
+                    !skip_tag(skip, &name) &&
+                     (!prevs[0] || !is_dup(kind, name, prevs, prevkind)) &&
+                      strstr(vim_buf->c_str(), name.c_str()) != nullptr)
+                {
+                        prevs = name;
+                        prevkind = kind;
+                        cout << kind << endl << name << endl;
+                }
+        }
+}
+
+#endif /* USE_PTHREADS */

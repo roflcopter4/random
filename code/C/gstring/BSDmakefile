@@ -1,0 +1,125 @@
+# Extremely simple Makefile.
+
+# .SUFFIXES: .o ${SUF}
+
+OUTPUT  = Test
+OBJECTS = arse.o
+
+CC  := gcc
+CXX := g++
+GC  := gccgo
+FC  := gfortran
+
+PROGTYPE := c
+ALTPTYPE := cpp
+
+OPTFLAGS     = -march=native -pipe
+DEBUGFLAGS   = -g -O0
+RELEASEFLAGS = -O3
+WFLAGS       = -Wall -Wpedantic -Wextra -fdiagnostics-color=always
+OTHER_FLAGS  = -std=gnu11
+DEFINES      = -D_GNU_SOURCE
+# INCLUDES     = -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include
+# LIBS         = -lglib-2.0
+LIBS         = -lustr
+LDFLAGS      =
+
+# FORCE_RELEASE := yes
+DEFAULT_VERBOSE := yes
+
+
+###############################################################################
+## Some setup
+
+# Combine most flags
+COMMONFLAGS = ${OPTFLAGS} ${WFLAGS} ${DEFINES} ${OTHER_FLAGS} ${INCLUDES}
+
+SUF := .${PROGTYPE} ${ALTPTYPE:D.${ALTPTYPE}}
+
+# Set build type
+.if "${cfg}" == "release" || defined(FORCE_RELEASE)
+  FLAGS := ${RELEASEFLAGS} ${COMMONFLAGS}
+.else
+  FLAGS := ${DEBUGFLAGS} ${COMMONFLAGS}
+.endif
+
+CFLAGS += ${FLAGS}
+
+# Set the appropriate compiler
+.if   "${PROGTYPE}" == "c"
+  COMP  := ${CC}
+  O_STR := CC
+.elif "${PROGTYPE}" == "cpp"
+  COMP  := ${CXX}
+  O_STR := CXX
+.elif "${PROGTYPE}" == "f"
+  COMP  := ${FC}
+  O_STR := FC
+.elif "${PROGTYPE}" == "go"
+  COMP  := ${GC}
+  O_STR := GO
+.else
+  BAIL  := yes
+.endif
+LD_STR  := "${O_STR}LD"
+
+# Build the actual commands
+MAKECMD  = ${COMP} ${CFLAGS} -c -o ${.TARGET} ${.IMPSRC}
+LDCMD    = ${COMP} ${CFLAGS} ${LDFLAGS} -o ${.TARGET} ${.ALLSRC} ${LIBS}
+
+# Determine whether to be quiet
+.if (!defined(v) && !defined(DEFAULT_VERBOSE)) || defined(q)
+  O_ECHO     = printf " %s\t%s\n" ${O_STR} $@
+  LD_ECHO    = printf ' %s\t%s\n' ${LD_STR} "$@"
+  CLEAN_ECHO = printf 'Cleaning all in %s\n' "${.OBJDIR}"
+.SILENT:
+.endif
+
+###############################################################################
+## Shenanigans
+
+.if exists("obj") || "${.CURDIR}" != "${.OBJDIR}"
+all: check .WAIT ${OUTPUT}
+	@rm -f "../${OUTPUT}"
+	@test -f ${OUTPUT} && ln ${OUTPUT} ..
+.else
+all: objdir
+.endif
+
+###############################################################################
+## The Commands
+
+${OUTPUT}: ${OBJECTS}
+	${LD_ECHO}
+	${LDCMD}
+
+.${PROGTYPE}.o:
+	${O_ECHO}
+	${MAKECMD}
+
+###############################################################################
+## Auxil
+
+check:
+.ifdef BAIL
+	@echo 'You must specify a program type to use this makefile.'
+	exit 1
+.endif
+
+objdir:
+	mkdir -p "${.CURDIR}/obj"
+	${MAKE}
+
+clean:
+	${CLEAN_ECHO}
+	rm -f ../*.o *.o ${OUTPUT} ../${OUTPUT}
+
+cleandir: clean
+	rm -rf "${.OBJDIR}"
+
+remake: clean .WAIT all
+
+###############################################################################
+
+.OBJDIR: obj
+.PHONY: clean cleandir objdir remake all

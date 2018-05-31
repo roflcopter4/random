@@ -1,0 +1,278 @@
+I can find 28 in the buffer
+Tmp is currently# Extremely simple Makefile. and i is 0 and j is 28
+Tmp is currently and i is 29 and j is 29
+Tmp is currently# .SUFFIXES: .o ${SUF} and i is 30 and j is 52
+Tmp is currently and i is 53 and j is 53
+Tmp is currentlyOUTPUT  = Test and i is 54 and j is 68
+Tmp is currentlyOBJECTS = test1.o and i is 69 and j is 86
+Tmp is currently and i is 87 and j is 87
+Tmp is currentlyCC  := /usr/bin/gcc and i is 88 and j is 107
+Tmp is currentlyCXX := g++ and i is 108 and j is 118
+Tmp is currentlyGC  := gccgo and i is 119 and j is 131
+Tmp is currentlyFC  := gfortran and i is 132 and j is 147
+Tmp is currently and i is 148 and j is 148
+Tmp is currentlyPROGTYPE := cpp and i is 149 and j is 164
+Tmp is currentlyALTPTYPE := cpp and i is 165 and j is 180
+Tmp is currently and i is 181 and j is 181
+Tmp is currentlyOPTFLAGS     = -march=native -pipe and i is 182 and j is 216
+Tmp is currentlyDEBUGFLAGS   = -g -O0 and i is 217 and j is 238
+Tmp is currentlyRELEASEFLAGS = -O3 and i is 239 and j is 257
+Tmp is currentlyWFLAGS       = -Wall -Wpedantic -Wextra -fdiagnostics-color=always and i is 258 and j is 324
+Tmp is currentlyOTHER_FLAGS  = -std=gnu++11 and i is 325 and j is 352
+Tmp is currentlyDEFINES      = -D_GNU_SOURCE and i is 353 and j is 381
+Tmp is currentlyLIBS         = and i is 382 and j is 396
+Tmp is currentlyLDFLAGS      = and i is 397 and j is 411
+Tmp is currently and i is 412 and j is 412
+Tmp is currently# ALT_CC  := gcc and i is 413 and j is 429
+Tmp is currently# ALT_CXX := g++ and i is 430 and j is 446
+Tmp is currently and i is 447 and j is 447
+Tmp is currently# FORCE_RELEASE := "YES" and i is 448 and j is 472
+Tmp is currentlyDEFAULT_VERBOSE := "YES" and i is 473 and j is 497
+Tmp is currently and i is 498 and j is 498
+Tmp is currently and i is 499 and j is 499
+Tmp is currently############################################################################### and i is 500 and j is 579
+Tmp is currently and i is 580 and j is 580
+Tmp is currently# Combine most flags and i is 581 and j is 601
+Tmp is currentlyCOMMONFLAGS = ${OPTFLAGS} ${WFLAGS} ${DEFINES} ${OTHER_FLAGS} and i is 602 and j is 663
+Tmp is currently and i is 664 and j is 664
+Tmp is currentlySUF := .${PROGTYPE} ${ALTPTYPE:D.${ALTPTYPE}} and i is 665 and j is 710
+Tmp is currently and i is 711 and j is 711
+Tmp is currently# Set build type and i is 712 and j is 728
+Tmp is currently.if "${cfg}" == "release" || defined(FORCE_RELEASE) and i is 729 and j is 780
+Tmp is currently  FLAGS := ${RELEASEFLAGS} ${COMMONFLAGS} and i is 781 and j is 822
+Tmp is currently.else and i is 823 and j is 828
+Tmp is currently  FLAGS := ${DEBUGFLAGS} ${COMMONFLAGS} and i is 829 and j is 868
+Tmp is currently.endif and i is 869 and j is 875
+Tmp is currently and i is 876 and j is 876
+Tmp is currentlyCFLAGS += ${FLAGS} and i is 877 and j is 895
+Tmp is currently and i is 896 and j is 896
+Tmp is currently# # Set the C compiler and i is 897 and j is 919
+Tmp is currently# .if "${CC}" == "cc" && defined(ALT_CC) and i is 920 and j is 960
+Tmp is currently#   CC  := ${ALT_CC} and i is 961 and j is 981
+Tmp is currently# .endif and i is 982 and j is 990
+Tmp is currently# .if "${CXX}" == "c++" && defined(ALT_CXX) and i is 991 and j is 1034
+Tmp is currently#   CXX := ${ALT_CXX} and i is 1035 and j is 1056
+Tmp is currently# .endif and i is 1057 and j is 1065
+Tmp is currently and i is 1066 and j is 1066
+Tmp is currently# Set the appropriate compiler and i is 1067 and j is 1097
+Tmp is currently.if   "${PROGTYPE}" == "c" and i is 1098 and j is 1124
+Tmp is currently  COMP  := ${CC} and i is 1125 and j is 1141
+Tmp is currently  O_STR := CC and i is 1142 and j is 1155
+Tmp is currently.elif "${PROGTYPE}" == "cpp" and i is 1156 and j is 1184
+Tmp is currently  COMP  := ${CXX} and i is 1185 and j is 1202
+Tmp is currently  O_STR := CXX and i is 1203 and j is 1217
+Tmp is currently.elif "${PROGTYPE}" == "f" and i is 1218 and j is 1244
+Tmp is currently  COMP  := ${FC} and i is 1245 and j is 1261
+Tmp is currently  O_STR := FC and i is 1262 and j is 1275
+Tmp is currently.elif "${PROGTYPE}" == "go" and i is 1276 and j is 1303
+Tmp is currently  COMP  := ${GC} and i is 1304 and j is 1320
+Tmp is currently  O_STR := GO and i is 1321 and j is 1334
+Tmp is currently.else and i is 1335 and j is 1340
+Tmp is currently  BAIL  := "YES" and i is 1341 and j is 1357
+Tmp is currently.endif and i is 1358 and j is 1364
+Tmp is currentlyLD_STR  := "${O_STR}LD" and i is 1365 and j is 1388
+Tmp is currently and i is 1389 and j is 1389
+Tmp is currently# Build the actual commands and i is 1390 and j is 1417
+Tmp is currentlyMAKECMD  = ${COMP} ${CFLAGS} -c -o ${.TARGET} ${.IMPSRC} and i is 1418 and j is 1474
+Tmp is currentlyLDCMD    = ${COMP} ${CFLAGS} ${LDFLAGS} -o ${.TARGET} ${.ALLSRC} ${LIBS} and i is 1475 and j is 1547
+Tmp is currently and i is 1548 and j is 1548
+Tmp is currently# Determine whether to be quiet and i is 1549 and j is 1580
+Tmp is currently.if (!defined(v) && !defined(DEFAULT_VERBOSE)) || defined(q) and i is 1581 and j is 1641
+Tmp is currently  O_ECHO     = printf " %s\t%s\n" ${O_STR} $@ and i is 1642 and j is 1687
+Tmp is currently  LD_ECHO    = printf ' %s\t%s\n' ${LD_STR} "$@" and i is 1688 and j is 1736
+Tmp is currently  CLEAN_ECHO = printf 'Cleaning all in %s\n' "${.OBJDIR}" and i is 1737 and j is 1794
+Tmp is currently.SILENT: and i is 1795 and j is 1803
+Tmp is currently.endif and i is 1804 and j is 1810
+Tmp is currently and i is 1811 and j is 1811
+Tmp is currently############################################################################### and i is 1812 and j is 1891
+Tmp is currently and i is 1892 and j is 1892
+Tmp is currently.if exists("obj") || "${.CURDIR}" != "${.OBJDIR}" and i is 1893 and j is 1942
+Tmp is currentlyall: check .WAIT ${OUTPUT} and i is 1943 and j is 1969
+Tmp is currently	@rm -f "../${OUTPUT}" and i is 1970 and j is 1992
+Tmp is currently	@test -f ${OUTPUT} && ln ${OUTPUT} .. and i is 1993 and j is 2031
+Tmp is currently.else and i is 2032 and j is 2037
+Tmp is currentlyall: objdir and i is 2038 and j is 2049
+Tmp is currently.endif and i is 2050 and j is 2056
+Tmp is currently and i is 2057 and j is 2057
+Tmp is currently############################################################################### and i is 2058 and j is 2137
+Tmp is currently and i is 2138 and j is 2138
+Tmp is currently and i is 2139 and j is 2139
+Tmp is currently${OUTPUT}: ${OBJECTS} and i is 2140 and j is 2161
+Tmp is currently	${LD_ECHO} and i is 2162 and j is 2173
+Tmp is currently	${LDCMD} and i is 2174 and j is 2183
+Tmp is currently and i is 2184 and j is 2184
+Tmp is currently.${PROGTYPE}.o: and i is 2185 and j is 2200
+Tmp is currently	${O_ECHO} and i is 2201 and j is 2211
+Tmp is currently	${MAKECMD} and i is 2212 and j is 2223
+Tmp is currently and i is 2224 and j is 2224
+Tmp is currently# .ifdef ALTPTYPE and i is 2225 and j is 2242
+Tmp is currently# .${ALTPTYPE}.o: and i is 2243 and j is 2260
+Tmp is currently# #	${O_ECHO} and i is 2261 and j is 2274
+Tmp is currently# #	${MAKECMD} and i is 2275 and j is 2289
+Tmp is currently# .endif and i is 2290 and j is 2298
+Tmp is currently and i is 2299 and j is 2299
+Tmp is currently############################################################################### and i is 2300 and j is 2379
+Tmp is currently and i is 2380 and j is 2380
+Tmp is currentlycheck: and i is 2381 and j is 2387
+Tmp is currently.ifdef BAIL and i is 2388 and j is 2399
+Tmp is currently	@echo 'You must specify a program type to use this makefile.' and i is 2400 and j is 2462
+Tmp is currently	exit 1 and i is 2463 and j is 2470
+Tmp is currently.endif and i is 2471 and j is 2477
+Tmp is currently and i is 2478 and j is 2478
+Tmp is currentlyobjdir: and i is 2479 and j is 2486
+Tmp is currently	mkdir -p "${.CURDIR}/obj" and i is 2487 and j is 2513
+Tmp is currently	${MAKE} and i is 2514 and j is 2522
+Tmp is currently and i is 2523 and j is 2523
+Tmp is currentlyclean: and i is 2524 and j is 2530
+Tmp is currently	${CLEAN_ECHO} and i is 2531 and j is 2545
+Tmp is currently	rm -f ../*.o *.o ${OUTPUT} ../${OUTPUT} and i is 2546 and j is 2586
+Tmp is currently and i is 2587 and j is 2587
+Tmp is currentlycleandir: clean and i is 2588 and j is 2603
+Tmp is currently	rm -rf "${.OBJDIR}" and i is 2604 and j is 2624
+Tmp is currently and i is 2625 and j is 2625
+Tmp is currentlyremake: clean .WAIT all and i is 2626 and j is 2649
+Tmp is currently and i is 2650 and j is 2650
+Tmp is currently############################################################################### and i is 2651 and j is 2730
+Tmp is currently and i is 2731 and j is 2731
+Tmp is currently.OBJDIR: obj and i is 2732 and j is 2744
+Tmp is currently.PHONY: clean cleandir objdir remake all and i is 2745 and j is 2785
+Tmp is currently and i is 2786 and j is -1
+size is 138
+# Extremely simple Makefile.
+
+# .SUFFIXES: .o ${SUF}
+
+OUTPUT  = Test
+OBJECTS = test1.o
+
+CC  := /usr/bin/gcc
+CXX := g++
+GC  := gccgo
+FC  := gfortran
+
+PROGTYPE := cpp
+ALTPTYPE := cpp
+
+OPTFLAGS     = -march=native -pipe
+DEBUGFLAGS   = -g -O0
+RELEASEFLAGS = -O3
+WFLAGS       = -Wall -Wpedantic -Wextra -fdiagnostics-color=always
+OTHER_FLAGS  = -std=gnu++11
+DEFINES      = -D_GNU_SOURCE
+LIBS         =
+LDFLAGS      =
+
+# ALT_CC  := gcc
+# ALT_CXX := g++
+
+# FORCE_RELEASE := "YES"
+DEFAULT_VERBOSE := "YES"
+
+
+###############################################################################
+
+# Combine most flags
+COMMONFLAGS = ${OPTFLAGS} ${WFLAGS} ${DEFINES} ${OTHER_FLAGS}
+
+SUF := .${PROGTYPE} ${ALTPTYPE:D.${ALTPTYPE}}
+
+# Set build type
+.if "${cfg}" == "release" || defined(FORCE_RELEASE)
+  FLAGS := ${RELEASEFLAGS} ${COMMONFLAGS}
+.else
+  FLAGS := ${DEBUGFLAGS} ${COMMONFLAGS}
+.endif
+
+CFLAGS += ${FLAGS}
+
+# # Set the C compiler
+# .if "${CC}" == "cc" && defined(ALT_CC)
+#   CC  := ${ALT_CC}
+# .endif
+# .if "${CXX}" == "c++" && defined(ALT_CXX)
+#   CXX := ${ALT_CXX}
+# .endif
+
+# Set the appropriate compiler
+.if   "${PROGTYPE}" == "c"
+  COMP  := ${CC}
+  O_STR := CC
+.elif "${PROGTYPE}" == "cpp"
+  COMP  := ${CXX}
+  O_STR := CXX
+.elif "${PROGTYPE}" == "f"
+  COMP  := ${FC}
+  O_STR := FC
+.elif "${PROGTYPE}" == "go"
+  COMP  := ${GC}
+  O_STR := GO
+.else
+  BAIL  := "YES"
+.endif
+LD_STR  := "${O_STR}LD"
+
+# Build the actual commands
+MAKECMD  = ${COMP} ${CFLAGS} -c -o ${.TARGET} ${.IMPSRC}
+LDCMD    = ${COMP} ${CFLAGS} ${LDFLAGS} -o ${.TARGET} ${.ALLSRC} ${LIBS}
+
+# Determine whether to be quiet
+.if (!defined(v) && !defined(DEFAULT_VERBOSE)) || defined(q)
+  O_ECHO     = printf " %s\t%s\n" ${O_STR} $@
+  LD_ECHO    = printf ' %s\t%s\n' ${LD_STR} "$@"
+  CLEAN_ECHO = printf 'Cleaning all in %s\n' "${.OBJDIR}"
+.SILENT:
+.endif
+
+###############################################################################
+
+.if exists("obj") || "${.CURDIR}" != "${.OBJDIR}"
+all: check .WAIT ${OUTPUT}
+	@rm -f "../${OUTPUT}"
+	@test -f ${OUTPUT} && ln ${OUTPUT} ..
+.else
+all: objdir
+.endif
+
+###############################################################################
+
+
+${OUTPUT}: ${OBJECTS}
+	${LD_ECHO}
+	${LDCMD}
+
+.${PROGTYPE}.o:
+	${O_ECHO}
+	${MAKECMD}
+
+# .ifdef ALTPTYPE
+# .${ALTPTYPE}.o:
+# #	${O_ECHO}
+# #	${MAKECMD}
+# .endif
+
+###############################################################################
+
+check:
+.ifdef BAIL
+	@echo 'You must specify a program type to use this makefile.'
+	exit 1
+.endif
+
+objdir:
+	mkdir -p "${.CURDIR}/obj"
+	${MAKE}
+
+clean:
+	${CLEAN_ECHO}
+	rm -f ../*.o *.o ${OUTPUT} ../${OUTPUT}
+
+cleandir: clean
+	rm -rf "${.OBJDIR}"
+
+remake: clean .WAIT all
+
+###############################################################################
+
+.OBJDIR: obj
+.PHONY: clean cleandir objdir remake all
+

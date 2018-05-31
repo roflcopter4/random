@@ -1,0 +1,217 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
+!_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
+!_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
+!_TAG_PROGRAM_URL	https://ctags.io/	/official site/
+!_TAG_PROGRAM_VERSION	0.0.0	//
+BLOCK	strip.cpp	/^        BLOCK,$/;"	e	language:C++	enum:c_com_type	file:
+BOTH	neotags.h	/^        BOTH$/;"	e	language:C++	enum:ll_pop_type
+C_LIKE	strip.cpp	/^enum basic_types { C_LIKE, PYTHON };$/;"	e	language:C++	enum:basic_types	file:
+DEL_ONLY	neotags.h	/^        DEL_ONLY,$/;"	e	language:C++	enum:ll_pop_type
+DOUBLE_DOCSTRING	strip.cpp	/^        DOUBLE_DOCSTRING$/;"	e	language:C++	enum:docstring_e	file:
+IO_WAIT_ERROR	archive_util_xz.cpp	/^        IO_WAIT_ERROR,   \/\/ Error or user_abort$/;"	e	language:C++	enum:__anonab3787460103	file:
+IO_WAIT_MORE	archive_util_xz.cpp	/^        IO_WAIT_MORE,    \/\/ Reading or writing is possible.$/;"	e	language:C++	enum:__anonab3787460103	file:
+IO_WAIT_TIMEOUT	archive_util_xz.cpp	/^        IO_WAIT_TIMEOUT, \/\/ poll() timed out$/;"	e	language:C++	enum:__anonab3787460103	file:
+LINE	strip.cpp	/^        LINE$/;"	e	language:C++	enum:c_com_type	file:
+NONE	strip.cpp	/^        NONE,$/;"	e	language:C++	enum:c_com_type	file:
+NO_DOCSTRING	strip.cpp	/^        NO_DOCSTRING,$/;"	e	language:C++	enum:docstring_e	file:
+Node	neotags.h	/^struct Node {$/;"	s	language:C++
+Node::data	neotags.h	/^        void *data;$/;"	m	language:C++	struct:Node	typeref:typename:void *
+Node::next	neotags.h	/^        struct Node *next;$/;"	m	language:C++	struct:Node	typeref:struct:Node *
+Node::prev	neotags.h	/^        struct Node *prev;$/;"	m	language:C++	struct:Node	typeref:struct:Node *
+PYTHON	strip.cpp	/^enum basic_types { C_LIKE, PYTHON };$/;"	e	language:C++	enum:basic_types	file:
+RET_ONLY	neotags.h	/^        RET_ONLY,$/;"	e	language:C++	enum:ll_pop_type
+SINGLE_DOCSTRING	strip.cpp	/^        SINGLE_DOCSTRING,$/;"	e	language:C++	enum:docstring_e	file:
+_CPP_	strip.cpp	/^        _CPP_,$/;"	e	language:C++	enum:lang_e	file:
+_CSHARP_	strip.cpp	/^        _CSHARP_,$/;"	e	language:C++	enum:lang_e	file:
+_C_	strip.cpp	/^        _C_,$/;"	e	language:C++	enum:lang_e	file:
+_GO_	strip.cpp	/^        _GO_,$/;"	e	language:C++	enum:lang_e	file:
+_JAVA_	strip.cpp	/^        _JAVA_,$/;"	e	language:C++	enum:lang_e	file:
+_PYTHON_	strip.cpp	/^        _PYTHON_,$/;"	e	language:C++	enum:lang_e	file:
+__anonab3787460103	archive_util_xz.cpp	/^typedef enum {$/;"	g	language:C++	file:
+__anonab378746020a	archive_util_xz.cpp	/^typedef union {$/;"	u	language:C++	file:
+__anonab378746020a::u32	archive_util_xz.cpp	/^        uint32_t u32[IO_BUFFER_SIZE \/ sizeof(uint32_t)];$/;"	m	language:C++	union:__anonab378746020a	typeref:typename:uint32_t[]	file:
+__anonab378746020a::u64	archive_util_xz.cpp	/^        uint64_t u64[IO_BUFFER_SIZE \/ sizeof(uint64_t)];$/;"	m	language:C++	union:__anonab378746020a	typeref:typename:uint64_t[]	file:
+__anonab378746020a::u8	archive_util_xz.cpp	/^        uint8_t u8[IO_BUFFER_SIZE];$/;"	m	language:C++	union:__anonab378746020a	typeref:typename:uint8_t[]	file:
+__dump_list	neotags.h	/^extern void  __dump_list    (char **list, FILE *fp, const char *varname);$/;"	p	language:C++	typeref:typename:void
+__dump_list	util.cpp	/^__dump_list(char **list, FILE *fp, const char *varname)$/;"	f	language:C++	typeref:typename:void
+__dump_string	neotags.h	/^extern void  __dump_string  (char *str, const char *filename, FILE *fp, const char *varname);$/;"	p	language:C++	typeref:typename:void
+__dump_string	util.cpp	/^__dump_string(char *str, const char *filename, FILE *fp, const char *varname)$/;"	f	language:C++	typeref:typename:void
+__free_all	neotags.h	/^extern void  __free_all     (void *ptr, ...);$/;"	p	language:C++	typeref:typename:void
+__free_all	util.cpp	/^__free_all(void *ptr, ...)$/;"	f	language:C++	typeref:typename:void
+__xatoi	neotags.h	/^extern int64_t __xatoi      (char *str, bool strict);$/;"	p	language:C++	typeref:typename:int64_t
+__xatoi	util.cpp	/^__xatoi(char *str, bool strict)$/;"	f	language:C++	typeref:typename:int64_t
+_warn	neotags.h	/^    void _warn(bool print_err, const char *fmt, ...) __attribute__((format(printf, 2, 3)));$/;"	p	language:C++	typeref:typename:void
+_warn	util.cpp	/^_warn(bool print_err, const char *const __restrict fmt, ...)$/;"	f	language:C++	typeref:typename:void
+all_have_sizes	archive_util_xz.cpp	/^        bool all_have_sizes;$/;"	m	language:C++	struct:xz_file_info_s	typeref:typename:bool	file:
+archive	archive_util.h	/^        size_t archive;$/;"	m	language:C++	struct:archive_size	typeref:typename:size_t
+archive_size	archive_util.h	/^struct archive_size {$/;"	s	language:C++
+archive_size::archive	archive_util.h	/^        size_t archive;$/;"	m	language:C++	struct:archive_size	typeref:typename:size_t
+archive_size::uncompressed	archive_util.h	/^        size_t uncompressed;$/;"	m	language:C++	struct:archive_size	typeref:typename:size_t
+b	strip.cpp	/^        bool b;$/;"	m	language:C++	struct:py_quote	typeref:typename:bool	file:
+basename	neotags.h	/^    extern char * basename(char *path);$/;"	p	language:C++	typeref:typename:char *
+basename	util.cpp	/^basename(char *path)$/;"	f	language:C++	typeref:typename:char *
+basic_types	strip.cpp	/^enum basic_types { C_LIKE, PYTHON };$/;"	g	language:C++	file:
+c_com_type	strip.cpp	/^enum c_com_type {$/;"	g	language:C++	file:
+ch	strip.cpp	/^        char ch;$/;"	m	language:C++	struct:py_quote	typeref:typename:char	file:
+cnt	strip.cpp	/^        int cnt;$/;"	m	language:C++	struct:py_quote	typeref:typename:int	file:
+comment_s	strip.cpp	/^static const struct comment_s {$/;"	s	language:C++	file:
+comment_s::delim	strip.cpp	/^        const char delim;$/;"	m	language:C++	struct:comment_s	typeref:typename:const char	file:
+comment_s::type	strip.cpp	/^        const int type;$/;"	m	language:C++	struct:comment_s	typeref:typename:const int	file:
+data	neotags.h	/^        struct lldata **data;$/;"	m	language:C++	struct:datalist	typeref:struct:lldata **
+data	neotags.h	/^        void *data;$/;"	m	language:C++	struct:Node	typeref:typename:void *
+datalist	neotags.h	/^struct datalist {$/;"	s	language:C++
+datalist::data	neotags.h	/^        struct lldata **data;$/;"	m	language:C++	struct:datalist	typeref:struct:lldata **
+datalist::max	neotags.h	/^        int64_t max;$/;"	m	language:C++	struct:datalist	typeref:typename:int64_t
+datalist::num	neotags.h	/^        int64_t num;$/;"	m	language:C++	struct:datalist	typeref:typename:int64_t
+delim	strip.cpp	/^        const char delim;$/;"	m	language:C++	struct:comment_s	typeref:typename:const char	file:
+do_search	neotags.cpp	/^   static void *do_search(void *vdata);$/;"	p	language:C++	typeref:typename:void *	file:
+do_search	neotags.cpp	/^do_search(void *vdata)$/;"	f	language:C++	typeref:typename:void *	file:
+docstring_e	strip.cpp	/^enum docstring_e {$/;"	g	language:C++	file:
+eof	archive_util_xz.cpp	/^        bool eof;$/;"	m	language:C++	struct:xz_file	typeref:typename:bool	file:
+equiv	neotags.cpp	/^           const char *const *equiv;$/;"	m	language:C++	struct:pdata	typeref:typename:const char * const *	file:
+err	bsd_funcs.c	/^                int err;$/;"	m	language:C	struct:neotags_strtonum::errval	typeref:typename:int	file:
+errstr	bsd_funcs.c	/^                const char *errstr;$/;"	m	language:C	struct:neotags_strtonum::errval	typeref:typename:const char *	file:
+errval	bsd_funcs.c	/^        struct errval {$/;"	s	language:C	function:neotags_strtonum	file:
+fd	archive_util_xz.cpp	/^        int fd;$/;"	m	language:C++	struct:xz_file	typeref:typename:int	file:
+file_is_reg	neotags.h	/^extern bool    file_is_reg  (const char *filename);$/;"	p	language:C++	typeref:typename:bool
+file_is_reg	util.cpp	/^file_is_reg(const char *filename)$/;"	f	language:C++	typeref:typename:bool
+find_num_cpus	neotags.h	/^extern int   find_num_cpus  (void);$/;"	p	language:C++	typeref:typename:int
+find_num_cpus	util.cpp	/^find_num_cpus(void)$/;"	f	language:C++	typeref:typename:int
+get_colon_data	neotags.cpp	/^get_colon_data(char *oarg)$/;"	f	language:C++	typeref:typename:char **	file:
+get_colon_data	neotags.cpp	/^static char **get_colon_data(char *oarg);$/;"	p	language:C++	typeref:typename:char **	file:
+get_size	archive_util_gzip.cpp	/^get_size(struct archive_size *size, int ifd, const char *name)$/;"	f	language:C++	typeref:typename:void	file:
+get_size	archive_util_gzip.cpp	/^static void get_size(struct archive_size *size, int fd, const char *name);$/;"	p	language:C++	typeref:typename:void	file:
+getlines	getlines.cpp	/^getlines(struct datalist *tags, const char *comptype, const char *filename)$/;"	f	language:C++	typeref:typename:int
+getlines	neotags.h	/^extern int getlines(struct datalist *tags, const char *comptype, const char *filename);$/;"	p	language:C++	typeref:typename:int
+gz_getlines	getlines.cpp	/^gz_getlines(struct datalist *tags, const char *filename)$/;"	f	language:C++	typeref:typename:void	file:
+gz_getlines	getlines.cpp	/^static void gz_getlines    (struct datalist *tags, const char *filename);$/;"	p	language:C++	typeref:typename:void	file:
+gzip_size	archive_util.h	/^void gzip_size(struct archive_size *size, const char *name);$/;"	p	language:C++	typeref:typename:void
+gzip_size	archive_util_gzip.cpp	/^gzip_size(struct archive_size *size, const char *name)$/;"	f	language:C++	typeref:typename:void
+gzip_size	archive_util_gzip.cpp	/^void gzip_size(struct archive_size *data, const char *name);$/;"	p	language:C++	typeref:typename:void	file:
+handle_cstyle	strip.cpp	/^handle_cstyle(const struct lldata *const vim_buf)$/;"	f	language:C++	typeref:typename:char *	file:
+handle_cstyle	strip.cpp	/^static char *handle_cstyle(const struct lldata *const vim_buf);$/;"	p	language:C++	typeref:typename:char *	file:
+handle_python	strip.cpp	/^handle_python(const struct lldata *const vim_buf, const char delim)$/;"	f	language:C++	typeref:typename:char *	file:
+handle_python	strip.cpp	/^static char *handle_python(const struct lldata *const vim_buf, const char delim);$/;"	p	language:C++	typeref:typename:char *	file:
+idx	archive_util_xz.cpp	/^        lzma_index *idx;$/;"	m	language:C++	struct:xz_file_info_s	typeref:typename:lzma_index *	file:
+in_order	neotags.cpp	/^in_order(const char *const *equiv, const char *order, char *group)$/;"	f	language:C++	typeref:typename:bool	file:
+io_buf	archive_util_xz.cpp	/^} io_buf;$/;"	t	language:C++	typeref:union:__anonab378746020a	file:
+io_open_src	archive_util_xz.cpp	/^io_open_src(const char *name)$/;"	f	language:C++	typeref:struct:xz_file *	file:
+io_open_src_real	archive_util_xz.cpp	/^io_open_src_real(struct xz_file *file)$/;"	f	language:C++	typeref:typename:bool	file:
+io_read	archive_util_xz.cpp	/^io_read(struct xz_file *file, io_buf *buf_union, size_t size)$/;"	f	language:C++	typeref:typename:size_t	file:
+io_read	archive_util_xz.cpp	/^static size_t io_read(struct xz_file *file, io_buf *buf_union, size_t size);$/;"	p	language:C++	typeref:typename:size_t	file:
+io_seek_src	archive_util_xz.cpp	/^io_seek_src(struct xz_file *file, off_t pos)$/;"	f	language:C++	typeref:typename:bool	file:
+io_wait_ret	archive_util_xz.cpp	/^} io_wait_ret;$/;"	t	language:C++	typeref:enum:__anonab3787460103	file:
+is_correct_lang	neotags.cpp	/^is_correct_lang(const char *lang, __CONST__ char *match_lang)$/;"	f	language:C++	typeref:typename:bool	file:
+kind	neotags.h	/^        char kind;$/;"	m	language:C++	struct:lldata	typeref:typename:char
+lang	neotags.cpp	/^           const char *lang;$/;"	m	language:C++	struct:pdata	typeref:typename:const char *	file:
+lang	strip.cpp	/^        const char *lang;$/;"	m	language:C++	struct:lang_s	typeref:typename:const char *	file:
+lang_e	strip.cpp	/^enum lang_e {$/;"	g	language:C++	file:
+lang_id	strip.cpp	/^        const enum lang_e lang_id;$/;"	m	language:C++	struct:lang_s	typeref:typename:const enum lang_e	file:
+lang_s	strip.cpp	/^static const struct lang_s {$/;"	s	language:C++	file:
+lang_s::lang	strip.cpp	/^        const char *lang;$/;"	m	language:C++	struct:lang_s	typeref:typename:const char *	file:
+lang_s::lang_id	strip.cpp	/^        const enum lang_e lang_id;$/;"	m	language:C++	struct:lang_s	typeref:typename:const enum lang_e	file:
+lang_s::type	strip.cpp	/^        const enum basic_types type;$/;"	m	language:C++	struct:lang_s	typeref:typename:const enum basic_types	file:
+len	neotags.h	/^        size_t len;$/;"	m	language:C++	struct:lldata	typeref:typename:size_t
+ll_pop_type	neotags.h	/^enum ll_pop_type {$/;"	g	language:C++
+ll_strsep	getlines.cpp	/^ll_strsep(struct datalist *tags, char *buf)$/;"	f	language:C++	typeref:typename:void	file:
+ll_strsep	getlines.cpp	/^static void ll_strsep      (struct datalist *tags, char *buf);$/;"	p	language:C++	typeref:typename:void	file:
+lldata	neotags.h	/^struct lldata {$/;"	s	language:C++
+lldata::kind	neotags.h	/^        char kind;$/;"	m	language:C++	struct:lldata	typeref:typename:char
+lldata::len	neotags.h	/^        size_t len;$/;"	m	language:C++	struct:lldata	typeref:typename:size_t
+lldata::s	neotags.h	/^        char *s;$/;"	m	language:C++	struct:lldata	typeref:typename:char *
+lst	neotags.cpp	/^           struct lldata **lst;$/;"	m	language:C++	struct:pdata	typeref:struct:lldata **	file:
+main	neotags.cpp	/^main(int argc, char *argv[])$/;"	f	language:C++	typeref:typename:int
+max	neotags.h	/^        int64_t max;$/;"	m	language:C++	struct:datalist	typeref:typename:int64_t
+memusage_max	archive_util_xz.cpp	/^        uint64_t memusage_max;$/;"	m	language:C++	struct:xz_file_info_s	typeref:typename:uint64_t	file:
+message_strm	archive_util_xz.cpp	/^const char * message_strm(lzma_ret code);$/;"	p	language:C++	typeref:typename:const char *	file:
+message_strm	archive_util_xz.cpp	/^message_strm(lzma_ret code)$/;"	f	language:C++	typeref:typename:const char *
+message_strm	getlines.cpp	/^extern const char * message_strm(lzma_ret);$/;"	p	language:C++	typeref:typename:const char *	file:
+min_version	archive_util_xz.cpp	/^        uint32_t min_version;$/;"	m	language:C++	struct:xz_file_info_s	typeref:typename:uint32_t	file:
+my_fgetc	neotags.h	/^extern int     my_fgetc     (void *fp);$/;"	p	language:C++	typeref:typename:int
+my_fgetline	neotags.h	/^extern size_t  my_fgetline  (char **ptr, void *fp);$/;"	p	language:C++	typeref:typename:size_t
+my_fgetline	util.cpp	/^my_fgetline(char **ptr, void *fp)$/;"	f	language:C++	typeref:typename:size_t
+name	archive_util_xz.cpp	/^        const char *name;$/;"	m	language:C++	struct:xz_file	typeref:typename:const char *	file:
+neotags_strlcat	bsd_funcs.c	/^neotags_strlcat(char * __restrict dst, const char * __restrict src, size_t dst_size)$/;"	f	language:C	typeref:typename:size_t
+neotags_strlcat	bsd_funcs.h	/^size_t    neotags_strlcat(char * __restrict dst, const char * __restrict src, size_t dst_size);$/;"	p	language:C++	typeref:typename:size_t
+neotags_strlcpy	bsd_funcs.c	/^neotags_strlcpy(char * __restrict dst, const char * __restrict src, size_t dst_size)$/;"	f	language:C	typeref:typename:size_t
+neotags_strlcpy	bsd_funcs.h	/^size_t    neotags_strlcpy(char * __restrict dst, const char * __restrict src, size_t dst_size);$/;"	p	language:C++	typeref:typename:size_t
+neotags_strtonum	bsd_funcs.c	/^neotags_strtonum(const char *numstr,$/;"	f	language:C	typeref:typename:long long
+neotags_strtonum	bsd_funcs.h	/^long long neotags_strtonum(const char *numstr, long long minval, long long maxval, const char **/;"	p	language:C++	typeref:typename:long long
+neotags_strtonum::errval::err	bsd_funcs.c	/^                int err;$/;"	m	language:C	struct:neotags_strtonum::errval	typeref:typename:int	file:
+neotags_strtonum::errval::errstr	bsd_funcs.c	/^                const char *errstr;$/;"	m	language:C	struct:neotags_strtonum::errval	typeref:typename:const char *	file:
+next	neotags.h	/^        struct Node *next;$/;"	m	language:C++	struct:Node	typeref:struct:Node *
+num	neotags.cpp	/^           int num;$/;"	m	language:C++	struct:pdata	typeref:typename:int	file:
+num	neotags.h	/^        int64_t num;$/;"	m	language:C++	struct:datalist	typeref:typename:int64_t
+open_and_stat	archive_util_gzip.cpp	/^open_and_stat(const char *name)$/;"	f	language:C++	typeref:typename:int	file:
+open_and_stat	archive_util_gzip.cpp	/^static int open_and_stat(const char *name);$/;"	p	language:C++	typeref:typename:int	file:
+order	neotags.cpp	/^           const char *order;$/;"	m	language:C++	struct:pdata	typeref:typename:const char *	file:
+parse_indexes	archive_util_xz.cpp	/^parse_indexes(struct xz_file *file, xz_file_info *xfi)$/;"	f	language:C++	typeref:typename:bool	file:
+parse_indexes	archive_util_xz.cpp	/^static bool parse_indexes(struct xz_file *file, xz_file_info *xfi);$/;"	p	language:C++	typeref:typename:bool	file:
+pdata	neotags.cpp	/^   struct pdata {$/;"	s	language:C++	file:
+pdata::equiv	neotags.cpp	/^           const char *const *equiv;$/;"	m	language:C++	struct:pdata	typeref:typename:const char * const *	file:
+pdata::lang	neotags.cpp	/^           const char *lang;$/;"	m	language:C++	struct:pdata	typeref:typename:const char *	file:
+pdata::lst	neotags.cpp	/^           struct lldata **lst;$/;"	m	language:C++	struct:pdata	typeref:struct:lldata **	file:
+pdata::num	neotags.cpp	/^           int num;$/;"	m	language:C++	struct:pdata	typeref:typename:int	file:
+pdata::order	neotags.cpp	/^           const char *order;$/;"	m	language:C++	struct:pdata	typeref:typename:const char *	file:
+pdata::skip	neotags.cpp	/^           const char *const *skip;$/;"	m	language:C++	struct:pdata	typeref:typename:const char * const *	file:
+pdata::threadnum	neotags.cpp	/^           int threadnum;$/;"	m	language:C++	struct:pdata	typeref:typename:int	file:
+pdata::vim_buf	neotags.cpp	/^           const char *vim_buf;$/;"	m	language:C++	struct:pdata	typeref:typename:const char *	file:
+plain_getlines	getlines.cpp	/^plain_getlines(struct datalist *tags, const char *filename)$/;"	f	language:C++	typeref:typename:void	file:
+plain_getlines	getlines.cpp	/^static void plain_getlines (struct datalist *tags, const char *filename);$/;"	p	language:C++	typeref:typename:void	file:
+prev	neotags.h	/^        struct Node *prev;$/;"	m	language:C++	struct:Node	typeref:struct:Node *
+py_quote	strip.cpp	/^struct py_quote {$/;"	s	language:C++	file:
+py_quote::b	strip.cpp	/^        bool b;$/;"	m	language:C++	struct:py_quote	typeref:typename:bool	file:
+py_quote::ch	strip.cpp	/^        char ch;$/;"	m	language:C++	struct:py_quote	typeref:typename:char	file:
+py_quote::cnt	strip.cpp	/^        int cnt;$/;"	m	language:C++	struct:py_quote	typeref:typename:int	file:
+py_quote::val	strip.cpp	/^        enum docstring_e val;$/;"	m	language:C++	struct:py_quote	typeref:enum:docstring_e	file:
+quick_sort	neotags.h	/^extern void quick_sort(struct lldata **data, uint32_t size);$/;"	p	language:C++	typeref:typename:void
+read_error	archive_util_gzip.cpp	/^static inline void read_error(const char *filename);$/;"	p	language:C++	typeref:typename:void	file:
+read_error	archive_util_gzip.cpp	/^void read_error(const char *filename)$/;"	f	language:C++	typeref:typename:void	file:
+report_size	getlines.cpp	/^    report_size(struct archive_size *size)$/;"	f	language:C++	typeref:typename:void	file:
+s	neotags.h	/^        char *s;$/;"	m	language:C++	struct:lldata	typeref:typename:char *
+safe_fopen	neotags.h	/^extern FILE *  safe_fopen   (const char * const __restrict filename, const char * const __restri/;"	p	language:C++	typeref:typename:FILE *
+safe_fopen	util.cpp	/^safe_fopen(const char * const __restrict filename,$/;"	f	language:C++	typeref:typename:FILE *
+search	neotags.cpp	/^search(struct datalist *tags,$/;"	f	language:C++	typeref:typename:void	file:
+search	neotags.cpp	/^static void search($/;"	p	language:C++	typeref:typename:void	file:
+skip	neotags.cpp	/^           const char *const *skip;$/;"	m	language:C++	struct:pdata	typeref:typename:const char * const *	file:
+skip_tag	neotags.cpp	/^skip_tag(const char *const *skip, const char *find)$/;"	f	language:C++	typeref:typename:bool	file:
+ssize_t	archive_util_xz.cpp	/^    typedef int64_t ssize_t;$/;"	t	language:C++	typeref:typename:int64_t	file:
+st	archive_util_xz.cpp	/^        struct stat st;$/;"	m	language:C++	struct:xz_file	typeref:struct:stat	file:
+stream_padding	archive_util_xz.cpp	/^        uint64_t stream_padding;$/;"	m	language:C++	struct:xz_file_info_s	typeref:typename:uint64_t	file:
+strip_comments	neotags.h	/^extern char * strip_comments(struct lldata *buffer, const char *lang);$/;"	p	language:C++	typeref:typename:char *
+strip_comments	strip.cpp	/^strip_comments(struct lldata *buffer, const char *lang)$/;"	f	language:C++	typeref:typename:char *
+strsep	bsd_funcs.c	/^strsep(char **stringp, const char *delim)$/;"	f	language:C	typeref:typename:char *
+strsep	bsd_funcs.h	/^   char *strsep(char **stringp, const char *delim);$/;"	p	language:C++	typeref:typename:char *
+threadnum	neotags.cpp	/^           int threadnum;$/;"	m	language:C++	struct:pdata	typeref:typename:int	file:
+type	strip.cpp	/^        const enum basic_types type;$/;"	m	language:C++	struct:lang_s	typeref:typename:const enum basic_types	file:
+type	strip.cpp	/^        const int type;$/;"	m	language:C++	struct:comment_s	typeref:typename:const int	file:
+u32	archive_util_xz.cpp	/^        uint32_t u32[IO_BUFFER_SIZE \/ sizeof(uint32_t)];$/;"	m	language:C++	union:__anonab378746020a	typeref:typename:uint32_t[]	file:
+u64	archive_util_xz.cpp	/^        uint64_t u64[IO_BUFFER_SIZE \/ sizeof(uint64_t)];$/;"	m	language:C++	union:__anonab378746020a	typeref:typename:uint64_t[]	file:
+u8	archive_util_xz.cpp	/^        uint8_t u8[IO_BUFFER_SIZE];$/;"	m	language:C++	union:__anonab378746020a	typeref:typename:uint8_t[]	file:
+uncompressed	archive_util.h	/^        size_t uncompressed;$/;"	m	language:C++	struct:archive_size	typeref:typename:size_t
+val	strip.cpp	/^        enum docstring_e val;$/;"	m	language:C++	struct:py_quote	typeref:enum:docstring_e	file:
+vim_buf	neotags.cpp	/^           const char *vim_buf;$/;"	m	language:C++	struct:pdata	typeref:typename:const char *	file:
+xcalloc	neotags.h	/^extern void *  xcalloc      (const int num, const size_t size) __attribute__((malloc));$/;"	p	language:C++	typeref:typename:void *
+xcalloc	util.cpp	/^xcalloc(const int num, const size_t size)$/;"	f	language:C++	typeref:typename:void *
+xmalloc	neotags.h	/^extern void *  xmalloc      (const size_t size)                __attribute__((malloc));$/;"	p	language:C++	typeref:typename:void *
+xmalloc	util.cpp	/^xmalloc(const size_t size)$/;"	f	language:C++	typeref:typename:void *
+xrealloc	neotags.h	/^extern void *  xrealloc     (void *ptr, const size_t size)     __attribute__((malloc));$/;"	p	language:C++	typeref:typename:void *
+xrealloc	util.cpp	/^xrealloc(void *ptr, const size_t size)$/;"	f	language:C++	typeref:typename:void *
+xz_file	archive_util_xz.cpp	/^struct xz_file {$/;"	s	language:C++	file:
+xz_file::eof	archive_util_xz.cpp	/^        bool eof;$/;"	m	language:C++	struct:xz_file	typeref:typename:bool	file:
+xz_file::fd	archive_util_xz.cpp	/^        int fd;$/;"	m	language:C++	struct:xz_file	typeref:typename:int	file:
+xz_file::name	archive_util_xz.cpp	/^        const char *name;$/;"	m	language:C++	struct:xz_file	typeref:typename:const char *	file:
+xz_file::st	archive_util_xz.cpp	/^        struct stat st;$/;"	m	language:C++	struct:xz_file	typeref:struct:stat	file:
+xz_file_info	archive_util_xz.cpp	/^} xz_file_info;$/;"	t	language:C++	typeref:struct:xz_file_info_s	file:
+xz_file_info_s	archive_util_xz.cpp	/^typedef struct xz_file_info_s {$/;"	s	language:C++	file:
+xz_file_info_s::all_have_sizes	archive_util_xz.cpp	/^        bool all_have_sizes;$/;"	m	language:C++	struct:xz_file_info_s	typeref:typename:bool	file:
+xz_file_info_s::idx	archive_util_xz.cpp	/^        lzma_index *idx;$/;"	m	language:C++	struct:xz_file_info_s	typeref:typename:lzma_index *	file:
+xz_file_info_s::memusage_max	archive_util_xz.cpp	/^        uint64_t memusage_max;$/;"	m	language:C++	struct:xz_file_info_s	typeref:typename:uint64_t	file:
+xz_file_info_s::min_version	archive_util_xz.cpp	/^        uint32_t min_version;$/;"	m	language:C++	struct:xz_file_info_s	typeref:typename:uint32_t	file:
+xz_file_info_s::stream_padding	archive_util_xz.cpp	/^        uint64_t stream_padding;$/;"	m	language:C++	struct:xz_file_info_s	typeref:typename:uint64_t	file:
+xz_getlines	getlines.cpp	/^static void xz_getlines    (struct datalist *tags, const char *filename);$/;"	p	language:C++	typeref:typename:void	file:
+xz_getlines	getlines.cpp	/^xz_getlines(struct datalist *tags, const char *filename)$/;"	f	language:C++	typeref:typename:void	file:
+xz_size	archive_util.h	/^void xz_size(struct archive_size *size, const char *filename);$/;"	p	language:C++	typeref:typename:void
+xz_size	archive_util_xz.cpp	/^xz_size(struct archive_size *size, const char *filename)$/;"	f	language:C++	typeref:typename:void

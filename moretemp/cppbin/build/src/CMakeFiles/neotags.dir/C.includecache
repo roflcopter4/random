@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/bml/moretemp/cppbin/src/bsd_funcs.c
+bsd_funcs.h
+/home/bml/moretemp/cppbin/src/bsd_funcs.h
+limits.h
+-
+stdlib.h
+-
+stddef.h
+-
+
+/home/bml/moretemp/cppbin/src/bsd_funcs.h
+
