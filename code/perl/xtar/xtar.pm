@@ -110,9 +110,9 @@ sub extract($self)
     safe_make_path( $self->out->top_dir );
 
     mv( $self->out->bottom, $self->out->odir )
-        or ( $DEBUG && err "Resorting to dircopy" or true )
+        or ( $DEBUG && err("Resorting to dircopy") or true )
            && dircopy( $self->out->bottom, $self->out->odir )
-        or confess "Dircopy failed. Aborting. - $!";
+        or confess("Dircopy failed. Aborting. - $!");
 
     my $CWD    = $self->CWD;
     my $reldir = $self->out->odir =~ s|${CWD}/(.*)|$1|r;

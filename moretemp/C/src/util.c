@@ -58,7 +58,7 @@ get_all_lines(const char *filename)
 {
         FILE *fp = safe_fopen(filename, "rb");
         struct linked_list *ll = new_list(ST_STRING_FREE);
-        struct lldata *str;
+        struct String *str;
 
         for (;;) {
                 str = xmalloc(sizeof * str);
@@ -78,7 +78,7 @@ get_all_lines(const char *filename)
 
 
 struct linked_list *
-llstrsep(struct lldata *buffer)
+llstrsep(struct String *buffer)
 {
         char *tok, *buf;
         struct linked_list *ll = new_list(ST_STRING_NOFREE);
@@ -89,7 +89,7 @@ llstrsep(struct lldata *buffer)
         while ((tok = strsep(&buf, "\n")) != NULL) {
                 if (*tok == '\0')
                         continue;
-                struct lldata *str = xmalloc(sizeof * str);
+                struct String *str = xmalloc(sizeof * str);
                 str->len = buf - tok;
                 str->s   = tok;
 

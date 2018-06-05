@@ -4,6 +4,7 @@ set (neotags_SOURCES
     getlines.c
     neotags.c
     strip.c
+    tok.c
     util.c)
 
 if (LZMA_SUPPORT)

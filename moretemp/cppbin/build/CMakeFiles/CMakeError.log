@@ -1,22 +1,22 @@
 Determining if the pthread_create exist failed with the following output:
-Change Dir: /home/bml/moretemp/cppbin/build/CMakeFiles/CMakeTmp
+Change Dir: /home/bml/random/moretemp/cppbin/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/gmake" "cmTC_27b13/fast"
-/usr/bin/gmake -f CMakeFiles/cmTC_27b13.dir/build.make CMakeFiles/cmTC_27b13.dir/build
-gmake[1]: Entering directory '/home/bml/moretemp/cppbin/build/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_27b13.dir/CheckSymbolExists.c.o
-/usr/lib/ccache/bin/gcc    -o CMakeFiles/cmTC_27b13.dir/CheckSymbolExists.c.o   -c /home/bml/moretemp/cppbin/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c
-Linking C executable cmTC_27b13
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_27b13.dir/link.txt --verbose=1
-/usr/lib/ccache/bin/gcc      CMakeFiles/cmTC_27b13.dir/CheckSymbolExists.c.o  -o cmTC_27b13 
-CMakeFiles/cmTC_27b13.dir/CheckSymbolExists.c.o: In function `main':
+Run Build Command:"/usr/bin/gmake" "cmTC_7ee7e/fast"
+/usr/bin/gmake -f CMakeFiles/cmTC_7ee7e.dir/build.make CMakeFiles/cmTC_7ee7e.dir/build
+gmake[1]: Entering directory '/home/bml/random/moretemp/cppbin/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_7ee7e.dir/CheckSymbolExists.c.o
+/usr/lib/ccache/bin/gcc    -o CMakeFiles/cmTC_7ee7e.dir/CheckSymbolExists.c.o   -c /home/bml/random/moretemp/cppbin/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_7ee7e
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_7ee7e.dir/link.txt --verbose=1
+/usr/lib/ccache/bin/gcc      CMakeFiles/cmTC_7ee7e.dir/CheckSymbolExists.c.o  -o cmTC_7ee7e 
+CMakeFiles/cmTC_7ee7e.dir/CheckSymbolExists.c.o: In function `main':
 CheckSymbolExists.c:(.text+0x1b): undefined reference to `pthread_create'
 collect2: error: ld returned 1 exit status
-gmake[1]: *** [CMakeFiles/cmTC_27b13.dir/build.make:87: cmTC_27b13] Error 1
-gmake[1]: Leaving directory '/home/bml/moretemp/cppbin/build/CMakeFiles/CMakeTmp'
-gmake: *** [Makefile:126: cmTC_27b13/fast] Error 2
+gmake[1]: *** [CMakeFiles/cmTC_7ee7e.dir/build.make:87: cmTC_7ee7e] Error 1
+gmake[1]: Leaving directory '/home/bml/random/moretemp/cppbin/build/CMakeFiles/CMakeTmp'
+gmake: *** [Makefile:126: cmTC_7ee7e/fast] Error 2
 
-File /home/bml/moretemp/cppbin/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+File /home/bml/random/moretemp/cppbin/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
 /* */
 #include <pthread.h>
 
@@ -32,24 +32,24 @@ int main(int argc, char** argv)
 }
 
 Determining if the strlcpy exist failed with the following output:
-Change Dir: /home/bml/moretemp/cppbin/build/CMakeFiles/CMakeTmp
+Change Dir: /home/bml/random/moretemp/cppbin/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/gmake" "cmTC_7f3ed/fast"
-/usr/bin/gmake -f CMakeFiles/cmTC_7f3ed.dir/build.make CMakeFiles/cmTC_7f3ed.dir/build
-gmake[1]: Entering directory '/home/bml/moretemp/cppbin/build/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_7f3ed.dir/CheckSymbolExists.c.o
-/usr/lib/ccache/bin/gcc -DHAVE_CONFIG_H -D_GNU_SOURCE   -o CMakeFiles/cmTC_7f3ed.dir/CheckSymbolExists.c.o   -c /home/bml/moretemp/cppbin/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c
-/home/bml/moretemp/cppbin/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c: In function ‘main’:
-/home/bml/moretemp/cppbin/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:8:19: error: ‘strlcpy’ undeclared (first use in this function); did you mean ‘strncpy’?
+Run Build Command:"/usr/bin/gmake" "cmTC_31123/fast"
+/usr/bin/gmake -f CMakeFiles/cmTC_31123.dir/build.make CMakeFiles/cmTC_31123.dir/build
+gmake[1]: Entering directory '/home/bml/random/moretemp/cppbin/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_31123.dir/CheckSymbolExists.c.o
+/usr/lib/ccache/bin/gcc -DHAVE_CONFIG_H -D_GNU_SOURCE   -o CMakeFiles/cmTC_31123.dir/CheckSymbolExists.c.o   -c /home/bml/random/moretemp/cppbin/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+/home/bml/random/moretemp/cppbin/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c: In function ‘main’:
+/home/bml/random/moretemp/cppbin/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:8:19: error: ‘strlcpy’ undeclared (first use in this function); did you mean ‘strncpy’?
    return ((int*)(&strlcpy))[argc];
                    ^~~~~~~
                    strncpy
-/home/bml/moretemp/cppbin/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:8:19: note: each undeclared identifier is reported only once for each function it appears in
-gmake[1]: *** [CMakeFiles/cmTC_7f3ed.dir/build.make:66: CMakeFiles/cmTC_7f3ed.dir/CheckSymbolExists.c.o] Error 1
-gmake[1]: Leaving directory '/home/bml/moretemp/cppbin/build/CMakeFiles/CMakeTmp'
-gmake: *** [Makefile:126: cmTC_7f3ed/fast] Error 2
+/home/bml/random/moretemp/cppbin/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:8:19: note: each undeclared identifier is reported only once for each function it appears in
+gmake[1]: *** [CMakeFiles/cmTC_31123.dir/build.make:66: CMakeFiles/cmTC_31123.dir/CheckSymbolExists.c.o] Error 1
+gmake[1]: Leaving directory '/home/bml/random/moretemp/cppbin/build/CMakeFiles/CMakeTmp'
+gmake: *** [Makefile:126: cmTC_31123/fast] Error 2
 
-File /home/bml/moretemp/cppbin/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+File /home/bml/random/moretemp/cppbin/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
 /* */
 #include <string.h>
 

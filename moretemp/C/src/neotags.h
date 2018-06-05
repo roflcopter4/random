@@ -47,14 +47,14 @@
 /*===========================================================================*/
 
 
-struct lldata {
+struct String {
         char *s;
         char kind;
         size_t len;
 };
 
-struct datalist {
-        struct lldata **data;
+struct StringLst {
+        struct String **data;
         int64_t num;
         int64_t max;
 };
@@ -137,9 +137,11 @@ extern int   find_num_cpus  (void);
 /* 
  * Else
  */
-extern int  getlines(struct datalist *tags, const char *comptype, const char *filename);
-extern void strip_comments(struct lldata *buffer, const char *lang);
+extern int  getlines(struct StringLst *tags, const char *comptype, const char *filename);
+extern void strip_comments(struct String *buffer, const char *lang);
+extern struct StringLst * tokenize(struct String *vimbuf, const char *lang);
 
+/* #include "inline.h" */
 
 #ifdef __cplusplus
     }

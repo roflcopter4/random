@@ -1,0 +1,10 @@
+package main
+
+//go:generate cpp -P -C $GOFILE
+#define butthole 23
+
+
+func main() {
+	i := butthole
+	printf("This wont work... %d\n", i)
+}

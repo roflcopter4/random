@@ -6,15 +6,15 @@
 
 #IncludeRegexTransform: 
 
-/home/bml/moretemp/cppbin/src/archive_util.h
+/home/bml/random/moretemp/cppbin/src/archive_util.h
 stddef.h
 -
 
-/home/bml/moretemp/cppbin/src/archive_util_gzip.cpp
+/home/bml/random/moretemp/cppbin/src/archive_util_gzip.cpp
 archive_util.h
-/home/bml/moretemp/cppbin/src/archive_util.h
+/home/bml/random/moretemp/cppbin/src/archive_util.h
 neotags.h
-/home/bml/moretemp/cppbin/src/neotags.h
+/home/bml/random/moretemp/cppbin/src/neotags.h
 cerrno
 -
 cstdlib
@@ -24,11 +24,11 @@ fcntl.h
 sys/stat.h
 -
 
-/home/bml/moretemp/cppbin/src/archive_util_xz.cpp
+/home/bml/random/moretemp/cppbin/src/archive_util_xz.cpp
 archive_util.h
-/home/bml/moretemp/cppbin/src/archive_util.h
+/home/bml/random/moretemp/cppbin/src/archive_util.h
 neotags.h
-/home/bml/moretemp/cppbin/src/neotags.h
+/home/bml/random/moretemp/cppbin/src/neotags.h
 cassert
 -
 cerrno
@@ -50,13 +50,13 @@ unistd.h
 fcntl.h
 -
 
-/home/bml/moretemp/cppbin/src/bsd_funcs.h
+/home/bml/random/moretemp/cppbin/src/bsd_funcs.h
 
-/home/bml/moretemp/cppbin/src/getlines.cpp
+/home/bml/random/moretemp/cppbin/src/getlines.cpp
 archive_util.h
-/home/bml/moretemp/cppbin/src/archive_util.h
+/home/bml/random/moretemp/cppbin/src/archive_util.h
 neotags.h
-/home/bml/moretemp/cppbin/src/neotags.h
+/home/bml/random/moretemp/cppbin/src/neotags.h
 cassert
 -
 climits
@@ -80,9 +80,9 @@ zlib.h
 lzma.h
 -
 
-/home/bml/moretemp/cppbin/src/neotags.cpp
+/home/bml/random/moretemp/cppbin/src/neotags.cpp
 neotags.h
-/home/bml/moretemp/cppbin/src/neotags.h
+/home/bml/random/moretemp/cppbin/src/neotags.h
 clocale
 -
 cstdlib
@@ -106,13 +106,13 @@ malloc.h
 fstream
 -
 
-/home/bml/moretemp/cppbin/src/neotags.h
+/home/bml/random/moretemp/cppbin/src/neotags.h
 config.h
-/home/bml/moretemp/cppbin/src/config.h
+/home/bml/random/moretemp/cppbin/src/config.h
 bsd/bsd.h
 -
 bsd_funcs.h
-/home/bml/moretemp/cppbin/src/bsd_funcs.h
+/home/bml/random/moretemp/cppbin/src/bsd_funcs.h
 malloc.h
 -
 cerrno
@@ -138,9 +138,9 @@ unistd.h
 err.h
 -
 
-/home/bml/moretemp/cppbin/src/strip.cpp
+/home/bml/random/moretemp/cppbin/src/strip.cpp
 neotags.h
-/home/bml/moretemp/cppbin/src/neotags.h
+/home/bml/random/moretemp/cppbin/src/neotags.h
 cctype
 -
 cerrno
@@ -152,9 +152,9 @@ string
 vector
 -
 
-/home/bml/moretemp/cppbin/src/util.cpp
+/home/bml/random/moretemp/cppbin/src/util.cpp
 neotags.h
-/home/bml/moretemp/cppbin/src/neotags.h
+/home/bml/random/moretemp/cppbin/src/neotags.h
 cassert
 -
 cstdarg

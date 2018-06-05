@@ -1,4 +1,4 @@
-# Install script for directory: /home/bml/moretemp/cppbin/src
+# Install script for directory: /home/bml/random/moretemp/cppbin/src
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

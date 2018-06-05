@@ -6,5 +6,5 @@ C_FLAGS = -march=native -fdiagnostics-color=always -Wall -Og -g -Wextra -Wpedant
 
 C_DEFINES = -DHAVE_CONFIG_H -D_GNU_SOURCE
 
-C_INCLUDES = -I/home/bml/moretemp/C/build 
+C_INCLUDES = -I/home/bml/random/moretemp/C/build 
 

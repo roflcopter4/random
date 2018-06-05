@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/bml/moretemp/C
+CMAKE_SOURCE_DIR = /home/bml/random/moretemp/C
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/bml/moretemp/C/build
+CMAKE_BINARY_DIR = /home/bml/random/moretemp/C/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,14 +80,14 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/bml/moretemp/C/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/bml/moretemp/C/build/CMakeFiles /home/bml/moretemp/C/build/src/CMakeFiles/progress.marks
-	cd /home/bml/moretemp/C/build && $(MAKE) -f CMakeFiles/Makefile2 src/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/bml/moretemp/C/build/CMakeFiles 0
+	cd /home/bml/random/moretemp/C/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/bml/random/moretemp/C/build/CMakeFiles /home/bml/random/moretemp/C/build/src/CMakeFiles/progress.marks
+	cd /home/bml/random/moretemp/C/build && $(MAKE) -f CMakeFiles/Makefile2 src/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/bml/random/moretemp/C/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/bml/moretemp/C/build && $(MAKE) -f CMakeFiles/Makefile2 src/clean
+	cd /home/bml/random/moretemp/C/build && $(MAKE) -f CMakeFiles/Makefile2 src/clean
 .PHONY : clean
 
 # The main clean target
@@ -97,22 +97,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/bml/moretemp/C/build && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
+	cd /home/bml/random/moretemp/C/build && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/bml/moretemp/C/build && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
+	cd /home/bml/random/moretemp/C/build && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/bml/moretemp/C/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/bml/random/moretemp/C/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 src/CMakeFiles/neotags.dir/rule:
-	cd /home/bml/moretemp/C/build && $(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/neotags.dir/rule
+	cd /home/bml/random/moretemp/C/build && $(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/neotags.dir/rule
 .PHONY : src/CMakeFiles/neotags.dir/rule
 
 # Convenience name for target.
@@ -122,7 +122,7 @@ neotags: src/CMakeFiles/neotags.dir/rule
 
 # fast build rule for target.
 neotags/fast:
-	cd /home/bml/moretemp/C/build && $(MAKE) -f src/CMakeFiles/neotags.dir/build.make src/CMakeFiles/neotags.dir/build
+	cd /home/bml/random/moretemp/C/build && $(MAKE) -f src/CMakeFiles/neotags.dir/build.make src/CMakeFiles/neotags.dir/build
 .PHONY : neotags/fast
 
 archive_util_gzip.o: archive_util_gzip.c.o
@@ -131,7 +131,7 @@ archive_util_gzip.o: archive_util_gzip.c.o
 
 # target to build an object file
 archive_util_gzip.c.o:
-	cd /home/bml/moretemp/C/build && $(MAKE) -f src/CMakeFiles/neotags.dir/build.make src/CMakeFiles/neotags.dir/archive_util_gzip.c.o
+	cd /home/bml/random/moretemp/C/build && $(MAKE) -f src/CMakeFiles/neotags.dir/build.make src/CMakeFiles/neotags.dir/archive_util_gzip.c.o
 .PHONY : archive_util_gzip.c.o
 
 archive_util_gzip.i: archive_util_gzip.c.i
@@ -140,7 +140,7 @@ archive_util_gzip.i: archive_util_gzip.c.i
 
 # target to preprocess a source file
 archive_util_gzip.c.i:
-	cd /home/bml/moretemp/C/build && $(MAKE) -f src/CMakeFiles/neotags.dir/build.make src/CMakeFiles/neotags.dir/archive_util_gzip.c.i
+	cd /home/bml/random/moretemp/C/build && $(MAKE) -f src/CMakeFiles/neotags.dir/build.make src/CMakeFiles/neotags.dir/archive_util_gzip.c.i
 .PHONY : archive_util_gzip.c.i
 
 archive_util_gzip.s: archive_util_gzip.c.s
@@ -149,7 +149,7 @@ archive_util_gzip.s: archive_util_gzip.c.s
 
 # target to generate assembly for a file
 archive_util_gzip.c.s:
-	cd /home/bml/moretemp/C/build && $(MAKE) -f src/CMakeFiles/neotags.dir/build.make src/CMakeFiles/neotags.dir/archive_util_gzip.c.s
+	cd /home/bml/random/moretemp/C/build && $(MAKE) -f src/CMakeFiles/neotags.dir/build.make src/CMakeFiles/neotags.dir/archive_util_gzip.c.s
 .PHONY : archive_util_gzip.c.s
 
 archive_util_xz.o: archive_util_xz.c.o
@@ -158,7 +158,7 @@ archive_util_xz.o: archive_util_xz.c.o
 
 # target to build an object file
 archive_util_xz.c.o:
-	cd /home/bml/moretemp/C/build && $(MAKE) -f src/CMakeFiles/neotags.dir/build.make src/CMakeFiles/neotags.dir/archive_util_xz.c.o
+	cd /home/bml/random/moretemp/C/build && $(MAKE) -f src/CMakeFiles/neotags.dir/build.make src/CMakeFiles/neotags.dir/archive_util_xz.c.o
 .PHONY : archive_util_xz.c.o
 
 archive_util_xz.i: archive_util_xz.c.i
@@ -167,7 +167,7 @@ archive_util_xz.i: archive_util_xz.c.i
 
 # target to preprocess a source file
 archive_util_xz.c.i:
-	cd /home/bml/moretemp/C/build && $(MAKE) -f src/CMakeFiles/neotags.dir/build.make src/CMakeFiles/neotags.dir/archive_util_xz.c.i
+	cd /home/bml/random/moretemp/C/build && $(MAKE) -f src/CMakeFiles/neotags.dir/build.make src/CMakeFiles/neotags.dir/archive_util_xz.c.i
 .PHONY : archive_util_xz.c.i
 
 archive_util_xz.s: archive_util_xz.c.s
@@ -176,7 +176,7 @@ archive_util_xz.s: archive_util_xz.c.s
 
 # target to generate assembly for a file
 archive_util_xz.c.s:
-	cd /home/bml/moretemp/C/build && $(MAKE) -f src/CMakeFiles/neotags.dir/build.make src/CMakeFiles/neotags.dir/archive_util_xz.c.s
+	cd /home/bml/random/moretemp/C/build && $(MAKE) -f src/CMakeFiles/neotags.dir/build.make src/CMakeFiles/neotags.dir/archive_util_xz.c.s
 .PHONY : archive_util_xz.c.s
 
 bsd_funcs.o: bsd_funcs.c.o
@@ -185,7 +185,7 @@ bsd_funcs.o: bsd_funcs.c.o
 
 # target to build an object file
 bsd_funcs.c.o:
-	cd /home/bml/moretemp/C/build && $(MAKE) -f src/CMakeFiles/neotags.dir/build.make src/CMakeFiles/neotags.dir/bsd_funcs.c.o
+	cd /home/bml/random/moretemp/C/build && $(MAKE) -f src/CMakeFiles/neotags.dir/build.make src/CMakeFiles/neotags.dir/bsd_funcs.c.o
 .PHONY : bsd_funcs.c.o
 
 bsd_funcs.i: bsd_funcs.c.i
@@ -194,7 +194,7 @@ bsd_funcs.i: bsd_funcs.c.i
 
 # target to preprocess a source file
 bsd_funcs.c.i:
-	cd /home/bml/moretemp/C/build && $(MAKE) -f src/CMakeFiles/neotags.dir/build.make src/CMakeFiles/neotags.dir/bsd_funcs.c.i
+	cd /home/bml/random/moretemp/C/build && $(MAKE) -f src/CMakeFiles/neotags.dir/build.make src/CMakeFiles/neotags.dir/bsd_funcs.c.i
 .PHONY : bsd_funcs.c.i
 
 bsd_funcs.s: bsd_funcs.c.s
@@ -203,7 +203,7 @@ bsd_funcs.s: bsd_funcs.c.s
 
 # target to generate assembly for a file
 bsd_funcs.c.s:
-	cd /home/bml/moretemp/C/build && $(MAKE) -f src/CMakeFiles/neotags.dir/build.make src/CMakeFiles/neotags.dir/bsd_funcs.c.s
+	cd /home/bml/random/moretemp/C/build && $(MAKE) -f src/CMakeFiles/neotags.dir/build.make src/CMakeFiles/neotags.dir/bsd_funcs.c.s
 .PHONY : bsd_funcs.c.s
 
 getlines.o: getlines.c.o
@@ -212,7 +212,7 @@ getlines.o: getlines.c.o
 
 # target to build an object file
 getlines.c.o:
-	cd /home/bml/moretemp/C/build && $(MAKE) -f src/CMakeFiles/neotags.dir/build.make src/CMakeFiles/neotags.dir/getlines.c.o
+	cd /home/bml/random/moretemp/C/build && $(MAKE) -f src/CMakeFiles/neotags.dir/build.make src/CMakeFiles/neotags.dir/getlines.c.o
 .PHONY : getlines.c.o
 
 getlines.i: getlines.c.i
@@ -221,7 +221,7 @@ getlines.i: getlines.c.i
 
 # target to preprocess a source file
 getlines.c.i:
-	cd /home/bml/moretemp/C/build && $(MAKE) -f src/CMakeFiles/neotags.dir/build.make src/CMakeFiles/neotags.dir/getlines.c.i
+	cd /home/bml/random/moretemp/C/build && $(MAKE) -f src/CMakeFiles/neotags.dir/build.make src/CMakeFiles/neotags.dir/getlines.c.i
 .PHONY : getlines.c.i
 
 getlines.s: getlines.c.s
@@ -230,7 +230,7 @@ getlines.s: getlines.c.s
 
 # target to generate assembly for a file
 getlines.c.s:
-	cd /home/bml/moretemp/C/build && $(MAKE) -f src/CMakeFiles/neotags.dir/build.make src/CMakeFiles/neotags.dir/getlines.c.s
+	cd /home/bml/random/moretemp/C/build && $(MAKE) -f src/CMakeFiles/neotags.dir/build.make src/CMakeFiles/neotags.dir/getlines.c.s
 .PHONY : getlines.c.s
 
 neotags.o: neotags.c.o
@@ -239,7 +239,7 @@ neotags.o: neotags.c.o
 
 # target to build an object file
 neotags.c.o:
-	cd /home/bml/moretemp/C/build && $(MAKE) -f src/CMakeFiles/neotags.dir/build.make src/CMakeFiles/neotags.dir/neotags.c.o
+	cd /home/bml/random/moretemp/C/build && $(MAKE) -f src/CMakeFiles/neotags.dir/build.make src/CMakeFiles/neotags.dir/neotags.c.o
 .PHONY : neotags.c.o
 
 neotags.i: neotags.c.i
@@ -248,7 +248,7 @@ neotags.i: neotags.c.i
 
 # target to preprocess a source file
 neotags.c.i:
-	cd /home/bml/moretemp/C/build && $(MAKE) -f src/CMakeFiles/neotags.dir/build.make src/CMakeFiles/neotags.dir/neotags.c.i
+	cd /home/bml/random/moretemp/C/build && $(MAKE) -f src/CMakeFiles/neotags.dir/build.make src/CMakeFiles/neotags.dir/neotags.c.i
 .PHONY : neotags.c.i
 
 neotags.s: neotags.c.s
@@ -257,7 +257,7 @@ neotags.s: neotags.c.s
 
 # target to generate assembly for a file
 neotags.c.s:
-	cd /home/bml/moretemp/C/build && $(MAKE) -f src/CMakeFiles/neotags.dir/build.make src/CMakeFiles/neotags.dir/neotags.c.s
+	cd /home/bml/random/moretemp/C/build && $(MAKE) -f src/CMakeFiles/neotags.dir/build.make src/CMakeFiles/neotags.dir/neotags.c.s
 .PHONY : neotags.c.s
 
 strip.o: strip.c.o
@@ -266,7 +266,7 @@ strip.o: strip.c.o
 
 # target to build an object file
 strip.c.o:
-	cd /home/bml/moretemp/C/build && $(MAKE) -f src/CMakeFiles/neotags.dir/build.make src/CMakeFiles/neotags.dir/strip.c.o
+	cd /home/bml/random/moretemp/C/build && $(MAKE) -f src/CMakeFiles/neotags.dir/build.make src/CMakeFiles/neotags.dir/strip.c.o
 .PHONY : strip.c.o
 
 strip.i: strip.c.i
@@ -275,7 +275,7 @@ strip.i: strip.c.i
 
 # target to preprocess a source file
 strip.c.i:
-	cd /home/bml/moretemp/C/build && $(MAKE) -f src/CMakeFiles/neotags.dir/build.make src/CMakeFiles/neotags.dir/strip.c.i
+	cd /home/bml/random/moretemp/C/build && $(MAKE) -f src/CMakeFiles/neotags.dir/build.make src/CMakeFiles/neotags.dir/strip.c.i
 .PHONY : strip.c.i
 
 strip.s: strip.c.s
@@ -284,8 +284,35 @@ strip.s: strip.c.s
 
 # target to generate assembly for a file
 strip.c.s:
-	cd /home/bml/moretemp/C/build && $(MAKE) -f src/CMakeFiles/neotags.dir/build.make src/CMakeFiles/neotags.dir/strip.c.s
+	cd /home/bml/random/moretemp/C/build && $(MAKE) -f src/CMakeFiles/neotags.dir/build.make src/CMakeFiles/neotags.dir/strip.c.s
 .PHONY : strip.c.s
+
+tok.o: tok.c.o
+
+.PHONY : tok.o
+
+# target to build an object file
+tok.c.o:
+	cd /home/bml/random/moretemp/C/build && $(MAKE) -f src/CMakeFiles/neotags.dir/build.make src/CMakeFiles/neotags.dir/tok.c.o
+.PHONY : tok.c.o
+
+tok.i: tok.c.i
+
+.PHONY : tok.i
+
+# target to preprocess a source file
+tok.c.i:
+	cd /home/bml/random/moretemp/C/build && $(MAKE) -f src/CMakeFiles/neotags.dir/build.make src/CMakeFiles/neotags.dir/tok.c.i
+.PHONY : tok.c.i
+
+tok.s: tok.c.s
+
+.PHONY : tok.s
+
+# target to generate assembly for a file
+tok.c.s:
+	cd /home/bml/random/moretemp/C/build && $(MAKE) -f src/CMakeFiles/neotags.dir/build.make src/CMakeFiles/neotags.dir/tok.c.s
+.PHONY : tok.c.s
 
 util.o: util.c.o
 
@@ -293,7 +320,7 @@ util.o: util.c.o
 
 # target to build an object file
 util.c.o:
-	cd /home/bml/moretemp/C/build && $(MAKE) -f src/CMakeFiles/neotags.dir/build.make src/CMakeFiles/neotags.dir/util.c.o
+	cd /home/bml/random/moretemp/C/build && $(MAKE) -f src/CMakeFiles/neotags.dir/build.make src/CMakeFiles/neotags.dir/util.c.o
 .PHONY : util.c.o
 
 util.i: util.c.i
@@ -302,7 +329,7 @@ util.i: util.c.i
 
 # target to preprocess a source file
 util.c.i:
-	cd /home/bml/moretemp/C/build && $(MAKE) -f src/CMakeFiles/neotags.dir/build.make src/CMakeFiles/neotags.dir/util.c.i
+	cd /home/bml/random/moretemp/C/build && $(MAKE) -f src/CMakeFiles/neotags.dir/build.make src/CMakeFiles/neotags.dir/util.c.i
 .PHONY : util.c.i
 
 util.s: util.c.s
@@ -311,7 +338,7 @@ util.s: util.c.s
 
 # target to generate assembly for a file
 util.c.s:
-	cd /home/bml/moretemp/C/build && $(MAKE) -f src/CMakeFiles/neotags.dir/build.make src/CMakeFiles/neotags.dir/util.c.s
+	cd /home/bml/random/moretemp/C/build && $(MAKE) -f src/CMakeFiles/neotags.dir/build.make src/CMakeFiles/neotags.dir/util.c.s
 .PHONY : util.c.s
 
 # Help Target
@@ -341,6 +368,9 @@ help:
 	@echo "... strip.o"
 	@echo "... strip.i"
 	@echo "... strip.s"
+	@echo "... tok.o"
+	@echo "... tok.i"
+	@echo "... tok.s"
 	@echo "... util.o"
 	@echo "... util.i"
 	@echo "... util.s"
@@ -355,6 +385,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/bml/moretemp/C/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/bml/random/moretemp/C/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

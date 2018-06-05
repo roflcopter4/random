@@ -5,17 +5,14 @@ include (CheckFunctionExists)
 include (CheckSymbolExists)
 
 if (MSVC OR MINGW)
-#    message(FATAL_ERROR "\
-#Native Microsoft Windows is not supported through cmake. Please use the included \
-#Visual Studio project solution and libraries")
     set(ISWIN 1)
 endif()
 
 set (REQUIRED_LZMA_VERSION 5.3.1)
 option(USE_LIBBSD "Use libbsd on linux/cygwin if available.")
 option(BUILD_DIST "\
-Include the required alpha (and therefore uncommon) liblzma version as a static
-// library, and use bundled BSD extensions instead of libbsd even if it is available.")
+Include the required alpha (and therefore uncommon) liblzma version as a static\
+library, and use bundled BSD extensions instead of libbsd even if it is available.")
 option(STATIC_LIBS_ONLY "Build with only static libraries.")
 
 ###############################################################################

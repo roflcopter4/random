@@ -6,9 +6,9 @@
 
 #IncludeRegexTransform: 
 
-/home/bml/moretemp/cppbin/src/bsd_funcs.c
+/home/bml/random/moretemp/cppbin/src/bsd_funcs.c
 bsd_funcs.h
-/home/bml/moretemp/cppbin/src/bsd_funcs.h
+/home/bml/random/moretemp/cppbin/src/bsd_funcs.h
 limits.h
 -
 stdlib.h
@@ -16,5 +16,5 @@ stdlib.h
 stddef.h
 -
 
-/home/bml/moretemp/cppbin/src/bsd_funcs.h
+/home/bml/random/moretemp/cppbin/src/bsd_funcs.h
 

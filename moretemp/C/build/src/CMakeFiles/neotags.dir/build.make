@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/bml/moretemp/C
+CMAKE_SOURCE_DIR = /home/bml/random/moretemp/C
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/bml/moretemp/C/build
+CMAKE_BINARY_DIR = /home/bml/random/moretemp/C/build
 
 # Include any dependencies generated for this target.
 include src/CMakeFiles/neotags.dir/depend.make
@@ -59,94 +59,107 @@ include src/CMakeFiles/neotags.dir/flags.make
 
 src/CMakeFiles/neotags.dir/archive_util_gzip.c.o: src/CMakeFiles/neotags.dir/flags.make
 src/CMakeFiles/neotags.dir/archive_util_gzip.c.o: ../src/archive_util_gzip.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bml/moretemp/C/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object src/CMakeFiles/neotags.dir/archive_util_gzip.c.o"
-	cd /home/bml/moretemp/C/build/src && /usr/lib/ccache/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/neotags.dir/archive_util_gzip.c.o   -c /home/bml/moretemp/C/src/archive_util_gzip.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bml/random/moretemp/C/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object src/CMakeFiles/neotags.dir/archive_util_gzip.c.o"
+	cd /home/bml/random/moretemp/C/build/src && /usr/lib/ccache/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/neotags.dir/archive_util_gzip.c.o   -c /home/bml/random/moretemp/C/src/archive_util_gzip.c
 
 src/CMakeFiles/neotags.dir/archive_util_gzip.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/neotags.dir/archive_util_gzip.c.i"
-	cd /home/bml/moretemp/C/build/src && /usr/lib/ccache/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/bml/moretemp/C/src/archive_util_gzip.c > CMakeFiles/neotags.dir/archive_util_gzip.c.i
+	cd /home/bml/random/moretemp/C/build/src && /usr/lib/ccache/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/bml/random/moretemp/C/src/archive_util_gzip.c > CMakeFiles/neotags.dir/archive_util_gzip.c.i
 
 src/CMakeFiles/neotags.dir/archive_util_gzip.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/neotags.dir/archive_util_gzip.c.s"
-	cd /home/bml/moretemp/C/build/src && /usr/lib/ccache/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/bml/moretemp/C/src/archive_util_gzip.c -o CMakeFiles/neotags.dir/archive_util_gzip.c.s
+	cd /home/bml/random/moretemp/C/build/src && /usr/lib/ccache/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/bml/random/moretemp/C/src/archive_util_gzip.c -o CMakeFiles/neotags.dir/archive_util_gzip.c.s
 
 src/CMakeFiles/neotags.dir/getlines.c.o: src/CMakeFiles/neotags.dir/flags.make
 src/CMakeFiles/neotags.dir/getlines.c.o: ../src/getlines.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bml/moretemp/C/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object src/CMakeFiles/neotags.dir/getlines.c.o"
-	cd /home/bml/moretemp/C/build/src && /usr/lib/ccache/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/neotags.dir/getlines.c.o   -c /home/bml/moretemp/C/src/getlines.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bml/random/moretemp/C/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object src/CMakeFiles/neotags.dir/getlines.c.o"
+	cd /home/bml/random/moretemp/C/build/src && /usr/lib/ccache/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/neotags.dir/getlines.c.o   -c /home/bml/random/moretemp/C/src/getlines.c
 
 src/CMakeFiles/neotags.dir/getlines.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/neotags.dir/getlines.c.i"
-	cd /home/bml/moretemp/C/build/src && /usr/lib/ccache/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/bml/moretemp/C/src/getlines.c > CMakeFiles/neotags.dir/getlines.c.i
+	cd /home/bml/random/moretemp/C/build/src && /usr/lib/ccache/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/bml/random/moretemp/C/src/getlines.c > CMakeFiles/neotags.dir/getlines.c.i
 
 src/CMakeFiles/neotags.dir/getlines.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/neotags.dir/getlines.c.s"
-	cd /home/bml/moretemp/C/build/src && /usr/lib/ccache/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/bml/moretemp/C/src/getlines.c -o CMakeFiles/neotags.dir/getlines.c.s
+	cd /home/bml/random/moretemp/C/build/src && /usr/lib/ccache/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/bml/random/moretemp/C/src/getlines.c -o CMakeFiles/neotags.dir/getlines.c.s
 
 src/CMakeFiles/neotags.dir/neotags.c.o: src/CMakeFiles/neotags.dir/flags.make
 src/CMakeFiles/neotags.dir/neotags.c.o: ../src/neotags.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bml/moretemp/C/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object src/CMakeFiles/neotags.dir/neotags.c.o"
-	cd /home/bml/moretemp/C/build/src && /usr/lib/ccache/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/neotags.dir/neotags.c.o   -c /home/bml/moretemp/C/src/neotags.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bml/random/moretemp/C/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object src/CMakeFiles/neotags.dir/neotags.c.o"
+	cd /home/bml/random/moretemp/C/build/src && /usr/lib/ccache/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/neotags.dir/neotags.c.o   -c /home/bml/random/moretemp/C/src/neotags.c
 
 src/CMakeFiles/neotags.dir/neotags.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/neotags.dir/neotags.c.i"
-	cd /home/bml/moretemp/C/build/src && /usr/lib/ccache/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/bml/moretemp/C/src/neotags.c > CMakeFiles/neotags.dir/neotags.c.i
+	cd /home/bml/random/moretemp/C/build/src && /usr/lib/ccache/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/bml/random/moretemp/C/src/neotags.c > CMakeFiles/neotags.dir/neotags.c.i
 
 src/CMakeFiles/neotags.dir/neotags.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/neotags.dir/neotags.c.s"
-	cd /home/bml/moretemp/C/build/src && /usr/lib/ccache/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/bml/moretemp/C/src/neotags.c -o CMakeFiles/neotags.dir/neotags.c.s
+	cd /home/bml/random/moretemp/C/build/src && /usr/lib/ccache/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/bml/random/moretemp/C/src/neotags.c -o CMakeFiles/neotags.dir/neotags.c.s
 
 src/CMakeFiles/neotags.dir/strip.c.o: src/CMakeFiles/neotags.dir/flags.make
 src/CMakeFiles/neotags.dir/strip.c.o: ../src/strip.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bml/moretemp/C/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object src/CMakeFiles/neotags.dir/strip.c.o"
-	cd /home/bml/moretemp/C/build/src && /usr/lib/ccache/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/neotags.dir/strip.c.o   -c /home/bml/moretemp/C/src/strip.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bml/random/moretemp/C/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object src/CMakeFiles/neotags.dir/strip.c.o"
+	cd /home/bml/random/moretemp/C/build/src && /usr/lib/ccache/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/neotags.dir/strip.c.o   -c /home/bml/random/moretemp/C/src/strip.c
 
 src/CMakeFiles/neotags.dir/strip.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/neotags.dir/strip.c.i"
-	cd /home/bml/moretemp/C/build/src && /usr/lib/ccache/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/bml/moretemp/C/src/strip.c > CMakeFiles/neotags.dir/strip.c.i
+	cd /home/bml/random/moretemp/C/build/src && /usr/lib/ccache/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/bml/random/moretemp/C/src/strip.c > CMakeFiles/neotags.dir/strip.c.i
 
 src/CMakeFiles/neotags.dir/strip.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/neotags.dir/strip.c.s"
-	cd /home/bml/moretemp/C/build/src && /usr/lib/ccache/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/bml/moretemp/C/src/strip.c -o CMakeFiles/neotags.dir/strip.c.s
+	cd /home/bml/random/moretemp/C/build/src && /usr/lib/ccache/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/bml/random/moretemp/C/src/strip.c -o CMakeFiles/neotags.dir/strip.c.s
+
+src/CMakeFiles/neotags.dir/tok.c.o: src/CMakeFiles/neotags.dir/flags.make
+src/CMakeFiles/neotags.dir/tok.c.o: ../src/tok.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bml/random/moretemp/C/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object src/CMakeFiles/neotags.dir/tok.c.o"
+	cd /home/bml/random/moretemp/C/build/src && /usr/lib/ccache/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/neotags.dir/tok.c.o   -c /home/bml/random/moretemp/C/src/tok.c
+
+src/CMakeFiles/neotags.dir/tok.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/neotags.dir/tok.c.i"
+	cd /home/bml/random/moretemp/C/build/src && /usr/lib/ccache/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/bml/random/moretemp/C/src/tok.c > CMakeFiles/neotags.dir/tok.c.i
+
+src/CMakeFiles/neotags.dir/tok.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/neotags.dir/tok.c.s"
+	cd /home/bml/random/moretemp/C/build/src && /usr/lib/ccache/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/bml/random/moretemp/C/src/tok.c -o CMakeFiles/neotags.dir/tok.c.s
 
 src/CMakeFiles/neotags.dir/util.c.o: src/CMakeFiles/neotags.dir/flags.make
 src/CMakeFiles/neotags.dir/util.c.o: ../src/util.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bml/moretemp/C/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object src/CMakeFiles/neotags.dir/util.c.o"
-	cd /home/bml/moretemp/C/build/src && /usr/lib/ccache/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/neotags.dir/util.c.o   -c /home/bml/moretemp/C/src/util.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bml/random/moretemp/C/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object src/CMakeFiles/neotags.dir/util.c.o"
+	cd /home/bml/random/moretemp/C/build/src && /usr/lib/ccache/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/neotags.dir/util.c.o   -c /home/bml/random/moretemp/C/src/util.c
 
 src/CMakeFiles/neotags.dir/util.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/neotags.dir/util.c.i"
-	cd /home/bml/moretemp/C/build/src && /usr/lib/ccache/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/bml/moretemp/C/src/util.c > CMakeFiles/neotags.dir/util.c.i
+	cd /home/bml/random/moretemp/C/build/src && /usr/lib/ccache/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/bml/random/moretemp/C/src/util.c > CMakeFiles/neotags.dir/util.c.i
 
 src/CMakeFiles/neotags.dir/util.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/neotags.dir/util.c.s"
-	cd /home/bml/moretemp/C/build/src && /usr/lib/ccache/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/bml/moretemp/C/src/util.c -o CMakeFiles/neotags.dir/util.c.s
+	cd /home/bml/random/moretemp/C/build/src && /usr/lib/ccache/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/bml/random/moretemp/C/src/util.c -o CMakeFiles/neotags.dir/util.c.s
 
 src/CMakeFiles/neotags.dir/archive_util_xz.c.o: src/CMakeFiles/neotags.dir/flags.make
 src/CMakeFiles/neotags.dir/archive_util_xz.c.o: ../src/archive_util_xz.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bml/moretemp/C/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object src/CMakeFiles/neotags.dir/archive_util_xz.c.o"
-	cd /home/bml/moretemp/C/build/src && /usr/lib/ccache/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/neotags.dir/archive_util_xz.c.o   -c /home/bml/moretemp/C/src/archive_util_xz.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bml/random/moretemp/C/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building C object src/CMakeFiles/neotags.dir/archive_util_xz.c.o"
+	cd /home/bml/random/moretemp/C/build/src && /usr/lib/ccache/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/neotags.dir/archive_util_xz.c.o   -c /home/bml/random/moretemp/C/src/archive_util_xz.c
 
 src/CMakeFiles/neotags.dir/archive_util_xz.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/neotags.dir/archive_util_xz.c.i"
-	cd /home/bml/moretemp/C/build/src && /usr/lib/ccache/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/bml/moretemp/C/src/archive_util_xz.c > CMakeFiles/neotags.dir/archive_util_xz.c.i
+	cd /home/bml/random/moretemp/C/build/src && /usr/lib/ccache/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/bml/random/moretemp/C/src/archive_util_xz.c > CMakeFiles/neotags.dir/archive_util_xz.c.i
 
 src/CMakeFiles/neotags.dir/archive_util_xz.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/neotags.dir/archive_util_xz.c.s"
-	cd /home/bml/moretemp/C/build/src && /usr/lib/ccache/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/bml/moretemp/C/src/archive_util_xz.c -o CMakeFiles/neotags.dir/archive_util_xz.c.s
+	cd /home/bml/random/moretemp/C/build/src && /usr/lib/ccache/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/bml/random/moretemp/C/src/archive_util_xz.c -o CMakeFiles/neotags.dir/archive_util_xz.c.s
 
 src/CMakeFiles/neotags.dir/bsd_funcs.c.o: src/CMakeFiles/neotags.dir/flags.make
 src/CMakeFiles/neotags.dir/bsd_funcs.c.o: ../src/bsd_funcs.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bml/moretemp/C/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building C object src/CMakeFiles/neotags.dir/bsd_funcs.c.o"
-	cd /home/bml/moretemp/C/build/src && /usr/lib/ccache/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/neotags.dir/bsd_funcs.c.o   -c /home/bml/moretemp/C/src/bsd_funcs.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bml/random/moretemp/C/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building C object src/CMakeFiles/neotags.dir/bsd_funcs.c.o"
+	cd /home/bml/random/moretemp/C/build/src && /usr/lib/ccache/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/neotags.dir/bsd_funcs.c.o   -c /home/bml/random/moretemp/C/src/bsd_funcs.c
 
 src/CMakeFiles/neotags.dir/bsd_funcs.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/neotags.dir/bsd_funcs.c.i"
-	cd /home/bml/moretemp/C/build/src && /usr/lib/ccache/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/bml/moretemp/C/src/bsd_funcs.c > CMakeFiles/neotags.dir/bsd_funcs.c.i
+	cd /home/bml/random/moretemp/C/build/src && /usr/lib/ccache/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/bml/random/moretemp/C/src/bsd_funcs.c > CMakeFiles/neotags.dir/bsd_funcs.c.i
 
 src/CMakeFiles/neotags.dir/bsd_funcs.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/neotags.dir/bsd_funcs.c.s"
-	cd /home/bml/moretemp/C/build/src && /usr/lib/ccache/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/bml/moretemp/C/src/bsd_funcs.c -o CMakeFiles/neotags.dir/bsd_funcs.c.s
+	cd /home/bml/random/moretemp/C/build/src && /usr/lib/ccache/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/bml/random/moretemp/C/src/bsd_funcs.c -o CMakeFiles/neotags.dir/bsd_funcs.c.s
 
 # Object files for target neotags
 neotags_OBJECTS = \
@@ -154,6 +167,7 @@ neotags_OBJECTS = \
 "CMakeFiles/neotags.dir/getlines.c.o" \
 "CMakeFiles/neotags.dir/neotags.c.o" \
 "CMakeFiles/neotags.dir/strip.c.o" \
+"CMakeFiles/neotags.dir/tok.c.o" \
 "CMakeFiles/neotags.dir/util.c.o" \
 "CMakeFiles/neotags.dir/archive_util_xz.c.o" \
 "CMakeFiles/neotags.dir/bsd_funcs.c.o"
@@ -165,6 +179,7 @@ src/neotags: src/CMakeFiles/neotags.dir/archive_util_gzip.c.o
 src/neotags: src/CMakeFiles/neotags.dir/getlines.c.o
 src/neotags: src/CMakeFiles/neotags.dir/neotags.c.o
 src/neotags: src/CMakeFiles/neotags.dir/strip.c.o
+src/neotags: src/CMakeFiles/neotags.dir/tok.c.o
 src/neotags: src/CMakeFiles/neotags.dir/util.c.o
 src/neotags: src/CMakeFiles/neotags.dir/archive_util_xz.c.o
 src/neotags: src/CMakeFiles/neotags.dir/bsd_funcs.c.o
@@ -172,8 +187,8 @@ src/neotags: src/CMakeFiles/neotags.dir/build.make
 src/neotags: /usr/lib/liblzma.so
 src/neotags: /usr/lib/libz.so
 src/neotags: src/CMakeFiles/neotags.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/bml/moretemp/C/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Linking C executable neotags"
-	cd /home/bml/moretemp/C/build/src && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/neotags.dir/link.txt --verbose=$(VERBOSE)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/bml/random/moretemp/C/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Linking C executable neotags"
+	cd /home/bml/random/moretemp/C/build/src && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/neotags.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
 src/CMakeFiles/neotags.dir/build: src/neotags
@@ -181,10 +196,10 @@ src/CMakeFiles/neotags.dir/build: src/neotags
 .PHONY : src/CMakeFiles/neotags.dir/build
 
 src/CMakeFiles/neotags.dir/clean:
-	cd /home/bml/moretemp/C/build/src && $(CMAKE_COMMAND) -P CMakeFiles/neotags.dir/cmake_clean.cmake
+	cd /home/bml/random/moretemp/C/build/src && $(CMAKE_COMMAND) -P CMakeFiles/neotags.dir/cmake_clean.cmake
 .PHONY : src/CMakeFiles/neotags.dir/clean
 
 src/CMakeFiles/neotags.dir/depend:
-	cd /home/bml/moretemp/C/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/bml/moretemp/C /home/bml/moretemp/C/src /home/bml/moretemp/C/build /home/bml/moretemp/C/build/src /home/bml/moretemp/C/build/src/CMakeFiles/neotags.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/bml/random/moretemp/C/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/bml/random/moretemp/C /home/bml/random/moretemp/C/src /home/bml/random/moretemp/C/build /home/bml/random/moretemp/C/build/src /home/bml/random/moretemp/C/build/src/CMakeFiles/neotags.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : src/CMakeFiles/neotags.dir/depend
 

@@ -7,11 +7,11 @@ C_FLAGS = -march=native -fdiagnostics-color=always -Wall -O3
 
 C_DEFINES = -DHAVE_CONFIG_H -D_GNU_SOURCE
 
-C_INCLUDES = -I/home/bml/moretemp/cppbin/build 
+C_INCLUDES = -I/home/bml/random/moretemp/cppbin/build 
 
 CXX_FLAGS = -march=native -fdiagnostics-color=always -Wall -O3  
 
 CXX_DEFINES = -DHAVE_CONFIG_H -D_GNU_SOURCE
 
-CXX_INCLUDES = -I/home/bml/moretemp/cppbin/build 
+CXX_INCLUDES = -I/home/bml/random/moretemp/cppbin/build 
 

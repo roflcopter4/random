@@ -96,8 +96,8 @@ main(int argc, char *argv[])
         ///buffer << cin.rdbuf();
         ///auto vim_buf = buffer.str();
 
-        const char *otmp = new char[nchars + 1];
-        auto tmp = const_cast<char *>(otmp);
+        char *const otmp = new char[nchars + 1];
+        char *tmp  = otmp;
 
         for (int64_t ch, i = 0; i < nchars; ++i)
                 if ((ch = getchar()) > 0 && ch < 127)
@@ -158,18 +158,18 @@ ll_cmp(const struct lldata *A, const struct lldata *B)
 {
         bool ret;
 
-        if (A->kind == B->kind) {
-                if (A->s.length() == B->s.length())
-                        ret = A->s < B->s;
-                else
-                        ret = A->s.length() < B->s.length();
-        } else
-                ret = A->kind < B->kind;
+        // if (A->kind == B->kind) {
+        //         if (A->s.length() == B->s.length())
+        //                 ret = A->s < B->s;
+        //         else
+        //                 ret = A->s.length() < B->s.length();
+        // } else
+        //         ret = A->kind < B->kind;
 
-        ///if (A->kind == B->kind)
-        ///        ret = A->s < B->s;
-        ///else
-        ///        ret = A->kind < B->kind;
+        if (A->kind == B->kind)
+                ret = A->s < B->s;
+        else
+                ret = A->kind < B->kind;
 
         return ret;
 }
@@ -246,7 +246,7 @@ Search(vector<struct lldata> *tags,
                 return;
         }
         
-        int num_threads = find_num_cpus();
+        auto num_threads = static_cast<unsigned>(find_num_cpus());
         if (num_threads == 0)
                 num_threads = 4;
         cerr << "Using " << num_threads << " cpus." << endl;
@@ -258,7 +258,7 @@ Search(vector<struct lldata> *tags,
                 const auto quot = (tags->size() / num_threads);
 
                 uint64_t num;
-                num = (i == (num_threads - 1))
+                num = (i == (num_threads - 1u))
                         ? tags->size() - ((num_threads - 1) * quot)
                         : quot;
 
@@ -273,8 +273,8 @@ Search(vector<struct lldata> *tags,
                 tmp->num   = num;
 
                 errno = 0;
-                        if (pthread_create(tid + i, nullptr, do_search, tmp) != 0 || errno)
-                                err(1, "pthread_create failed");
+                if (pthread_create(tid + i, nullptr, do_search, tmp))
+                        err(1, "pthread_create failed");
         }
 
         auto out = vector<vector<struct lldata> *>(num_threads);

@@ -267,7 +267,7 @@ message_strm(lzma_ret code)
 {
         switch (code) {
         case LZMA_OK:                break;
-        case LZMA_STREAM_END:        return "The stream ended, moron";
+        case LZMA_STREAM_END:        return "Unexpected end of stream";
         case LZMA_NO_CHECK:          return "No integrity check; not verifying file integrity";
         case LZMA_UNSUPPORTED_CHECK: return "Unsupported type of integrity check; not verifying file integrity";
         case LZMA_GET_CHECK:         return stringify(LZMA_GET_CHECK);

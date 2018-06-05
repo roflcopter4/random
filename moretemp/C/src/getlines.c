@@ -15,21 +15,22 @@
      } while (0)
 
 
-static void ll_strsep      (struct datalist *tags, char *buf);
-static void plain_getlines (struct datalist *tags, const char *filename);
-static void gz_getlines    (struct datalist *tags, const char *filename);
+static void ll_strsep      (struct StringLst *tags, char *buf);
+static void plain_getlines (struct StringLst *tags, const char *filename);
+static void gz_getlines    (struct StringLst *tags, const char *filename);
 #ifdef LZMA_SUPPORT
-static void xz_getlines    (struct datalist *tags, const char *filename);
+static void xz_getlines    (struct StringLst *tags, const char *filename);
 #endif
 
 /* ========================================================================== */
 
 
 int
-getlines(struct datalist *tags, const char *comptype, const char *filename)
+getlines(struct StringLst *tags, const char *comptype, const char *filename)
 {
         if (backup_iterator == NUM_BACKUPS)
                 errx(1, "Too many files!");
+        warnx("Attempting to read tag file %s", filename);
 
         if (streq(comptype, "none"))
                 plain_getlines(tags, filename);
@@ -48,7 +49,7 @@ getlines(struct datalist *tags, const char *comptype, const char *filename)
 
 
 static void
-ll_strsep(struct datalist *tags, char *buf)
+ll_strsep(struct StringLst *tags, char *buf)
 {
         char *tok;
         /* Set this global pointer so the string can be free'd later... */
@@ -59,8 +60,8 @@ ll_strsep(struct datalist *tags, char *buf)
         while ((tok = strsep(&buf, "\n")) != NULL) {
                 if (*tok == '\0')
                         continue;
-                struct lldata *str = xmalloc(sizeof *str);
-                str->len = buf - tok;
+                struct String *str = xmalloc(sizeof *str);
+                str->len = buf - tok - 1LLU;
                 str->s   = tok;
 
                 if (tags->num == tags->max)
@@ -89,7 +90,7 @@ ll_strsep(struct datalist *tags, char *buf)
 
 
 static void
-plain_getlines(struct datalist *tags, const char *filename)
+plain_getlines(struct StringLst *tags, const char *filename)
 {
         FILE *fp = safe_fopen(filename, "rb");
         struct stat st;
@@ -114,7 +115,7 @@ plain_getlines(struct datalist *tags, const char *filename)
 
 
 static void
-gz_getlines(struct datalist *tags, const char *filename)
+gz_getlines(struct StringLst *tags, const char *filename)
 {
         struct archive_size size;
         gzip_size(&size, filename);
@@ -147,14 +148,14 @@ extern const char * message_strm(lzma_ret);
 
 /* It would be nice if there were some magic macros to read an xz file too. */
 static void
-xz_getlines(struct datalist *tags, const char *filename)
+xz_getlines(struct StringLst *tags, const char *filename)
 {
         struct archive_size size;
         xz_size(&size, filename);
         report_size(&size);
 
-        uint8_t *in_buf  = xmalloc(size.archive + 1);
-        uint8_t *out_buf = xmalloc(size.uncompressed + 1);
+        uint8_t *in_buf  = xcalloc(size.archive + 1, 1);
+        uint8_t *out_buf = xcalloc(size.uncompressed + 1, 1);
 
         /* Setup the stream and initialize the decoder */
         lzma_stream strm[] = {LZMA_STREAM_INIT};

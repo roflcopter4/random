@@ -32,6 +32,11 @@ src/CMakeFiles/neotags.dir/strip.c.o: ../src/neotags.h
 src/CMakeFiles/neotags.dir/strip.c.o: ../src/strip.c
 src/CMakeFiles/neotags.dir/strip.c.o: config.h
 
+src/CMakeFiles/neotags.dir/tok.c.o: ../src/bsd_funcs.h
+src/CMakeFiles/neotags.dir/tok.c.o: ../src/neotags.h
+src/CMakeFiles/neotags.dir/tok.c.o: ../src/tok.c
+src/CMakeFiles/neotags.dir/tok.c.o: config.h
+
 src/CMakeFiles/neotags.dir/util.c.o: ../src/bsd_funcs.h
 src/CMakeFiles/neotags.dir/util.c.o: ../src/neotags.h
 src/CMakeFiles/neotags.dir/util.c.o: ../src/util.c
