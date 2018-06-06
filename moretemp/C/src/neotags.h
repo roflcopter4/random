@@ -139,7 +139,7 @@ extern int   find_num_cpus  (void);
  */
 extern int  getlines(struct StringLst *tags, const char *comptype, const char *filename);
 extern void strip_comments(struct String *buffer, const char *lang);
-extern struct StringLst * tokenize(struct String *vimbuf, const char *lang);
+extern struct StringLst * tokenize(struct String *vimbuf);
 
 /* #include "inline.h" */
 

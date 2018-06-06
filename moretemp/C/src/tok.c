@@ -8,27 +8,19 @@
 #define INIT_STRINGS 8192
 
 static void do_tokenize(struct StringLst *list, char *vimbuf);
-static void dump_tokens(struct StringLst *list);
+/* static void dump_tokens(struct StringLst *list); */
 static char * strsep_f(char **stringp, bool (*check)(const char, const bool));
 
 static inline void add_string(struct StringLst *list, struct String *str);
 static bool compar_func(const char ch, const bool first);
 
-static FILE *LOG_FILE;
+/* static FILE *LOG_FILE; */
 int64_t calls;
 
 
 struct StringLst *
-tokenize(struct String *vimbuf, const char *lang)
+tokenize(struct String *vimbuf)
 {
-#if 0
-        struct String *cpy = malloc(sizeof *cpy);
-        *cpy = (struct String){
-                .s = malloc(vimbuf->len + 1), 
-                .len = vimbuf->len
-        };
-        memcpy(cpy->s, vimbuf->s, vimbuf->len + 1);
-#endif
         char *cpy = malloc(vimbuf->len + 1);
         memcpy(cpy, vimbuf->s, vimbuf->len);
         cpy[vimbuf->len] = '\0';
@@ -41,12 +33,12 @@ tokenize(struct String *vimbuf, const char *lang)
                 .max  = INIT_STRINGS
         };
 
-        LOG_FILE = safe_fopen("/home/bml/token.log", "wb");
-        fputs(cpy, LOG_FILE); fputs("\n\n\n", LOG_FILE);
+        /* LOG_FILE = safe_fopen("/home/bml/token.log", "wb"); */
+        /* fputs(cpy, LOG_FILE); fputs("\n\n\n", LOG_FILE); */
         do_tokenize(list, cpy);
-        dump_tokens(list);
+        /* dump_tokens(list); */
 
-        fclose(LOG_FILE);
+        /* fclose(LOG_FILE); */
         warnx("There were %ld calls to realloc.", calls);
         return list;
 }
@@ -57,7 +49,6 @@ do_tokenize(struct StringLst *list, char *vimbuf)
 {
         char *tok = NULL;
 
-        //while ((tok = strsep(&vimbuf, " \t\n{}()[]+-*/<>,.'\";:!@#$%^&|\\=~`")) != NULL) {
         while ((tok = strsep_f(&vimbuf, &compar_func)) != NULL) {
                if (!*tok)
                        continue;
@@ -69,6 +60,7 @@ do_tokenize(struct StringLst *list, char *vimbuf)
 }
 
 
+#if 0
 static void
 dump_tokens(struct StringLst *list)
 {
@@ -77,6 +69,7 @@ dump_tokens(struct StringLst *list)
                 fputc('\n', LOG_FILE);
         }
 }
+#endif
 
 
 static char *
@@ -84,7 +77,7 @@ strsep_f(char **stringp, bool (*check)(const char, const bool))
 {
         char *ptr, *tok;
         if ((ptr = tok = *stringp) == NULL)
-                return (NULL);
+                return NULL;
 
         for (bool first = true;;first = false) {
                 const char src_ch = *ptr++;

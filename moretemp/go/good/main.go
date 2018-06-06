@@ -71,10 +71,6 @@ func main() {
 		equiv = strings.Split(os.Args[8], SEPCHAR)
 	)
 
-	// dump_slice(files)
-	// dump_slice(skip)
-	// dump_slice(equiv)
-
 	tags := make([]string, 0, INIT_CAP)
 	files_read := 0
 
@@ -86,7 +82,6 @@ func main() {
 		os.Exit(1)
 	}
 
-	// vim_buf_b := make([]byte, nchars + 1)
 	vim_buf_b, err := ioutil.ReadAll(os.Stdin)
 	if err != nil {
 		println("Error reading stdin:", err)
@@ -110,7 +105,9 @@ func main() {
 	errf(E, "search_tags took %fs\n", float64(time.Since(start)) / TIME_DIV)
 
 	filt_data := remove_dups(data)
-	for _, tmp := range filt_data { fmt.Printf("%c\n%s\n", tmp.kind, tmp.s) }
+	for _, tmp := range filt_data {
+		fmt.Printf("%c\n%s\n", tmp.kind, tmp.s)
+	}
 }
 
 /* ========================================================================== */
