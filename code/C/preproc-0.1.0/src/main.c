@@ -8,7 +8,7 @@
 
 static size_t slurp_file(char ** restrict slurp, const char * restrict filename);
 static size_t slurp_stdin(char **slurp);
-static char *parse_line(char * restrict line, char * restrict buf);
+static char *parse_line(char * restrict cur_line, char * restrict buf);
 
 int LEVEL;
 
@@ -22,7 +22,7 @@ main(int argc, char **argv)
         argc -= optind;
         argv += optind;
         if (argc == 0 && is_tty)
-                xerr(3, "No files specified.\n");
+                errx(3, "No files specified.\n");
 
         size_t size;
         char *slurp, *orig, *buf;
@@ -40,7 +40,7 @@ main(int argc, char **argv)
         else
                 size = slurp_file(&slurp, argv[0]);
 
-        buf = malloc(size + 1);
+        buf = xmalloc(size + 2);
         orig = slurp;
 
         while (*slurp != '\0')
@@ -56,10 +56,9 @@ static size_t
 slurp_file(char ** restrict slurp, const char * restrict filename)
 {
         FILE *fp;
-        char *path, *buf;
+        char *path;
         struct stat st;
         size_t size;
-        int ch;
 
         path = realpath(filename, NULL);
         safe_stat(path, &st);
@@ -67,16 +66,14 @@ slurp_file(char ** restrict slurp, const char * restrict filename)
         fp   = fopen(path, "r");
 
         if (!fp)
-                xperror("Failed to open file '%s'", filename);
+                err(1, "Failed to open file '%s'", filename);
         if (!S_ISREG(st.st_mode))
-                xerr(1, "Invalid filetype '%s'\n", filename);
+                errx(1, "Invalid filetype '%s'\n", filename);
 
-        *slurp = buf = xmalloc(++size);
-
-        while ((ch = fgetc(fp)) != EOF)
-                *buf++ = (char)ch;
+        *slurp = xmalloc(size + 1);
+        fread(*slurp, 1, size, fp);
         
-        *buf = '\0';
+        (*slurp)[size] = '\0';
         fclose(fp);
         free(path);
 
@@ -99,7 +96,7 @@ slurp_stdin(char **slurp)
                 if (ch == '\r')
                         continue;
                 if (it >= (size - 1))
-                        *slurp = xrealloc(*slurp, (size += INCSIZE));
+                        *slurp = xrealloc(*slurp, (size <<= 1));
 
                 (*slurp)[it++] = ch;
         }
@@ -112,38 +109,38 @@ slurp_stdin(char **slurp)
 
 
 static char *
-parse_line(char * restrict line, char * restrict buf)
+parse_line(char * restrict cur_line, char * restrict buf)
 {
-        char *orig  = line;
+        char *orig  = cur_line;
         char *tmp   = buf;
         int loc_lev = LEVEL;
         bool iscpp  = false;
 
-        if (*line == '\0')
-                return line;
-        if (*line == '\n') {
+        if (*cur_line == '\0')
+                return cur_line;
+        if (*cur_line == '\n') {
                 putchar('\n');
-                return (line + 1);
+                return (cur_line + 1);
         }
 
-        if ((*tmp++ = *line++) == '#') {
+        if ((*tmp++ = *cur_line++) == '#') {
                 iscpp = true;
 redo:
                 if (loc_lev > 0)
                         for (int i = 0; i < (loc_lev * WIDTH); ++i)
                                 *tmp++ = ' ';
 
-                while (isblank(*line))
-                        ++line;
+                while (isblank(*cur_line))
+                        ++cur_line;
         } else if (ALL) {
-                --line; /* oopsie.. */
+                --cur_line; /* oopsie.. */
                 --tmp;
                 if (loc_lev > 0)
                         for (int i = 0; i < (loc_lev * WIDTH) + 1; ++i)
                                 *tmp++ = ' ';
         }
 
-        while ((*tmp++ = *line++) != '\n' && *line != '\0')
+        while ((*tmp++ = *cur_line++) != '\n' && *cur_line)
                 ;
         *(tmp - 1) = '\0';
 
@@ -166,12 +163,12 @@ redo:
 
                 if (match == 2 || match == 3) {
                         iscpp = false;
-                        line  = orig + 1;
+                        cur_line  = orig + 1;
                         tmp   = buf + 1;
                         goto redo;
                 }
         }
 
         puts(buf);
-        return line;
+        return cur_line;
 }
